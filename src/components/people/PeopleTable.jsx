@@ -1,4 +1,5 @@
 import * as React from "react";
+import EditUser from '../people/EditUser';
 
 import {
   flexRender,
@@ -47,11 +48,9 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "*",
+    accessorKey:"*",
     header: "Action",
-    cell:
-      () =>
-      ({ row }) =>(<div>hello</div>),
+    cell: ({ row }) => <EditUser row={row} />,
   },
 ];
 

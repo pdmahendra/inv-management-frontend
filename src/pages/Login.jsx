@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../api/query/authApi";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -29,12 +29,12 @@ function Login() {
     };
     login(data, {
       onSuccess: () => {
-        toast.success('Login successful!');
+        toast.success("Login successful!");
         navigate("/");
       },
       onError: () => {
-        toast.error('Login failed! Please try again.');
-      }
+        toast.error("Login failed! Please try again.");
+      },
     });
     setUsername("");
     setPassword("");

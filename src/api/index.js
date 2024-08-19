@@ -7,5 +7,6 @@ export const API = {
   users: {
     //   register: `${SERVER_BASE_URL}/users/signup`,
     login: `${SERVER_BASE_URL}/auth/login`,
+    register: `${SERVER_BASE_URL}/auth/add-user`,
   },
 };
