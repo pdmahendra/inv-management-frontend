@@ -1,0 +1,15 @@
+.my-table {
+  border-collapse: collapse; /* Remove default table spacing */
+  width: 100%; /* Set a width */
+}
+
+.my-table th,
+.my-table td {
+  border: 1px solid #ddd; /* Add borders for cells */
+  padding: 10px; /* Add padding for content */
+  width: fit-content;
+}
+.my-table th {
+  background-color: #f2f2f2; /* Light background for headers */
+  text-align: left;
+}
