@@ -6,9 +6,10 @@ import toast from "react-hot-toast";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { mutate: login, isLoading } = useLogin();
+  const { mutate: login } = useLogin();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -21,8 +22,8 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
+    setLoading(true);
+
     const data = {
       username,
       password,
@@ -31,13 +32,15 @@ function Login() {
       onSuccess: () => {
         toast.success("Login successful!");
         navigate("/");
+        setUsername("");
+        setPassword("");
+        setLoading(false);
       },
       onError: () => {
-        toast.error("Login failed! Please try again.");
+        toast.error("Username or Password Invalid");
+        setLoading(false);
       },
     });
-    setUsername("");
-    setPassword("");
   };
 
   return (
@@ -53,30 +56,27 @@ function Login() {
               <div>Username*</div>
               <input
                 type="text"
-                name="username" // Use `name` attribute for form handling
-                value={username} // Bind state value to input
-                onChange={handleChange} // Handle changes
+                name="username"
+                value={username}
+                onChange={handleChange}
                 className="bg-[#EFEFEF] px-4 py-2 rounded-[5px] w-full"
                 required
-                disabled={isLoading}
+                disabled={loading}
               />
             </div>
             <div className="flex flex-col gap-1">
               <div>Password*</div>
               <input
                 type="password"
-                name="password" // Use `name` attribute for form handling
-                value={password} // Bind state value to input
-                onChange={handleChange} // Handle changes
+                name="password"
+                value={password}
+                onChange={handleChange}
                 className="bg-[#EFEFEF] px-4 py-2 rounded-[5px] w-full"
                 required
-                disabled={isLoading}
+                disabled={loading}
               />
             </div>
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Login"}
-            </button>
-            {/* {error && <div className="text-red-400">{error}</div>} */}
+            <button type="submit">{loading ? "Logging in..." : "Login"}</button>
           </div>
         </form>
       </div>
