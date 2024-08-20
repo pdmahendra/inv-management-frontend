@@ -1,15 +1,11 @@
-import * as React from "react";
-import EditUser from '../people/EditUser';
-
+import React, { useState } from "react";
+import EditUser from "../people/EditUser";
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -19,66 +15,60 @@ import {
   TableRow,
 } from "../../ui/table";
 
+// Define the columns
 export const columns = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => <div className="">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div>{row.index + 1}</div>,
   },
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+    cell: ({ getValue }) => <div>{getValue("name")}</div>,
   },
   {
-    accessorKey: "role",
+    accessorKey: "userType",
     header: "Role",
-    cell: ({ row }) => <div className="pl-6">{row.getValue("role")}</div>,
+    cell: ({ getValue }) => <div className="pl-6">{getValue("userType")}</div>,
   },
   {
-    accessorKey: "phone",
+    accessorKey: "phoneNo",
     header: "Phone",
-    cell: ({ row }) => <div className="pl-3">{row.getValue("phone")}</div>,
+    cell: ({ getValue }) => <div className="pl-3">{getValue("phoneNo")}</div>,
   },
   {
     accessorKey: "username",
     header: "Username",
-    cell: ({ row }) => (
-      <div className="underline ">{row.getValue("username")}</div>
+    cell: ({ getValue }) => (
+      <div className="underline">{getValue("username")}</div>
     ),
   },
   {
-    accessorKey:"*",
+    accessorKey: "*",
     header: "Action",
     cell: ({ row }) => <EditUser row={row} />,
   },
 ];
 
-export default function PeopleTable({ data }) {
-  // const [sorting, setSorting] = useState([]);
-  // const [columnFilters, setColumnFilters] = useState([]);
-  // const [columnVisibility, setColumnVisibility] = React.useState({});
-  // const [rowSelection, setRowSelection] = useState({});
+export default function PeopleTable({ data = [] }) {
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 10;
 
   const table = useReactTable({
     data,
     columns,
-    // onSortingChange: setSorting,
-    // onColumnFiltersChange: setColumnFilters,
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    // onColumnVisibilityChange: setColumnVisibility,
-
-    // onRowSelectionChange: setRowSelection,
-    // state: {
-    //   sorting,
-    //   columnFilters,
-    //   columnVisibility,
-    //   rowSelection,
-    // },
   });
+
+  const pageCount = Math.ceil(data.length / pageSize);
 
   return (
     <div className="border border-gray-300 rounded-3xl mt-6">
@@ -99,12 +89,9 @@ export default function PeopleTable({ data }) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="px-12">
                       {flexRender(
@@ -127,6 +114,22 @@ export default function PeopleTable({ data }) {
             )}
           </TableBody>
         </Table>
+
+        <div className="flex justify-center mt-4">
+          {Array.from({ length: pageCount }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setPageIndex(i)}
+              className={`px-2 m-3 rounded ${
+                pageIndex === i
+                  ? "text-black border-2 rounded-xl"
+                  : "text-black"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
