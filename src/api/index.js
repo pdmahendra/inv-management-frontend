@@ -5,8 +5,12 @@ export const SERVER_BASE_URL = `${
 
 export const API = {
   users: {
-    //   register: `${SERVER_BASE_URL}/users/signup`,
     login: `${SERVER_BASE_URL}/auth/login`,
     register: `${SERVER_BASE_URL}/auth/add-user`,
+    fetchAllUsers: `${SERVER_BASE_URL}/auth/fetch-users`,
+    editUser: `${SERVER_BASE_URL}/auth/edit-user`,
+  },
+  tasks: {
+    updateStatus: `${SERVER_BASE_URL}/todo/updateStatus`,
   },
 };
