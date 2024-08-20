@@ -1,34 +1,70 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import People from "./pages/People";
-import RawInventory from "./pages/RawInventory";
-import ReadyInventory from "./pages/ReadyInventory";
-import CuttingInventory from "./pages/CuttingInventory";
-import Notifications from "./pages/Notifications";
-import Layout from "./components/Layout.jsx";
-import { Toaster } from 'react-hot-toast'; 
+import React, { useState, useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        {/* Login Route (no layout) */}
-        <Route path="/login" element={<Login />} />
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
-        {/* Routes with Layout */}
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/people" element={<People />} />
-          <Route path="/inventory/raw" element={<RawInventory />} />
-          <Route path="/inventory/cutting" element={<CuttingInventory />} />
-          <Route path="/inventory/ready" element={<ReadyInventory />} />
-        </Route>
-      </Routes>
-      <Toaster position="top-center" />
-    </Router>
+  const handleSidebar = () => {
+    setSidebarOpen((prev) => !prev);
+  };
+
+  const handleResize = () => {
+    if (window.innerWidth >= 768) {
+      setSidebarOpen(true);
+    } else {
+      setSidebarOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const isLoginPage = location.pathname === "/login";
+
+  return (
+    <div className="flex">
+      {!isLoginPage && (
+        <Sidebar sidebarOpen={sidebarOpen} handleSidebar={handleSidebar} />
+      )}
+
+      <div className="flex-1">
+        <div
+          className={`md:hidden pl-6 fixed top-10 ${
+            sidebarOpen ? "hidden" : "block"
+          }`}
+        >
+          <button onClick={handleSidebar} className="p-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <main className="min-w-[300px]">
+          <Outlet />
+        </main>
+      </div>
+    </div>
   );
 }
 
