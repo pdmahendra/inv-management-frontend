@@ -7,6 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import PeopleTable from "../components/people/PeopleTable";
 import { useRegister } from "../api/query/registerUser";
 import { useUser } from "../context/UserContext";
+import { useFetchAllUsers } from "../api/query/fetchAllUsers";
 import toast from "react-hot-toast";
 
 function People() {
@@ -16,38 +17,14 @@ function People() {
   const [phoneNo, setPhoneNo] = useState("");
   const [userType, setUserType] = useState("admin");
   const [open, setOpen] = React.useState(false);
-  const [peopleData, setPeopleData] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      role: "Admin",
-      phone: "1234567890",
-      username: "Adway7103",
-    },
-    {
-      id: 2,
-      name: "John Doe",
-      role: "Admin",
-      phone: "1234567890",
-      username: "Adway7103",
-    },
-    {
-      id: 3,
-      name: "John Doe",
-      role: "Admin",
-      phone: "1234567890",
-      username: "Adway7103",
-    },
-    {
-      id: 4,
-      name: "John Doe",
-      role: "Admin",
-      phone: "1234567890",
-      username: "Adway7103",
-    },
-  ]);
+
   const { user } = useUser();
   const { mutate: register, isLoading } = useRegister();
+  const {
+    data: peopleData = [],
+    isLoading: isFetching,
+    refetch,
+  } = useFetchAllUsers();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,19 +40,8 @@ function People() {
       register(data, {
         onSuccess: (response) => {
           console.log(response);
-
           toast.success("Registration successful!");
-          setPeopleData((prevData) => [
-            ...prevData,
-            {
-              id: prevData.length + 1,
-              name: response.user.name,
-              role: response.user.userType,
-              phone: response.user.phoneNo,
-              username: response.user.username,
-            },
-          ]);
-          console.log(peopleData);
+          refetch();
 
           handleClose();
         },
@@ -97,6 +63,14 @@ function People() {
     setOpen(false);
   };
 
+  const adminCount =
+    peopleData?.users?.filter((user) => user.userType === "admin").length || 0;
+  const managerCount =
+    peopleData?.users?.filter((user) => user.userType === "manager").length ||
+    0;
+  const workerCount =
+    peopleData?.users?.filter((user) => user.userType === "worker").length || 0;
+
   return (
     <div className="md:ml-60 p-6">
       <div className="ml-12 max-md:mt-2 text-[2rem] flex justify-between">
@@ -112,21 +86,7 @@ function People() {
               >
                 Add More
               </button>
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                // PaperProps={{
-                //   component: "form",
-                //   onSubmit: { handleSubmit },
-                //   // {
-                //   // event.preventDefault();
-                //   // const formData = new FormData(event.currentTarget);
-                //   // const formJson = Object.fromEntries(formData.entries());
-                //   // const email = formJson.email;
-                //   // console.log(email);
-                //   // },
-                // }}
-              >
+              <Dialog open={open} onClose={handleClose}>
                 <DialogTitle sx={{ fontWeight: "500", fontSize: "1.4rem" }}>
                   Add new people
                 </DialogTitle>
@@ -167,17 +127,6 @@ function People() {
                     variant="outlined"
                     onChange={(e) => setUsername(e.target.value)}
                   />
-                  {/* <TextField
-                    autoFocus
-                    required
-                    margin="dense"
-                    id="Admin"
-                    name="AdminPass"
-                    label="Admin Password"
-                    type="password"
-                    fullWidth
-                    variant="outlined"
-                  /> */}
                   <TextField
                     autoFocus
                     required
@@ -215,7 +164,6 @@ function People() {
                   </button>
                   <button
                     onClick={handleSubmit}
-                    // type="submit"
                     className="text-white bg-[#3F51D7] font-medium px-8 py-2 border-2 rounded-xl"
                   >
                     Add
@@ -224,20 +172,20 @@ function People() {
               </Dialog>
             </div>
           )}
-          <PeopleTable data={peopleData} />{" "}
+          <PeopleTable data={peopleData?.users || []} refetch={refetch} />{" "}
         </div>
-        <div className="flex flex-col sm:flex-row lg:flex-col sm:justify-around gap-8 lg:mt-8 sm:w-[15rem]">
+        <div className="flex flex-col sm:flex-row lg:flex-col gap-8 lg:mt-8 sm:w-[15rem]">
           <div className="py-10 px-16 bg-[#F1FFCB] rounded-[8px] flex flex-row sm:flex-col justify-around gap-[20px] items-center">
             <div className="text-[1.5rem] sm:text-[1.2rem]">Admin</div>
-            <div className="text-[1.8em] font-semibold">14</div>
+            <div className="text-[1.8em] font-semibold">{adminCount}</div>
           </div>{" "}
           <div className="py-10 px-16 bg-[#A6CCFF] rounded-[8px] flex flex-row sm:flex-col justify-around gap-[20px] items-center">
             <div className="text-[1.5rem] sm:text-[1.2rem]">Managers</div>
-            <div className="text-[1.8em] font-semibold">14</div>
+            <div className="text-[1.8em] font-semibold">{managerCount}</div>
           </div>{" "}
           <div className="py-10 px-16 bg-[#FFB5B5] rounded-[8px] flex flex-row sm:flex-col justify-around gap-[20px] items-center">
             <div className="text-[1.5rem] sm:text-[1.2rem]">Workers</div>
-            <div className="text-[1.8em] font-semibold">14</div>
+            <div className="text-[1.8em] font-semibold">{workerCount}</div>
           </div>
         </div>
       </div>
