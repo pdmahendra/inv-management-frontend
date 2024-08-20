@@ -1,6 +1,23 @@
 import React from "react";
+import axios from "../../utils/middleware";
+import { API } from "../../api/index";
+import toast from "react-hot-toast";
 
-const ListItem = ({ title }) => {
+const ListItem = ({ id, title, description, status, getTasks }) => {
+  const svgColor = status ? "green" : "red";
+
+  const handleClick = async () => {
+    try {
+      await axios.put(`${API.tasks.updateStatus}`, { task_id: id });
+      console.log(id);
+      toast.success("Task completed successfully!");
+      getTasks();
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to update:");
+    }
+  };
+
   return (
     <div className="border border-gray-200 mt-4 rounded-xl p-1 w-80 bg-white">
       <li className="flex items-center justify-between py-1">
@@ -11,8 +28,9 @@ const ListItem = ({ title }) => {
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="1.5"
-              stroke="currentColor"
-              class="size-5"
+              stroke={svgColor}
+              className="size-5 hover:cursor-pointer"
+              onClick={handleClick}
             >
               <path
                 strokeLinecap="round"

@@ -7,6 +7,7 @@ const Agendas = () => {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  console.log(tasks.map((t) => t._id));
 
   const getTasks = async () => {
     try {
@@ -80,11 +81,14 @@ const Agendas = () => {
       </div>
       <div className="mt-2 md:mt-14">
         <ul>
-          {tasks.map((task, index) => (
+          {tasks.map((t) => (
             <ListItem
-              key={index}
-              title={task.title}
-              description={task.description}
+              key={t._id}
+              id={t._id}
+              status={t.status}
+              title={t.title}
+              description={t.description}
+              getTasks={getTasks}
             />
           ))}
         </ul>
