@@ -1,16 +1,13 @@
 import React from "react";
-import { useState } from "react";
 import icon from "../profileIcon.png";
 import Factory from "../factory.png";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
-function Sidebar({ sidebarOpen, handleSidebar }) {
+function Sidebar({ sidebarOpen, handleSidebar, user }) {
   return (
     <div
       className={`fixed w-64 z-40  bg-[#F4F0ED] flex flex-col justify-between text-black h-full transform ${
@@ -29,13 +26,13 @@ function Sidebar({ sidebarOpen, handleSidebar }) {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               className="size-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
               />
             </svg>
@@ -102,18 +99,20 @@ function Sidebar({ sidebarOpen, handleSidebar }) {
               Issuance Records
             </li>
           </Link>
-          <Link to="/people" className="font-medium">
-            <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              People
-            </li>
-          </Link>
+          {user?.userType !== "worker" && (
+            <Link to="/people" className="font-medium">
+              <li className="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+                People
+              </li>
+            </Link>
+          )}
         </ul>
       </div>
       <div className="rounded-lg bg-blue-50 px-5 flex gap-4 items-center py-4">
         <img src={icon} className="w-10 h-10" />
         <div className="text-black flex flex-col justify-center">
-          <div className="font-semibold text-lg">Manjot Kumar</div>
-          <div className="text-sm">Owner</div>
+          <div className="font-semibold text-lg">{user?.name}</div>
+          <div className="text-sm">{user?.userType}</div>
         </div>
       </div>
     </div>
