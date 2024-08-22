@@ -1,27 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import RawInventoryTable from '../components/inventory/rawInventory/RawInventoryTable'
+import RawInventoryTable from "../components/inventory/rawInventory/RawInventoryTable";
+import { useAddItem } from "../api/query/inventory/invetoryApi";
+import { useFetchInventoryData } from "../api/query/inventory/invetoryApi";
+import toast from "react-hot-toast";
+
 export default function RawInventory() {
-  const peopleData = [
-    {
-      id: 1,
-      name: "Button",
-      quantity: "8",
-      minimum: "4",
-      status: "green",
-    },
-    {
-      id: 2,
-      name: "Cloth",
-      role: "Admin",
-      phone: "1234567890",
-      username: "Adway7103",
-    },
-  ];
+  const { mutate: addItmes, isLoading } = useAddItem();
+  const {
+    data: inventoryData = { items: [] },
+    isLoading: isFetching,
+    refetch,
+  } = useFetchInventoryData();
+  const [data, setData] = useState({
+    name: "",
+    quantity: 0,
+    price: 0,
+    minimum: 0,
+    image_url: "",
+    inventory_type: "",
+  });
+
+  const filteredInventoryData = inventoryData.items?.filter(
+    (item) => item.inventory_type === "raw"
+  );
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -30,6 +37,51 @@ export default function RawInventory() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const item = {
+      name: data.name,
+      quantity: data.quantity,
+      price: data.price,
+      min_limit: data.minimum,
+      image_url: "abc",
+      inventory_type: "raw",
+    };
+
+    try {
+      addItmes(item, {
+        onSuccess: (response) => {
+          console.log(response);
+          toast.success("item added successfully!");
+          refetch();
+          setData({
+            name: "",
+            quantity: 0,
+            price: 0,
+            min_limit: 0,
+            image_url: "",
+            inventory_type: "",
+          });
+          handleClose();
+        },
+        onError: (error) => {
+          const errorMessage = error.response?.data?.error;
+          toast.error(errorMessage);
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -50,17 +102,17 @@ export default function RawInventory() {
               <Dialog
                 open={open}
                 onClose={handleClose}
-                PaperProps={{
-                  component: "form",
-                  onSubmit: (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.currentTarget);
-                    const formJson = Object.fromEntries(formData.entries());
-                    const email = formJson.email;
-                    console.log(email);
-                    handleClose();
-                  },
-                }}
+                // PaperProps={{
+                //   component: "form",
+                //   onSubmit: (event) => {
+                //     event.preventDefault();
+                //     const formData = new FormData(event.currentTarget);
+                //     const formJson = Object.fromEntries(formData.entries());
+                //     const email = formJson.email;
+                //     console.log(email);
+                //     handleClose();
+                //   },
+                // }}
               >
                 <DialogTitle sx={{ fontWeight: "500", fontSize: "1.4rem" }}>
                   Add item
@@ -71,33 +123,52 @@ export default function RawInventory() {
                     required
                     margin="dense"
                     id="name"
-                    name="Item Name"
+                    name="name"
                     label="Item Name"
                     type="text"
                     fullWidth
                     variant="outlined"
+                    value={data.name}
+                    onChange={handleInputChange}
                   />
                   <TextField
                     autoFocus
                     required
                     margin="dense"
                     id="qty"
-                    name="Initial Quantity"
+                    name="quantity"
                     label="Quantity"
                     type="number"
                     fullWidth
                     variant="outlined"
+                    value={data.quantity}
+                    onChange={handleInputChange}
+                  />
+                  <TextField
+                    autoFocus
+                    required
+                    margin="dense"
+                    id="price"
+                    name="price"
+                    label="Price"
+                    type="number"
+                    fullWidth
+                    variant="outlined"
+                    value={data.price}
+                    onChange={handleInputChange}
                   />
                   <TextField
                     autoFocus
                     required
                     margin="dense"
                     id="qty"
-                    name="Minimum Limit"
+                    name="minimum"
                     label="Minimum Limit"
                     type="number"
                     fullWidth
                     variant="outlined"
+                    value={data.minimum}
+                    onChange={handleInputChange}
                   />
                 </DialogContent>
                 <DialogActions>
@@ -105,10 +176,10 @@ export default function RawInventory() {
                     onClick={handleClose}
                     className="text-red-500 px-4 py-2 border-2 rounded-xl"
                   >
-                    Delete
+                    Cancel
                   </button>
                   <button
-                    type="submit"
+                    onClick={handleSubmit}
                     className="text-white bg-[#3F51D7] font-medium px-8 py-2 border-2 rounded-xl"
                   >
                     Add
@@ -116,7 +187,7 @@ export default function RawInventory() {
                 </DialogActions>
               </Dialog>
             </div>
-            <RawInventoryTable data={peopleData} />{" "}
+            <RawInventoryTable data={filteredInventoryData} refetch={refetch} />{" "}
           </div>
         </div>
       </div>
