@@ -1,51 +1,65 @@
-import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
-import Home from '../pages/Home'; 
-import Notifications from '../pages/Notifications'; 
-import People from '../pages/People'; 
-import RawInventory from '../pages/RawInventory'; 
-import CuttingInventory from '../pages/CuttingInventory'; 
-import ReadyInventory from '../pages/ReadyInventory';
-import Login from '../pages/Login'; 
-import ProtectedRoutes from '../components/ProtectedRoutes'; // Updated import
-import { Navigate } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
+import App from "../App";
+import Home from "../pages/Home";
+import Notifications from "../pages/Notifications";
+import People from "../pages/People";
+import RawInventory from "../pages/RawInventory";
+import CuttingInventory from "../pages/CuttingInventory";
+import ReadyInventory from "../pages/ReadyInventory";
+import Login from "../pages/Login";
+import ProtectedRoutes from "../components/ProtectedRoutes";
+import UnauthorizedPage from "../components/Unauth";
+import { Navigate } from "react-router-dom";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <ProtectedRoutes element={<Home />} />,
       },
       {
-        path: '/notifications',
+        path: "/notifications",
         element: <ProtectedRoutes element={<Notifications />} />,
       },
       {
-        path: '/people',
-        element: <ProtectedRoutes element={<People />} />,
+        path: "/people",
+        element: (
+          <ProtectedRoutes
+            element={<People />}
+            allowedRoles={["admin", "manager"]}
+          />
+        ),
       },
       {
-        path: '/inventory/raw',
+        path: "/inventory/raw",
         element: <ProtectedRoutes element={<RawInventory />} />,
       },
       {
-        path: '/inventory/cutting',
+        path: "/inventory/cutting",
         element: <ProtectedRoutes element={<CuttingInventory />} />,
       },
       {
-        path: '/inventory/ready',
+        path: "/inventory/ready",
         element: <ProtectedRoutes element={<ReadyInventory />} />,
       },
       {
-        path: '/login',
-        element: localStorage.getItem("accessToken") ? <Navigate to="/" replace /> : <Login />,
+        path: "/login",
+        element: localStorage.getItem("accessToken") ? (
+          <Navigate to="/" replace />
+        ) : (
+          <Login />
+        ),
       },
       {
-        path: '*',
-        element: <div>error page</div>, 
+        path: "/not-authorized",
+        element: <UnauthorizedPage />,
+      },
+      {
+        path: "*",
+        element: <div>error page</div>,
       },
     ],
   },
