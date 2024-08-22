@@ -8,7 +8,6 @@ import CuttingInventory from "../pages/CuttingInventory";
 import ReadyInventory from "../pages/ReadyInventory";
 import Login from "../pages/Login";
 import ProtectedRoutes from "../components/ProtectedRoutes";
-import UnauthorizedPage from "../components/Unauth";
 import { Navigate } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -52,10 +51,6 @@ export const router = createBrowserRouter([
         ) : (
           <Login />
         ),
-      },
-      {
-        path: "/not-authorized",
-        element: <UnauthorizedPage />,
       },
       {
         path: "*",
