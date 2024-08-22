@@ -76,7 +76,7 @@ function Login() {
                 disabled={loading}
               />
             </div>
-            <button type="submit">{loading ? "Logging in..." : "Login"}</button>
+            <button type="submit" className="bg-px-4 py-2 text-white bg-blue-500 rounded">{loading ? "Logging in..." : "Login"}</button>
           </div>
         </form>
       </div>
