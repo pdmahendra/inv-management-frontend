@@ -3,8 +3,11 @@ import icon from "../profileIcon.png";
 import Agendas from "../components/home/Agendas";
 import Alarms from "../components/home/Alarms";
 import Todays from "../components/home/Todays";
+import { useUser } from "../context/UserContext";
 
 function Home() {
+  const { user } = useUser();
+
   return (
     <div className="md:ml-80">
       <div className="py-4 border-b flex justify-between">
@@ -13,7 +16,7 @@ function Home() {
           <img src={icon} className="w-10 h-10" />
           <div className="text-black flex flex-col justify-center">
             <div className=" flex gap-2 font-semibold text-lg">
-              Manjot Kumar{" "}
+              {user?.name}{" "}
               <span className="place-self-center mt-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +34,7 @@ function Home() {
                 </svg>
               </span>
             </div>
-            <div className="text-sm">Owner</div>
+            <div className="text-sm">{user?.userType}</div>
           </div>
         </div>
       </div>
