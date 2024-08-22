@@ -13,4 +13,10 @@ export const API = {
   tasks: {
     updateStatus: `${SERVER_BASE_URL}/todo/updateStatus`,
   },
+  inventory: {
+    getItems: `${SERVER_BASE_URL}/inventory/get-items`,
+    addItems: `${SERVER_BASE_URL}/inventory/add-item`,
+    updateItems: `${SERVER_BASE_URL}/inventory/update-item`,
+    deleteItems: `${SERVER_BASE_URL}/inventory/delete-item`,
+  },
 };
