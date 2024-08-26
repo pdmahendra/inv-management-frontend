@@ -5,9 +5,18 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar({ sidebarOpen, handleSidebar, user }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+
+    toast.success("Logout successful!");
+
+    navigate("/login");
+  };
   return (
     <div
       className={`fixed w-64 z-40  bg-[#F4F0ED] flex flex-col justify-between text-black h-full transform ${
@@ -106,6 +115,12 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               </li>
             </Link>
           )}
+
+          <Link to="#" onClick={handleLogout} className="font-medium">
+            <li className="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+              Logout
+            </li>
+          </Link>
         </ul>
       </div>
       <div className="rounded-lg bg-blue-50 px-5 flex gap-4 items-center py-4">
