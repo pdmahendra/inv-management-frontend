@@ -19,10 +19,10 @@ import {
 } from "../../../ui/table";
 import EditItem from "./editItem";
 
-function Status({ status, rowId }) {
+function Status({ min_limit, quantity }) {
   return (
     <>
-      {status === "green" ? (
+      {min_limit < quantity ? (
         <div className="min-w-4 min-h-4 max-w-4 max-h-4 rounded-full bg-green-400"></div>
       ) : (
         <div className="min-w-4 min-h-4 max-w-4 max-h-4 rounded-full bg-red-400"></div>
@@ -36,13 +36,16 @@ export const columns = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <Status rowId={row.original.id} status={row.original.status} />
+      <Status
+        min_limit={row.getValue("min_limit")}
+        quantity={row.getValue("quantity")}
+      />
     ),
   },
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => <div className="">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div>{row.index + 1}</div>,
   },
   {
     accessorKey: "name",
