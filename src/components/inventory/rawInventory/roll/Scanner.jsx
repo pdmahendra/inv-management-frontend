@@ -11,7 +11,7 @@ const QRCodeScanner = () => {
   const handleScan = (data) => {
     if (data) {
       setScannedData(data);
-      console.log("Scanned Data:", data);
+      alert(`QR Code Scanned: ${data}`); // Show the scanned data on screen
       setScan(false);
       setIsFullScreen(false); // Exit full-screen mode after scanning
     }
@@ -20,6 +20,7 @@ const QRCodeScanner = () => {
   // Handle errors
   const handleError = (err) => {
     console.error("Scanner Error:", err);
+    alert("An error occurred while scanning. Please try again.");
   };
 
   // Handle image file selection from gallery
@@ -52,11 +53,12 @@ const QRCodeScanner = () => {
 
           if (code) {
             setScannedData(code.data); // QR code result
-            console.log("QR Code detected:", code.data);
+            alert(`QR Code detected: ${code.data}`); // Show the scanned data on screen
             setScan(false); // Close scanner after successful QR scan
             setIsFullScreen(false);
           } else {
             console.error("No QR code found in the image");
+            alert("No QR code found in the image");
           }
         };
       };
@@ -93,9 +95,7 @@ const QRCodeScanner = () => {
             {/* QR Scanner */}
             <Scanner
               onScan={(result) => {
-                console.log(result.data);
-                setScannedData(result.data);
-                setScan(false);
+                handleScan(result.data); // Call handleScan for results
               }}
               onError={handleError}
               className="w-full h-full"
