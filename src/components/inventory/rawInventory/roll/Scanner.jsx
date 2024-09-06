@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
-import jsQR from "jsqr"; // For decoding QR code from image
+import jsQR from "jsqr";
 import toast from "react-hot-toast";
 
 const QRCodeScanner = () => {
@@ -8,26 +8,23 @@ const QRCodeScanner = () => {
   const [scannedData, setScannedData] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  // Handle QR code scanning
   const handleScan = (data) => {
     if (data && data[0] && data[0].rawValue) {
-      const rawValue = data[0].rawValue; // Extract rawValue
-      setScannedData(rawValue); // Set the scanned rawValue
-      alert("Scanned Data: " + rawValue); // Alert with rawValue
-      toast.success(rawValue); // Optionally toast the rawValue
+      const rawValue = data[0].rawValue;
+      setScannedData(rawValue);
+      alert("Scanned Data: " + rawValue);
+      toast.success(rawValue);
       setScan(false);
-      setIsFullScreen(false); // Exit full-screen mode after scanning
+      setIsFullScreen(false);
     } else {
       alert("No QR code detected or invalid data format");
     }
   };
 
-  // Handle errors
   const handleError = (err) => {
     console.error("Scanner Error:", err);
   };
 
-  // Handle image file selection from gallery
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -38,7 +35,7 @@ const QRCodeScanner = () => {
         img.src = imageData;
 
         img.onload = () => {
-          const maxCanvasSize = 500; // Limit the canvas size
+          const maxCanvasSize = 500;
           const scaleFactor = Math.min(
             maxCanvasSize / img.width,
             maxCanvasSize / img.height,
@@ -56,9 +53,9 @@ const QRCodeScanner = () => {
           const code = jsQR(imageData.data, canvas.width, canvas.height);
 
           if (code) {
-            setScannedData(code.data); // QR code result
+            setScannedData(code.data);
             console.log("QR Code detected:", code.data);
-            setScan(false); // Close scanner after successful QR scan
+            setScan(false);
             setIsFullScreen(false);
           } else {
             console.error("No QR code found in the image");
@@ -92,24 +89,26 @@ const QRCodeScanner = () => {
           }`}
         >
           <div className="relative w-full h-full flex justify-center items-center">
-            {/* Circular Scanner UI similar to Google Pay */}
-            <div className="absolute border-4 border-white rounded-full w-64 h-64" />
+            {/* Circular Scanner UI */}
+            <div
+              className="absolute border-4 border-white rounded-full"
+              style={{
+                width: "80vw", // Make the scanner border responsive to viewport width
+                height: "80vw", // Make the scanner border circular and responsive
+                maxWidth: "400px", // Limit maximum width
+                maxHeight: "400px", // Limit maximum height
+              }}
+            />
 
             {/* QR Scanner */}
             <Scanner
               onScan={handleScan}
-              //   (result) => {
-              //   toast.success(result);
-              //   setScannedData(result);
-              //   setScan(false);
-              // }
-
               onError={handleError}
               className="w-full h-full"
             />
 
             {/* Flash/Torch and Gallery Buttons */}
-            <div className="absolute bottom-4 flex space-x-6">
+            <div className="absolute bottom-8 flex space-x-6"> {/* Adjusted bottom positioning for visibility */}
               <button
                 className="bg-gray-800 text-white rounded-full p-3"
                 onClick={() => document.getElementById("galleryInput").click()}
