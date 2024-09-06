@@ -94,7 +94,7 @@ const QRCodeScanner = () => {
             <Scanner
               onScan={(result) => {
                 console.log(result);
-                setScannedData(result);
+                setScannedData(result.data);
                 setScan(false);
               }}
               onError={handleError}
