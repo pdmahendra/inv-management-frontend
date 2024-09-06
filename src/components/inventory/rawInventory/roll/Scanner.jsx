@@ -12,8 +12,6 @@ const QRCodeScanner = () => {
     if (data && data[0] && data[0].rawValue) {
       const rawValue = data[0].rawValue;
       setScannedData(rawValue);
-      alert("Scanned Data: " + rawValue);
-      toast.success(rawValue);
       setScan(false);
       setIsFullScreen(false);
     } else {
@@ -88,7 +86,7 @@ const QRCodeScanner = () => {
             isFullScreen ? "w-screen h-screen" : "w-full h-64"
           }`}
         >
-          <div className="relative w-full h-full flex justify-center items-center">
+          <div className="w-full h-[390px] flex justify-center items-center">
             {/* Circular Scanner UI */}
             <div
               className="absolute border-4 border-white rounded-full"
@@ -108,7 +106,9 @@ const QRCodeScanner = () => {
             />
 
             {/* Flash/Torch and Gallery Buttons */}
-            <div className="absolute bottom-8 flex space-x-6"> {/* Adjusted bottom positioning for visibility */}
+            <div className="absolute bottom-16 flex space-x-6">
+              {" "}
+              {/* Adjusted bottom positioning for visibility */}
               <button
                 className="bg-gray-800 text-white rounded-full p-3"
                 onClick={() => document.getElementById("galleryInput").click()}
@@ -117,18 +117,17 @@ const QRCodeScanner = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  strokeWidth="2"
+                  stroke-width="1.5"
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
                 >
                   <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 8l7.89 5.26L12 13l1.11-.74L21 8m0 0v8.6c0 .896-1.078 1.34-1.707.707L12 9l-7.293 7.307c-.63.63-1.707.188-1.707-.707V8m0 0L12 3l9 5z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                   />
                 </svg>
               </button>
-
               <button className="bg-gray-800 text-white rounded-full p-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +135,7 @@ const QRCodeScanner = () => {
                   viewBox="0 0 24 24"
                   strokeWidth="2"
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
                 >
                   <path
                     strokeLinecap="round"
@@ -159,7 +158,7 @@ const QRCodeScanner = () => {
             {/* Close Button */}
             <button
               onClick={() => setScan(false)}
-              className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md"
+              className="absolute top-8 right-4 bg-red-500 text-white px-4 py-2 rounded-md"
             >
               Close
             </button>
