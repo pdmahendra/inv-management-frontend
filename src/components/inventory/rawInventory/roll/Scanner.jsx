@@ -10,12 +10,15 @@ const QRCodeScanner = () => {
 
   // Handle QR code scanning
   const handleScan = (data) => {
-    if (data) {
-      setScannedData(data);
-      alert("Scanned Data: " + JSON.stringify(data)); // Convert object to string
-      toast.success(JSON.stringify(data)); // Optionally toast the scanned data
+    if (data && data[0] && data[0].rawValue) {
+      const rawValue = data[0].rawValue; // Extract rawValue
+      setScannedData(rawValue); // Set the scanned rawValue
+      alert("Scanned Data: " + rawValue); // Alert with rawValue
+      toast.success(rawValue); // Optionally toast the rawValue
       setScan(false);
       setIsFullScreen(false); // Exit full-screen mode after scanning
+    } else {
+      alert("No QR code detected or invalid data format");
     }
   };
 
