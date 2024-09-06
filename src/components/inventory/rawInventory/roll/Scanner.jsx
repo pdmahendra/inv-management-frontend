@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import jsQR from "jsqr"; // For decoding QR code from image
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 
 const QRCodeScanner = () => {
   const [scan, setScan] = useState(false);
@@ -12,7 +12,8 @@ const QRCodeScanner = () => {
   const handleScan = (data) => {
     if (data) {
       setScannedData(data);
-      console.log("Scanned Data:", data);
+      alert("Scanned Data:", data);
+      toast.success("date")
       setScan(false);
       setIsFullScreen(false); // Exit full-screen mode after scanning
     }
@@ -93,11 +94,13 @@ const QRCodeScanner = () => {
 
             {/* QR Scanner */}
             <Scanner
-              onScan={(result) => {
-                toast.success(result);
-                setScannedData(result);
-                setScan(false);
-              }}
+              onScan={handleScan}
+              //   (result) => {
+              //   toast.success(result);
+              //   setScannedData(result);
+              //   setScan(false);
+              // }
+
               onError={handleError}
               className="w-full h-full"
             />
