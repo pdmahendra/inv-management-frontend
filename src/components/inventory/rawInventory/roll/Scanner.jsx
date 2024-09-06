@@ -34,7 +34,11 @@ const QRCodeScanner = () => {
 
         img.onload = () => {
           const maxCanvasSize = 500; // Limit the canvas size
-          const scaleFactor = Math.min(maxCanvasSize / img.width, maxCanvasSize / img.height, 1);
+          const scaleFactor = Math.min(
+            maxCanvasSize / img.width,
+            maxCanvasSize / img.height,
+            1
+          );
 
           const canvas = document.createElement("canvas");
           canvas.width = img.width * scaleFactor;
@@ -88,7 +92,13 @@ const QRCodeScanner = () => {
 
             {/* QR Scanner */}
             <Scanner
-              onScan={handleScan}
+              onScan={(result) => {
+                setScannedData(data);
+                console.log("Scanned Data:", data);
+                setScan(false);
+                setIsFullScreen(false);
+                console.log(result);
+              }}
               onError={handleError}
               className="w-full h-full"
             />
