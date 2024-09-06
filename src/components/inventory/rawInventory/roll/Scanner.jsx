@@ -28,7 +28,7 @@ const QRCodeScanner = () => {
 
       {scan && (
         <Scanner
-          onScan={handleScan}
+          onDecode={handleScan}
           onError={handleError}
           className="w-full h-64"
         />
