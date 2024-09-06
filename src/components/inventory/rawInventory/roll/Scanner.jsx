@@ -94,8 +94,8 @@ const QRCodeScanner = () => {
             {/* QR Scanner */}
             <Scanner
               onScan={(result) => {
-                toast.success(result.data);
-                setScannedData(result.data);
+                toast.success(result);
+                setScannedData(result);
                 setScan(false);
               }}
               onError={handleError}
