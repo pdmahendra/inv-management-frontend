@@ -12,7 +12,7 @@ const QRCodeScanner = () => {
   const handleScan = (data) => {
     if (data) {
       setScannedData(data);
-      alert("Scanned Data:", data);
+      alert("Scanned Data: "+ data);
       toast.success("date")
       setScan(false);
       setIsFullScreen(false); // Exit full-screen mode after scanning
