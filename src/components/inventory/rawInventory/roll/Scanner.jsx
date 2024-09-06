@@ -38,21 +38,6 @@ const QRCodeScanner = () => {
         <div className="mt-4 p-4 border bg-gray-100">
           <h3>Scanned Data:</h3>
           <p>{scannedData}</p>
-
-          <div>
-            <p>
-              <strong>RollNo:</strong> {scannedData.split("#")[0]}
-            </p>
-            <p>
-              <strong>SortNo:</strong> {scannedData.split("#")[1]}
-            </p>
-            <p>
-              <strong>Meter:</strong> {scannedData.split("#")[2]}
-            </p>
-            <p>
-              <strong>Grade:</strong> {scannedData.split("#")[3]}
-            </p>
-          </div>
         </div>
       )}
     </div>
