@@ -4,8 +4,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useDeleteItem } from "../../../api/query/inventory/invetoryApi";
-import { useEditItem } from "../../../api/query/inventory/invetoryApi";
+import { useDeleteItem } from "../../../../api/query/inventory/invetoryApi";
+import { useEditItem } from "../../../../api/query/inventory/invetoryApi";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

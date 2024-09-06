@@ -16,69 +16,78 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../ui/table";
-import EditItem from "./editItem";
-
-function Status({ min_limit, quantity }) {
-  return (
-    <>
-      {min_limit < quantity ? (
-        <div className="min-w-4 min-h-4 max-w-4 max-h-4 rounded-full bg-green-400"></div>
-      ) : (
-        <div className="min-w-4 min-h-4 max-w-4 max-h-4 rounded-full bg-red-400"></div>
-      )}
-    </>
-  );
-}
+} from "../../../../ui/table";
+// import EditItem from "./editItem";
 
 export const columns = [
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <Status
-        min_limit={row.getValue("min_limit")}
-        quantity={row.getValue("quantity")}
-      />
-    ),
-  },
   {
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => <div>{row.index + 1}</div>,
   },
   {
-    accessorKey: "name",
-    header: "Item Name",
-    cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+    accessorKey: "rollNo",
+    header: "Roll No",
+    cell: ({ row }) => <div className="">{row.getValue("rollNo")}</div>,
   },
   {
-    accessorKey: "quantity",
-    header: "Quantity",
-    cell: ({ row }) => <div className="pl-6">{row.getValue("quantity")}</div>,
+    accessorKey: "sortNo",
+    header: "Sort No",
+    cell: ({ row }) => <div className="pl-6">{row.getValue("sortNo")}</div>,
   },
   {
-    accessorKey: "min_limit",
-    header: "Minimum_Limit",
-    cell: ({ row }) => <div className="pl-3">{row.getValue("min_limit")}</div>,
+    accessorKey: "meter",
+    header: "Meter",
+    cell: ({ row }) => <div className="pl-3">{row.getValue("meter")}</div>,
   },
   {
-    accessorKey: "price",
-    header: "Price",
-    cell: ({ row }) => <div className="pl-3">{row.getValue("price")}</div>,
+    accessorKey: "grade",
+    header: "Grade",
+    cell: ({ row }) => <div className="pl-3">{row.getValue("grade")}</div>,
   },
-  {
-    accessorKey: "editAction",
-    header: "Edit Action",
-    cell: ({ row }) => <EditItem row={row} />,
-  },
+//   {
+//     accessorKey: "editAction",
+//     header: "Edit Action",
+//     cell: ({ row }) => <EditItem row={row} />,
+//   },
 ];
 
-export default function RawInventoryTable({ data = [] }) {
+export default function RawInventoryRollTable() {
   // const [sorting, setSorting] = useState([]);
   // const [columnFilters, setColumnFilters] = useState([]);
   // const [columnVisibility, setColumnVisibility] = React.useState({});
   // const [rowSelection, setRowSelection] = useState({});
+
+  const data = [
+    {
+      id: 1,
+      rollNo: "R001",
+      sortNo: "S001",
+      meter: "20",
+      grade: "A",
+    },
+    {
+      id: 2,
+      rollNo: "R002",
+      sortNo: "S002",
+      meter: "15",
+      grade: "B",
+    },
+    {
+      id: 3,
+      rollNo: "R003",
+      sortNo: "S003",
+      meter: "25",
+      grade: "A",
+    },
+    {
+      id: 4,
+      rollNo: "R004",
+      sortNo: "S004",
+      meter: "10",
+      grade: "C",
+    },
+  ];
 
   const table = useReactTable({
     data,
