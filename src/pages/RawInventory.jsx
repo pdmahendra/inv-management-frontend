@@ -1,7 +1,7 @@
 import React from "react";
 import AccessoriesComponent from "../components/inventory/rawInventory/accessories/AccessoriesComponent";
 import RollComponent from "../components/inventory/rawInventory/roll/RollComponent";
-import QRCodeScanner from "../components/inventory/rawInventory/roll/Scanner";
+import QRCodeScanner from "../components/inventory/rawInventory/roll/Scanner"
 
 export default function RawInventory() {
   return (
@@ -13,7 +13,7 @@ export default function RawInventory() {
         <AccessoriesComponent />
         <RollComponent />
       </div>
-      <QRCodeScanner />
+        <QRCodeScanner />
     </div>
   );
 }

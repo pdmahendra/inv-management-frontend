@@ -9,7 +9,7 @@ import { useAddItem } from "../api/query/inventory/invetoryApi";
 import { useFetchInventoryData } from "../api/query/inventory/invetoryApi";
 import toast from "react-hot-toast";
 
-export default function RawInventory() {
+export default function CuttingInventory() {
   const { mutate: addItmes, isLoading } = useAddItem();
   const {
     data: inventoryData = { items: [] },

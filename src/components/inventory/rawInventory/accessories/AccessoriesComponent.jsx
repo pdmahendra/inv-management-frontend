@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import RawInventoryAccessoriesTable from "./RawInventoryAccessoriesTable";
+import RawInventoryAccessoriesTable from "../accessories/RawInventoryAccessoriesTable";
 import { useAddItem } from "../../../../api/query/inventory/invetoryApi";
 import { useFetchInventoryData } from "../../../../api/query/inventory/invetoryApi";
 import toast from "react-hot-toast";
