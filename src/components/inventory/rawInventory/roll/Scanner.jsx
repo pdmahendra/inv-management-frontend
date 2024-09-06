@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import jsQR from "jsqr"; // For decoding QR code from image
-import toast from 'toast'
+import toast from 'react-hot-toast'
 
 const QRCodeScanner = () => {
   const [scan, setScan] = useState(false);
