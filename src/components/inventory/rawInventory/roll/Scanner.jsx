@@ -93,11 +93,9 @@ const QRCodeScanner = () => {
             {/* QR Scanner */}
             <Scanner
               onScan={(result) => {
-                setScannedData(data);
-                console.log("Scanned Data:", data);
-                setScan(false);
-                setIsFullScreen(false);
                 console.log(result);
+                setScannedData(result);
+                setScan(false);
               }}
               onError={handleError}
               className="w-full h-full"
