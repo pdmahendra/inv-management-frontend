@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../../../ui/table";
-// import EditItem from "./editItem";
+import EditItem from "../roll/editIRolltem";
 
 export const columns = [
   {
@@ -26,68 +26,51 @@ export const columns = [
     cell: ({ row }) => <div>{row.index + 1}</div>,
   },
   {
-    accessorKey: "rollNo",
+    accessorKey: "extra_fields",
     header: "Roll No",
-    cell: ({ row }) => <div className="">{row.getValue("rollNo")}</div>,
+    cell: ({ row }) => (
+      <div className="">{row.original.extra_fields?.[0]?.roll_number}</div>
+    ),
   },
   {
-    accessorKey: "sortNo",
+    accessorKey: "extra_fields",
     header: "Sort No",
-    cell: ({ row }) => <div className="pl-6">{row.getValue("sortNo")}</div>,
+    cell: ({ row }) => (
+      <div className="pl-6">{row.original.extra_fields?.[1]?.sort_number}</div>
+    ),
   },
   {
-    accessorKey: "meter",
+    accessorKey: "extra_fields",
     header: "Meter",
-    cell: ({ row }) => <div className="pl-3">{row.getValue("meter")}</div>,
+    cell: ({ row }) => (
+      <div className="pl-3">{row.original.extra_fields?.[2]?.meter}</div>
+    ),
   },
   {
-    accessorKey: "grade",
-    header: "Grade",
-    cell: ({ row }) => <div className="pl-3">{row.getValue("grade")}</div>,
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => <div className="pl-3">{row.getValue("price")}</div>,
   },
-//   {
-//     accessorKey: "editAction",
-//     header: "Edit Action",
-//     cell: ({ row }) => <EditItem row={row} />,
-//   },
+  {
+    accessorKey: "extra_",
+    header: "Grade",
+    cell: ({ row }) => (
+      <div className="pl-3">{row.original.extra_fields?.[3]?.grade}</div>
+    ),
+  },
+  {
+    accessorKey: "editAction",
+    header: "Edit Action",
+    cell: ({ row }) => <EditItem row={row} />,
+  },
 ];
 
-export default function RawInventoryRollTable() {
+export default function RawInventoryRollTable({ data = [] }) {
+
   // const [sorting, setSorting] = useState([]);
   // const [columnFilters, setColumnFilters] = useState([]);
   // const [columnVisibility, setColumnVisibility] = React.useState({});
   // const [rowSelection, setRowSelection] = useState({});
-
-  const data = [
-    {
-      id: 1,
-      rollNo: "R001",
-      sortNo: "S001",
-      meter: "20",
-      grade: "A",
-    },
-    {
-      id: 2,
-      rollNo: "R002",
-      sortNo: "S002",
-      meter: "15",
-      grade: "B",
-    },
-    {
-      id: 3,
-      rollNo: "R003",
-      sortNo: "S003",
-      meter: "25",
-      grade: "A",
-    },
-    {
-      id: 4,
-      rollNo: "R004",
-      sortNo: "S004",
-      meter: "10",
-      grade: "C",
-    },
-  ];
 
   const table = useReactTable({
     data,

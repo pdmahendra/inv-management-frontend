@@ -18,7 +18,6 @@ const QRCodeScanner = ({setData}) => {
 
       const [rollNumber, sortNumber, meter, grade] = rawValue.split('#');
 
-      // Update the form data using setData
       setData((prevData) => ({
         ...prevData,
         extra_fields: {
@@ -103,27 +102,24 @@ const QRCodeScanner = ({setData}) => {
         >
           <div className="w-full h-[390px] flex justify-center items-center">
             {/* Circular Scanner UI */}
-            <div
+            {/* <div
               className="absolute border-4 border-white rounded-full"
               style={{
-                width: "80vw", // Make the scanner border responsive to viewport width
-                height: "80vw", // Make the scanner border circular and responsive
-                maxWidth: "400px", // Limit maximum width
-                maxHeight: "400px", // Limit maximum height
+                width: "80vw",
+                height: "80vw", 
+                maxWidth: "400px", 
+                maxHeight: "400px", 
               }}
-            />
+            /> */}
 
-            {/* QR Scanner */}
             <Scanner
               onScan={handleScan}
               onError={handleError}
               className="w-full h-full"
             />
 
-            {/* Flash/Torch and Gallery Buttons */}
             <div className="absolute bottom-16 flex space-x-6">
               {" "}
-              {/* Adjusted bottom positioning for visibility */}
               <button
                 className="bg-gray-800 text-white rounded-full p-3"
                 onClick={() => document.getElementById("galleryInput").click()}
@@ -161,7 +157,6 @@ const QRCodeScanner = ({setData}) => {
               </button>
             </div>
 
-            {/* Hidden file input for selecting image from gallery */}
             <input
               type="file"
               id="galleryInput"
@@ -170,7 +165,6 @@ const QRCodeScanner = ({setData}) => {
               className="hidden"
             />
 
-            {/* Close Button */}
             <button
               onClick={() => setScan(false)}
               className="absolute top-8 right-4 bg-red-500 text-white px-4 py-2 rounded-md"
@@ -178,14 +172,6 @@ const QRCodeScanner = ({setData}) => {
               Close
             </button>
           </div>
-        </div>
-      )}
-
-      {/* Display scanned data */}
-      {scannedData && (
-        <div className="mt-4 p-4 border bg-gray-100">
-          <h3>Scanned Data:</h3>
-          <p>{scannedData}</p>
         </div>
       )}
     </div>
