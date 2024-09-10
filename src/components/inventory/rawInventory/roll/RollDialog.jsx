@@ -28,6 +28,7 @@ export default function FormDialog({ refetch }) {
       { grade: "" },
     ],
   });
+console.log(data);
 
   const [open, setOpen] = useState(false);
 

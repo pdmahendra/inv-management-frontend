@@ -8,7 +8,6 @@ const QRCodeScanner = ({setData}) => {
   const [scan, setScan] = useState(false);
   const [scannedData, setScannedData] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [rollNumber, sortNumber, meter, grade] = scannedData.split('#');
 
   const handleScan = (data) => {
     if (data && data[0] && data[0].rawValue) {
@@ -17,16 +16,17 @@ const QRCodeScanner = ({setData}) => {
       setScan(false);
       setIsFullScreen(false);
 
+      const [rollNumber, sortNumber, meter, grade] = rawValue.split('#');
 
       // Update the form data using setData
       setData((prevData) => ({
         ...prevData,
-        // extra_fields: {
-        //   roll_number: rollNumber || "",
-        //   sort_number: sortNumber || "",
-        //   meter: meter || "",
-        //   grade: grade || "",
-        // },
+        extra_fields: {
+          roll_number: rollNumber || "",
+          sort_number: sortNumber || "",
+          meter: meter || "",
+          grade: grade || "",
+        },
       }));
 
     } else {
@@ -184,14 +184,8 @@ const QRCodeScanner = ({setData}) => {
       {/* Display scanned data */}
       {scannedData && (
         <div className="mt-4 p-4 border bg-gray-100">
-          <h3>rollNumber :</h3>
-          <p>{rollNumber}</p>
-          <h3>sortNumber :</h3>
-          <p>{sortNumber}</p>
-          <h3>meter :</h3>
-          <p>{meter}</p>
-          <h3>grade :</h3>
-          <p>{grade}</p>
+          <h3>Scanned Data:</h3>
+          <p>{scannedData}</p>
         </div>
       )}
     </div>
