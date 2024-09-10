@@ -18,15 +18,17 @@ const AccessoriesComponent = () => {
     } = useFetchInventoryData();
     const [data, setData] = useState({
       name: "",
-      quantity: 0,
-      price: 0,
-      minimum: 0,
+      quantity: "",
+      price: "",
+      minimum: "",
       image_url: "",
       inventory_type: "",
+      sub_category:"",
+      extra_fields:[],
     });
   
     const filteredInventoryData = inventoryData.items?.filter(
-      (item) => item.inventory_type === "raw"
+      (item) => item.inventory_type === "raw" && item.sub_category === "accessories"
     );
   
     const [open, setOpen] = React.useState(false);
@@ -48,6 +50,8 @@ const AccessoriesComponent = () => {
         min_limit: data.minimum,
         image_url: "abc",
         inventory_type: "raw",
+        sub_category:"accessories",
+        extra_fields:[]
       };
   
       try {
