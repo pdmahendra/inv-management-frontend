@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import jsQR from "jsqr";
 import toast from "react-hot-toast";
+import scannerPng from "../../../../../public/barcode-scanner.png"
 
 const QRCodeScanner = () => {
   const [scan, setScan] = useState(false);
@@ -73,9 +74,9 @@ const QRCodeScanner = () => {
               setScan(true);
               setIsFullScreen(true);
             }}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
-          >
-            Scan QR Code
+            title="Scan QR Code"
+            >
+          <img src={scannerPng} alt="" className="size-6"/>
           </button>
         </div>
       )}
