@@ -122,7 +122,7 @@ export default function FormDialog({ refetch }) {
             Add item
           </DialogTitle>{" "}
           <div className="mr-8">
-          <QRCodeScanner />
+          <QRCodeScanner setData={setData}/>
           </div>
         </div>
         <DialogContent>

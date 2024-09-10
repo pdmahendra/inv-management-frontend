@@ -4,7 +4,7 @@ import jsQR from "jsqr";
 import toast from "react-hot-toast";
 import scannerPng from "../../../../../public/barcode-scanner.png"
 
-const QRCodeScanner = () => {
+const QRCodeScanner = ({setData}) => {
   const [scan, setScan] = useState(false);
   const [scannedData, setScannedData] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -15,6 +15,20 @@ const QRCodeScanner = () => {
       setScannedData(rawValue);
       setScan(false);
       setIsFullScreen(false);
+
+      const [rollNumber, sortNumber, meter, grade] = rawValue.split('#');
+
+      // Update the form data using setData
+      setData((prevData) => ({
+        ...prevData,
+        extra_fields: {
+          roll_number: rollNumber || "",
+          sort_number: sortNumber || "",
+          meter: meter || "",
+          grade: grade || "",
+        },
+      }));
+
     } else {
       alert("No QR code detected or invalid data format");
     }
