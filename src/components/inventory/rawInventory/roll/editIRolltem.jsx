@@ -32,14 +32,14 @@ function EditItem({ onEditClick, row }) {
 
   React.useEffect(() => {
     if (row) {
-        console.log("Roll number:", row.original.extra_fields[0].roll_number); 
+        console.log("Roll number:", row.original?.extra_fields[0]?.roll_number); 
 
       setData({
-        roll_number: row.original.extra_fields[0].roll_number,
-        sort_number: row.original.extra_fields[1].sort_number,
-        meter: row.original.extra_fields[2].meter,
-        price: row.original.price || "",
-        grade: row.original.extra_fields[3].grade,
+        roll_number: row.original?.extra_fields[0]?.roll_number,
+        sort_number: row.original?.extra_fields[1]?.sort_number,
+        meter: row.original?.extra_fields[2]?.meter,
+        price: row.original?.price || "",
+        grade: row.original?.extra_fields[3]?.grade,
       });
     }
   }, [row]);
@@ -120,7 +120,7 @@ function EditItem({ onEditClick, row }) {
         <DialogTitle sx={{ fontWeight: "500", fontSize: "1.4rem" }}>
           Edit item
         </DialogTitle>
-        <DialogContent sx={{ width: "28rem", paddingTop: "1.5rem" }}>
+        <DialogContent>
           <TextField
             autoFocus
             name="roll_number"

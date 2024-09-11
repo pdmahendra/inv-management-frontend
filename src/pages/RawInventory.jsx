@@ -1,6 +1,7 @@
 import React from "react";
 import AccessoriesComponent from "../components/inventory/rawInventory/accessories/AccessoriesComponent";
 import RollComponent from "../components/inventory/rawInventory/roll/RollComponent";
+import AstarComponent from "../components/inventory/rawInventory/astar/AstarComponent";
 
 export default function RawInventory() {
   return (
@@ -10,6 +11,7 @@ export default function RawInventory() {
       </div>
       <AccessoriesComponent />
       <RollComponent />
+      <AstarComponent />
     </div>
   );
 }
