@@ -30,7 +30,8 @@ function App() {
     };
   }, []);
 
-  const isLoginPage = location.pathname === "/login";
+  const isLoginPage =
+    location.pathname === "/login" || location.pathname === "/login/";
 
   return (
     <div className="flex">
@@ -68,7 +69,7 @@ function App() {
           </div>
         )}
 
-        <main className="min-w-[300px]">
+        <main className="min-w-[300px] sm:ml-72">
           <Outlet />
         </main>
       </div>
