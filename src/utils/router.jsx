@@ -9,6 +9,8 @@ import ReadyInventory from "../pages/ReadyInventory";
 import Login from "../pages/Login";
 import ProtectedRoutes from "../components/ProtectedRoutes";
 import { Navigate } from "react-router-dom";
+import ProductionPage from "../pages/ProductionPage";
+import StartNewProductionPage from "../pages/StartNewProductionPage";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +37,14 @@ export const router = createBrowserRouter([
       {
         path: "/inventory/raw",
         element: <ProtectedRoutes element={<RawInventory />} />,
+      },
+      {
+        path: "/production",
+        element: <ProtectedRoutes element={<ProductionPage />} />,
+      },
+      {
+        path: "/production/start-new",
+        element: <ProtectedRoutes element={<StartNewProductionPage />} />,
       },
       {
         path: "/inventory/cutting",
