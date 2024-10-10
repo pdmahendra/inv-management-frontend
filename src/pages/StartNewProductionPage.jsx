@@ -38,7 +38,7 @@ const StartNewProductionPage = () => {
     setExpectedDeliveryDate(formattedDate);
   };
   return (
-    <div className="sm:pr-20 pb-10 pt-5 ">
+    <div className="sm:pr-20 pb-10 pt-5 max-sm:w-[420px]">
       <div className="flex justify-between items-center max-sm:pr-8">
         <h1 className="text-3xl sm:pt-8 sm:pl-4 max-sm:pl-16">Start New</h1>
         <div className="pt-6">
