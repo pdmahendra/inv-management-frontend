@@ -74,7 +74,7 @@ function People() {
   return (
     <div className="p-6">
       <div className="max-md:mt-2 text-[2rem] flex justify-between">
-        <div>People</div>
+        <div className="max-sm:pl-12">People</div>
       </div>
       <div className="flex gap-8 sm:gap-0 flex-col lg:flex-row justify-between w-[380px] sm:w-full ">
         <div className="w-full sm:pt-8 sm:pr-16">
