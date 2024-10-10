@@ -72,12 +72,12 @@ function People() {
     peopleData?.users?.filter((user) => user.userType === "worker").length || 0;
 
   return (
-    <div className="md:ml-60 p-6">
-      <div className="ml-12 max-md:mt-2 text-[2rem] flex justify-between">
+    <div className="p-6">
+      <div className="max-md:mt-2 text-[2rem] flex justify-between">
         <div>People</div>
       </div>
       <div className="flex gap-8 sm:gap-0 flex-col lg:flex-row justify-between w-[380px] sm:w-full ">
-        <div className="w-full sm:p-8">
+        <div className="w-full sm:pt-8 sm:pr-16">
           {user?.userType === "admin" && (
             <div className="flex justify-end mb-6">
               <button

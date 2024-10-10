@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import QRCodeScanner from "../../rawInventory/roll/Scanner";
 
 export default function FormDialog({ refetch }) {
-  console.log(refetch);
 
   const { mutate: addItmes, isLoading } = useAddItem();
   const [data, setData] = useState({

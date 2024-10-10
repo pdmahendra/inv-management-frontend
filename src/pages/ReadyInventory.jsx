@@ -85,12 +85,12 @@ export default function ReadyInventory() {
 
   return (
     <div className="">
-      <div className="md:ml-60 p-6">
-        <div className="ml-12 max-md:mt-2 text-[2rem] flex justify-between">
-          <div>Ready Inventory</div>
+      <div className="p-6">
+        <div className="max-md:mt-2 text-[2rem] flex justify-between">
+          <div className="max-sm:pl-12">Ready Inventory</div>
         </div>
         <div className="flex justify-between w-[380px] sm:w-full">
-          <div className=" max-sm:mt-8 w-full sm:p-8">
+          <div className=" max-sm:mt-8 w-full sm:pr-16">
             <div className="flex justify-end mb-6">
               <button
                 className="text-[1rem] rounded-lg bg-[#3F51D7] px-8 py-4 text-white font-bold whitespace-nowrap"

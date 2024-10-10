@@ -9,7 +9,7 @@ function Home() {
   const { user } = useUser();
 
   return (
-    <div className="md:ml-80">
+    <div className="">
       <div className="py-4 border-b flex justify-between">
         <div className="text-[2rem] max-md:mt-4 max-md:ml-16">Home</div>
         <div className="rounded-lg px-2 flex gap-4 items-center py-5 md:py-1">

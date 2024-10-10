@@ -5,9 +5,9 @@ import AstarComponent from "../components/inventory/rawInventory/astar/AstarComp
 
 export default function RawInventory() {
   return (
-    <div className="md:ml-60 p-6 max-sm:space-y-8">
-      <div className="ml-12 max-md:mt-2 text-[2rem] flex justify-between">
-        <div>Raw Inventory</div>
+    <div className="p-6 max-sm:space-y-8">
+      <div className="max-md:mt-2 text-[2rem] flex justify-between">
+        <div className="max-sm:pl-12">Raw Inventory</div>
       </div>
       <AccessoriesComponent />
       <RollComponent />

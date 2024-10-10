@@ -3,9 +3,9 @@ import NotificationCard from "../components/NotificationCard";
 function Notifications() {
   return (
     <div className="">
-      <div className="md:ml-60 p-6">
-        <div className="ml-12 max-sm:mt-2 text-[2rem] flex justify-between">
-          <div>Notifications</div>
+      <div className="p-6">
+        <div className="max-sm:mt-2 text-[2rem] flex justify-between">
+          <div className="max-sm:pl-12">Notifications</div>
         </div>
         <div className="mt-4">
           <NotificationCard

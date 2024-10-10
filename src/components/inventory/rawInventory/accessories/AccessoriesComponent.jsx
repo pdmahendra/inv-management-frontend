@@ -88,8 +88,8 @@ const AccessoriesComponent = () => {
       }));
     };
   return (
-    <div className="flex justify-between w-[380px] sm:w-full">
-      <div className=" max-sm:mt-8 w-full sm:p-8">
+    <div className="flex justify-between w-[380px] sm:w-full sm:pr-16">
+      <div className=" max-sm:mt-8 w-full sm:pt-8">
       <div className="flex justify-between items-center sm:pl-6">
       <h1 className="text-2xl">Accessories</h1>
           <button

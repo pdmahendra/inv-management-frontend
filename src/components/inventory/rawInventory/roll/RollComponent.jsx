@@ -14,8 +14,8 @@ const RollComponent = () => {
   );
 
   return (
-    <div className="sm:ml-8 sm:pr-16 w-[380px] sm:w-full">
-      <div className="flex justify-between items-center sm:pl-6 pt-8">
+    <div className="sm:pr-16 w-[380px] sm:w-full">
+      <div className="flex justify-between items-center sm:pl-6 sm:pt-8">
         <h1 className="text-2xl">Roll</h1> <FormDialog refetch={refetch} />
       </div>{" "}
       <RawInventoryRollTable data={filteredInventoryData} refetch={refetch} />
