@@ -93,8 +93,13 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               </AccordionDetails>
             </Accordion>
           </li>
-          <Link to="/notifications" className="font-medium">
+          <Link to="/production" className="font-medium">
             <li class="px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+              Production{" "}
+            </li>
+          </Link>
+          <Link to="/notifications" className="font-medium">
+            <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Notification
             </li>
           </Link>
