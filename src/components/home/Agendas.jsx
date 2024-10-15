@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ListItem from "./ListItem";
 import FormDialog from "./AddItem";
 import axios from "../../utils/middleware";
+import { SERVER_BASE_URL } from "../../api/index";
 
 const Agendas = () => {
   const [tasks, setTasks] = useState([]);
@@ -11,9 +12,7 @@ const Agendas = () => {
 
   const getTasks = async () => {
     try {
-      const response = await axios.get(
-        "https://fact-1-production.up.railway.app/todo/get-tasks"
-      );
+      const response = await axios.get(`${SERVER_BASE_URL}/todo/get-tasks`);
       const filteredTasks = response.data.tasks.filter(
         (task) => task.todo_type === "todo1"
       );
@@ -32,7 +31,7 @@ const Agendas = () => {
 
     try {
       const response = await axios.post(
-        "https://fact-1-production.up.railway.app/todo/addTask",
+        `${SERVER_BASE_URL}/todo/addTask`,
         newTask
       );
       setTasks([...tasks, response.data.task]);

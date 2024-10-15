@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import QRCodeScanner from "../../rawInventory/roll/Scanner";
 
 export default function FormDialog({ refetch }) {
-
   const { mutate: addItmes, isLoading } = useAddItem();
   const [data, setData] = useState({
     name: "N/A",
@@ -27,7 +26,6 @@ export default function FormDialog({ refetch }) {
       { grade: "" },
     ],
   });
-console.log(data);
 
   const [open, setOpen] = useState(false);
 
@@ -122,7 +120,7 @@ console.log(data);
             Add item
           </DialogTitle>{" "}
           <div className="mr-8">
-          <QRCodeScanner setData={setData}/>
+            <QRCodeScanner setData={setData} />
           </div>
         </div>
         <DialogContent>

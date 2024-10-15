@@ -32,8 +32,6 @@ function EditItem({ onEditClick, row }) {
 
   React.useEffect(() => {
     if (row) {
-        console.log("Roll number:", row.original?.extra_fields[0]?.roll_number); 
-
       setData({
         roll_number: row.original?.extra_fields[0]?.roll_number,
         sort_number: row.original?.extra_fields[1]?.sort_number,
