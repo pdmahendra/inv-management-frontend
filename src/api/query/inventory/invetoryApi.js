@@ -4,7 +4,6 @@ import { API } from "../../index";
 
 export const getItems = async () => {
   const response = await axios.get(`${API.inventory.getItems}`);
-  console.log(response.data);
   return response.data;
 };
 
@@ -34,7 +33,7 @@ export const useAddItem = () => {
   });
 };
 
-export const editItem = async ( data ) => {
+export const editItem = async (data) => {
   const response = await axios.put(`${API.inventory.updateItems}`, data);
   return response.data;
 };
@@ -72,5 +71,18 @@ export const useDeleteItem = () => {
     onError: (error) => {
       console.error("Delete item error:", error);
     },
+  });
+};
+
+export const getItem = async (id) => {
+  const response = await axios.get(`${API.inventory.getItemById}/${id}`);
+  return response.data;
+};
+
+export const useFetchItemData = (id) => {
+  return useQuery({
+    queryKey: ["rollInventory", id], // Use id in the query key for unique caching
+    queryFn: () => getItem(id), // Call the getItem function with the id
+    enabled: !!id, // Ensure the query only runs if the id is not null or undefined
   });
 };
