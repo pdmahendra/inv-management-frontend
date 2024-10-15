@@ -1,11 +1,29 @@
 import React from "react";
 import OngoingCompletedTable from "../components/production/OngoingCompletedTable";
 import { Link } from "react-router-dom";
+import { useFetchAllProduction } from "../api/query/productionApi";
 
 const ProductionPage = () => {
+  const {
+    data: productionResponse,
+    isLoading: isFetching,
+    refetch,
+  } = useFetchAllProduction();
+
+  const productionData = productionResponse?.productions || [];
+
+  const ongoingProduction = productionData.filter(
+    (item) => item.markAsDone === false
+  );
+  const completedProduction = productionData.filter(
+    (item) => item.markAsDone === true
+  );
+
   return (
     <>
-      <h1 className="text-3xl max-sm:pl-16 pt-10 sm:pt-8 sm:pl-4">Production</h1>
+      <h1 className="text-3xl max-sm:pl-16 pt-10 sm:pt-8 sm:pl-4">
+        Production
+      </h1>
       <div className="sm:pt-8 sm:pr-16 p-8 max-sm:w-[420px]">
         <div className="flex justify-between items-center">
           <h1 className="sm:pl-4 text-lg">Ongoing</h1>
@@ -16,11 +34,11 @@ const ProductionPage = () => {
             Start New
           </Link>
         </div>
-        <OngoingCompletedTable />
+        <OngoingCompletedTable data={ongoingProduction} />
       </div>
       <div className="sm:pt-8 sm:pr-16 p-8 max-sm:w-[420px]">
         <h1 className="sm:pl-4 text-lg">Completed</h1>
-        <OngoingCompletedTable />
+        <OngoingCompletedTable data={completedProduction} />
       </div>
     </>
   );
