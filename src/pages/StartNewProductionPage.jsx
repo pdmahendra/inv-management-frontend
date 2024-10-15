@@ -6,6 +6,10 @@ import dayjs from "dayjs"; // Import dayjs
 import AddMoreRollTable from "../components/production/AddMoreRollTable";
 import AddMoreDialog from "../components/production/AddMoreDialog";
 import { useNavigate } from "react-router-dom";
+import { useFetchAllUsers } from "../api/query/fetchAllUsers";
+import { useStartNewProduction } from "../api/query/productionApi";
+import { toast } from "react-hot-toast";
+
 const StartNewProductionPage = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -13,30 +17,54 @@ const StartNewProductionPage = () => {
   const [assignTo, setAssignTo] = useState("");
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(null);
   const [data, setData] = useState([]);
+  console.log(data);
+  
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleContactChange = (e) => {
-    setContact(e.target.value);
-  };
-
+  //handle assignTo field
   const handleChange = (event) => {
-    setAssignTo(event.target.value);
+    const value = event.target.value;
+    setAssignTo(value === "others" ? "others" : value);
   };
 
-  const handleSubmit = () => {
-    console.log(name, contact, assignTo, expectedDeliveryDate, data);
-    navigate("/production");
-  };
-
+  //handle expected date field
   const handleDateChange = (newValue) => {
     const formattedDate = newValue
       ? dayjs(newValue).format("MM/DD/YYYY")
       : null;
     setExpectedDeliveryDate(formattedDate);
   };
+
+  //fetch all users to show name in dropdown
+  const {
+    data: peopleData = [],
+    isLoading: isFetching,
+    refetch,
+  } = useFetchAllUsers();
+  const { mutate: startNewProduction, isLoading } = useStartNewProduction();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const productionData = {
+      rolls: data,
+      expectedDeliveryDate: expectedDeliveryDate,
+      assignTo: assignTo === "Others" ? "others" : assignTo,
+      name: assignTo === "Others" ? name : undefined,
+      contact: assignTo === "Others" ? contact : undefined,
+    };
+
+    startNewProduction(productionData, {
+      onSuccess: (response) => {
+        navigate("/production");
+        toast.success("Production started successfully!");
+      },
+      onError: (error) => {
+        const errorMessage = error.response?.data?.error || "An error occurred";
+        toast.error(errorMessage);
+      },
+    });
+  };
+
   return (
     <div className="sm:pr-20 pb-10 pt-5 max-sm:w-[420px]">
       <div className="flex justify-between items-center max-sm:pr-8">
@@ -58,8 +86,14 @@ const StartNewProductionPage = () => {
             onChange={handleChange}
             className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
           >
-            <option value="abc">abc</option>
-            <option value="xyz">xyz</option>
+            <option value="" disabled>
+              Select User
+            </option>
+            {peopleData?.users?.map((user, index) => (
+              <option key={index} value={user._id}>
+                {user.name}
+              </option>
+            ))}
             <option value="Others">Others</option>
           </select>
         </div>
@@ -74,7 +108,7 @@ const StartNewProductionPage = () => {
                 id="name"
                 name="name"
                 value={name}
-                onChange={handleNameChange}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
                 placeholder="Enter your name"
               />
@@ -91,7 +125,7 @@ const StartNewProductionPage = () => {
                 id="contact"
                 name="contact"
                 value={contact}
-                onChange={handleContactChange}
+                onChange={(e) => setContact(e.target.value)}
                 className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
                 placeholder="Enter your contact"
               />

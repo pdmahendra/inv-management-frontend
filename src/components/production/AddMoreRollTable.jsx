@@ -30,21 +30,30 @@ export const columns = [
     cell: ({ row }) => <div className="pl-6">{row.original.rollNo}</div>,
   },
   {
-    accessorKey: "grade",
-    header: "Grade",
-    cell: ({ row }) => <div className="pl-3">{row.original.grade}</div>,
-  },
-  {
     accessorKey: "sort",
     header: "Sort",
     cell: ({ row }) => <div className="pl-3">{row.original.sort}</div>,
+  },
+  {
+    accessorKey: "meter",
+    header: "Meter",
+    cell: ({ row }) => <div className="pl-6">{row.original.meter}</div>,
+  },
+  {
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => <div className="pl-3">{row.original.price}</div>,
+  },
+  {
+    accessorKey: "grade",
+    header: "Grade",
+    cell: ({ row }) => <div className="pl-3">{row.original.grade}</div>,
   },
   {
     accessorKey: "noOfPieces",
     header: "No. of Pieces",
     cell: ({ row }) => <div className="pl-3">{row.original.noOfPieces}</div>,
   },
-
   {
     accessorKey: "costPrice",
     header: "Cost Price",

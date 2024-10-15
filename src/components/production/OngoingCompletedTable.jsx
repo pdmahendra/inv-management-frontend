@@ -18,82 +18,58 @@ import {
   TableRow,
 } from "../../ui/table";
 
-export const columns = [
-  {
-    accessorKey: "srNo.",
-    header: "Sr no.",
-    cell: ({ row }) => <div>{row.index + 1}</div>,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => <div className="">{row.original.status}</div>,
-  },
-  {
-    accessorKey: "rollNo",
-    header: "Roll no.",
-    cell: ({ row }) => <div className="pl-6">{row.original.rollNo}</div>,
-  },
-  {
-    accessorKey: "expectedDate",
-    header: "Expected Date",
-    cell: ({ row }) => <div className="pl-3">{row.original.expectedDate}</div>,
-  },
-  {
-    accessorKey: "totalPrice",
-    header: "Total price",
-    cell: ({ row }) => <div className="pl-3">{row.getValue("totalPrice")}</div>,
-  },
-  {
-    accessorKey: "assignTo",
-    header: "AssignTo",
-    cell: ({ row }) => <div className="pl-3">{row.original.assignTo}</div>,
-  },
-];
-
-const data = [
-    {
-      status: "Ongoing",
-      rollNo: "101",
-      expectedDate: "2024-10-10",
-      totalPrice: "$200",
-      assignTo: "Pratik",
-    },
-    {
-      status: "Completed",
-      rollNo: "102",
-      expectedDate: "2024-10-12",
-      totalPrice: "$150",
-      assignTo: "Ayur",
-    },
-    {
-      status: "Pending",
-      rollNo: "103",
-      expectedDate: "2024-10-15",
-      totalPrice: "$300",
-      assignTo: "Ankush",
-    },
-    {
-      status: "Ongoing",
-      rollNo: "104",
-      expectedDate: "2024-10-20",
-      totalPrice: "$250",
-      assignTo: "John",
-    },
-    {
-      status: "Completed",
-      rollNo: "105",
-      expectedDate: "2024-10-25",
-      totalPrice: "$400",
-      assignTo: "Jane",
-    },
-  ];
-
-export default function OngoingCompletedTable() {
+export default function OngoingCompletedTable({ data = [] }) {
   // const [sorting, setSorting] = useState([]);
   // const [columnFilters, setColumnFilters] = useState([]);
   // const [columnVisibility, setColumnVisibility] = React.useState({});
   // const [rowSelection, setRowSelection] = useState({});
+
+  const columns = [
+    {
+      accessorKey: "srNo.",
+      header: "Sr no.",
+      cell: ({ row }) => <div>{row.index + 1}</div>,
+    },
+    {
+      accessorKey: "markAsDone",
+      header: "Status",
+      cell: ({ row }) => (
+        <div>{row.original.markAsDone ? "Completed" : "Ongoing"}</div>
+      ),
+    },
+    {
+      accessorKey: "rollNo",
+      header: "Roll no.",
+      cell: ({ row }) => (
+        <div className="pl-6">
+          {row.original.rolls.map((roll) => roll.rollNo).join(", ")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "expectedDeliveryDate",
+      header: "Expected Date",
+      cell: ({ row }) => (
+        <div className="pl-3">{row.original.expectedDeliveryDate}</div>
+      ),
+    },
+    {
+      accessorKey: "totalPrice",
+      header: "Total price",
+      cell: ({ row }) => {
+        const totalCost = row.original.rolls.reduce(
+            (total, roll) => total + roll.noOfPieces * roll.costPrice,
+            0
+          );
+          return <div className="pl-3">{totalCost.toFixed(2)}</div>;
+        },
+    },
+    {
+      accessorKey: "assignTo",
+      header: "AssignTo",
+      cell: ({ row }) => <div className="pl-3">{row.original.assignTo.name}</div>,
+    },
+  ];
 
   const table = useReactTable({
     data,

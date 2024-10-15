@@ -3,7 +3,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useFetchInventoryData } from "../../api/query/inventory/invetoryApi";
+import { useFetchItemData } from "../../api/query/inventory/invetoryApi";
 
 export default function AddMoreDialog({ setData }) {
   const [open, setOpen] = useState(false);
@@ -14,6 +16,48 @@ export default function AddMoreDialog({ setData }) {
     noOfPieces: "",
     costPrice: "",
   });
+  const [selectedRollNoId, setSelectedRollNoId] = useState("");
+
+  //fetch list of roll item for dropdown
+  const { data: inventoryData = { items: [] }, isLoading: isFetching } =
+    useFetchInventoryData();
+  const filteredInventoryData = inventoryData.items?.filter(
+    (item) => item.inventory_type === "raw" && item.sub_category === "roll"
+  );
+
+  //filter roll_name and id
+  const rollNumbers = filteredInventoryData
+    .map((item) => {
+      const rollField = item.extra_fields.find((field) => field.roll_number);
+
+      if (rollField?.roll_number) {
+        return { roll_number: rollField.roll_number, id: item._id };
+      }
+      return null;
+    })
+    .filter((rollNumber) => rollNumber !== null);
+
+  //fetch roll item data by id
+  const { data: rollInventoryData } = useFetchItemData(selectedRollNoId);
+
+  //prefill fields
+  useEffect(() => {
+    if (rollInventoryData?.items) {
+      const { extra_fields, price } = rollInventoryData.items;
+      const sort =
+        extra_fields.find((field) => field.sort_number)?.sort_number || "";
+      const meter = extra_fields.find((field) => field.meter)?.meter || "";
+      const grade = extra_fields.find((field) => field.grade)?.grade || "";
+
+      setFormData((prevData) => ({
+        ...prevData,
+        sort,
+        meter,
+        price,
+        grade,
+      }));
+    }
+  }, [rollInventoryData]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,17 +69,39 @@ export default function AddMoreDialog({ setData }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (name === "rollNo") {
+      const selectedRollNo = rollNumbers.find(
+        (rollNo) => rollNo.roll_number === value
+      );
+
+      setFormData((prevData) => ({
+        ...prevData,
+        rollNo: value,
+      }));
+
+      setSelectedRollNoId(selectedRollNo?.id || "");
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = () => {
-    setData((prevData) => [...prevData, formData]); // Assuming setData accepts an array
-    handleClose(); // Close dialog after submission
-  };
+    setData((prevData) => [...prevData, formData]);
 
+    setFormData({
+      rollNo: "",
+      grade: "",
+      sort: "",
+      noOfPieces: "",
+      costPrice: "",
+    });
+
+    handleClose();
+  };
   return (
     <div>
       <button
@@ -72,25 +138,15 @@ export default function AddMoreDialog({ setData }) {
               onChange={handleChange}
               className="w-full px-4 py-4 border rounded-lg"
             >
-              <option value="">Select Roll Number</option>
-              <option value="R01">R01</option>
-              <option value="R02">R02</option>
-              <option value="R03">R03</option>
-              <option value="R04">R04</option>
+              <option value="" disabled>
+                Select Roll Number
+              </option>
+              {rollNumbers.map((roll, index) => (
+                <option key={index} value={roll.roll_number}>
+                  {roll.roll_number}
+                </option>
+              ))}
             </select>
-          </div>
-          <div className="mt-4">
-            <label className="block mb-2 text-lg font-medium" htmlFor="grade">
-              Grade
-            </label>
-            <input
-              type="text"
-              id="grade"
-              name="grade"
-              value={formData.grade}
-              onChange={handleChange}
-              className="w-full px-4 py-4 border rounded-lg"
-            />
           </div>
           <div className="mt-4">
             <label className="block mb-2 text-lg font-medium" htmlFor="sort">
@@ -100,7 +156,50 @@ export default function AddMoreDialog({ setData }) {
               type="text"
               id="sort"
               name="sort"
+              readOnly
               value={formData.sort}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border rounded-lg"
+            />
+          </div>
+          <div className="mt-4">
+            <label className="block mb-2 text-lg font-medium" htmlFor="meter">
+              Meter
+            </label>
+            <input
+              type="text"
+              id="meter"
+              name="meter"
+              readOnly
+              value={formData.meter}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border rounded-lg"
+            />
+          </div>
+          <div className="mt-4">
+            <label className="block mb-2 text-lg font-medium" htmlFor="price">
+              Price
+            </label>
+            <input
+              type="text"
+              id="price"
+              name="price"
+              readOnly
+              value={formData.price}
+              onChange={handleChange}
+              className="w-full px-4 py-4 border rounded-lg"
+            />
+          </div>
+          <div className="mt-4">
+            <label className="block mb-2 text-lg font-medium" htmlFor="grade">
+              Grade
+            </label>
+            <input
+              type="text"
+              id="grade"
+              name="grade"
+              readOnly
+              value={formData.grade}
               onChange={handleChange}
               className="w-full px-4 py-4 border rounded-lg"
             />
