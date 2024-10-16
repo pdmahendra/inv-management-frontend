@@ -22,16 +22,36 @@ export const startNewProduction = async (productionData) => {
   );
   return response.data;
 };
+
 export const useStartNewProduction = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: startNewProduction,
     onSuccess: () => {
-      queryClient.invalidateQueries(["fetchAllProduction"]); // fz etch ongoing table query here
+      queryClient.invalidateQueries(["fetchAllProduction"]);
     },
     onError: (error) => {
-      console.error("Registration error:", error);
+      console.error("Error starting production:", error);
+    },
+  });
+};
+
+export const updateProduction = async ({id, updatedMarkAsDone}) => {     
+  const response = await axios.put(`${API.production.update}/${id}`, {
+    markAsDone: updatedMarkAsDone,
+  });
+  return response.data;
+};
+
+export const useUpdateProduction = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateProduction,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["fetchAllProduction"]);
+    },
+    onError: (error) => {
+      console.error("Error updating production:", error);
     },
   });
 };
