@@ -44,7 +44,7 @@ function App() {
       )}
 
       <div className="flex-1">
-        {!isLoginPage && user?.userType !== "worker" && (
+        {!isLoginPage && user?.userType !== "" && (
           <div
             className={`md:hidden pl-6 fixed top-10 ${
               sidebarOpen ? "hidden" : "block"
