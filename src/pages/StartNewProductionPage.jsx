@@ -16,9 +16,7 @@ const StartNewProductionPage = () => {
   const [contact, setContact] = useState("");
   const [assignTo, setAssignTo] = useState("");
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(null);
-  const [data, setData] = useState([]);
-  console.log(data);
-  
+  const [data, setData] = useState([]);  
 
   //handle assignTo field
   const handleChange = (event) => {
@@ -29,7 +27,7 @@ const StartNewProductionPage = () => {
   //handle expected date field
   const handleDateChange = (newValue) => {
     const formattedDate = newValue
-      ? dayjs(newValue).format("MM/DD/YYYY")
+      ? dayjs(newValue).format("DD/MM/YYYY")
       : null;
     setExpectedDeliveryDate(formattedDate);
   };
@@ -38,7 +36,6 @@ const StartNewProductionPage = () => {
   const {
     data: peopleData = [],
     isLoading: isFetching,
-    refetch,
   } = useFetchAllUsers();
   const { mutate: startNewProduction, isLoading } = useStartNewProduction();
 
@@ -59,7 +56,7 @@ const StartNewProductionPage = () => {
         toast.success("Production started successfully!");
       },
       onError: (error) => {
-        const errorMessage = error.response?.data?.error || "An error occurred";
+        const errorMessage = error.response?.data?.message;        
         toast.error(errorMessage);
       },
     });
