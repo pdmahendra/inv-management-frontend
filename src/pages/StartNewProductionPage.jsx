@@ -27,7 +27,7 @@ const StartNewProductionPage = () => {
   //handle expected date field
   const handleDateChange = (newValue) => {
     const formattedDate = newValue
-      ? dayjs(newValue).format("DD/MM/YYYY")
+      ? dayjs(newValue).format("DD-MM-YYYY")
       : null;
     setExpectedDeliveryDate(formattedDate);
   };
