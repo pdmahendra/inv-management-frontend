@@ -50,7 +50,7 @@ const Todays = () => {
     <div className="pr-2 w-80">
       <div>
         <div className="flex justify-between items-center pr-2 text-xl font-medium">
-          <h1 className="">Todays notes</h1>
+          <h1 className="">My pending jobs</h1>
           <div className="flex items-center gap-4">
             <FormDialog
               title={title}
