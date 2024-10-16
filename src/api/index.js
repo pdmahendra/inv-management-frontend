@@ -22,5 +22,6 @@ export const API = {
   production: {
     getAllProduction: `${SERVER_BASE_URL}/production/get-all-productions`,
     startNew: `${SERVER_BASE_URL}/production/start-new`,
+    update: `${SERVER_BASE_URL}/production/update`,
   },
 };
