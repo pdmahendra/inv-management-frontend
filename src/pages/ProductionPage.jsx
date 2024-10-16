@@ -7,7 +7,6 @@ const ProductionPage = () => {
   const {
     data: productionResponse,
     isLoading: isFetching,
-    refetch,
   } = useFetchAllProduction();
 
   const productionData = productionResponse?.productions || [];
