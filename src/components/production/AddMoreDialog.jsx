@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
 import { useFetchInventoryData } from "../../api/query/inventory/invetoryApi";
 import { useFetchItemData } from "../../api/query/inventory/invetoryApi";
+import { toast } from "react-hot-toast";
 
 export default function AddMoreDialog({ setData }) {
   const [open, setOpen] = useState(false);
@@ -90,6 +91,15 @@ export default function AddMoreDialog({ setData }) {
   };
 
   const handleSubmit = () => {
+    if(!formData.rollNo) {
+        toast.error("Please select Roll number to continue.");
+        return;
+    }
+    if (!formData.noOfPieces || !formData.costPrice) {
+      toast.error("Please enter number of pieces and cost price.");
+      return;
+    }
+
     setData((prevData) => [...prevData, formData]);
 
     setFormData({
