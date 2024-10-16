@@ -3,26 +3,37 @@ import FormDialog from "./AddItem";
 import React, { useEffect, useState } from "react";
 import axios from "../../utils/middleware";
 import { SERVER_BASE_URL } from "../../api/index";
+import { useFetchMyProduction } from "../../api/query/productionApi";
 
 const Todays = () => {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [myProductionData, setMyProductionData] = useState([]);
+  console.log(myProductionData.productions);
 
-  const getTasks = async () => {
-    try {
-      const response = await axios.get(
-        `${SERVER_BASE_URL}/todo/get-tasks`
-      );
-      const filteredTasks = response.data.tasks.filter(
-        (task) => task.todo_type === "todo3"
-      );
-      setTasks(filteredTasks);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
+  // const getTasks = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${SERVER_BASE_URL}/todo/get-tasks`
+  //     );
+  //     const filteredTasks = response.data.tasks.filter(
+  //       (task) => task.todo_type === "todo3"
+  //     );
+  //     setTasks(filteredTasks);
+  //   } catch (error) {
+  //     console.error("Error fetching tasks:", error);
+  //   }
+  // };
+
+  const { data: myProductionResponse, isLoading: isFetching } =
+    useFetchMyProduction();
+
+  useEffect(() => {
+    if (myProductionResponse) {
+      setMyProductionData(myProductionResponse); // Update state with the fetched data
     }
-  };
-
+  }, [myProductionResponse]);
   const addTask = async () => {
     const newTask = {
       title,
@@ -43,9 +54,9 @@ const Todays = () => {
     }
   };
 
-  useEffect(() => {
-    getTasks();
-  }, []);
+  // useEffect(() => {
+  //   getTasks();
+  // }, []);
   return (
     <div className="pr-2 w-80">
       <div>
@@ -80,16 +91,18 @@ const Todays = () => {
       </div>
       <div className="mt-2 md:mt-14">
         <ul>
-          {tasks.map((t) => (
-            <ListItem
-              key={t._id}
-              id={t._id}
-              status={t.status}
-              title={t.title}
-              description={t.description}
-              getTasks={getTasks}
-            />
-          ))}
+          {myProductionData?.productions?.map((t) =>
+            t.rolls.map((roll) => (
+              <ListItem
+                key={t._id}
+                id={t._id}
+                status={t.markAsDone}
+                title={`${"Cutting"} / ${roll.rollNo} / ${
+                  t.expectedDeliveryDate
+                }`}
+              />
+            ))
+          )}
         </ul>
       </div>
     </div>
