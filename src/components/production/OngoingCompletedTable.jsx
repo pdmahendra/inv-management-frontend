@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../ui/table";
+import Options from "./Option";
 
 export default function OngoingCompletedTable({ data = [] }) {
   // const [sorting, setSorting] = useState([]);
@@ -33,24 +34,44 @@ export default function OngoingCompletedTable({ data = [] }) {
     {
       accessorKey: "markAsDone",
       header: "Status",
-      cell: ({ row }) => (
-        <div>{row.original.markAsDone ? "Completed" : "Ongoing"}</div>
-      ),
+      cell: ({ row }) => {
+        const markAsDone = row.original.markAsDone;
+        const statusClass = markAsDone ? "bg-green-500" : "bg-yellow-300";
+        return (
+          <div className={`text-white ${statusClass} p-1 rounded-full`}>
+            {markAsDone ? "Completed" : "Ongoing"}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "rollNo",
       header: "Roll no.",
       cell: ({ row }) => (
-        <div className="pl-6">
+        <div className="">
           {row.original.rolls.map((roll) => roll.rollNo).join(", ")}
         </div>
       ),
     },
     {
+      accessorKey: "createdAt",
+      header: "Start Date",
+      cell: ({ row }) => {
+        const formattedDate = new Date(
+          row.original.createdAt
+        ).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        return <div className="">{formattedDate}</div>;
+      },
+    },
+    {
       accessorKey: "expectedDeliveryDate",
       header: "Expected Date",
       cell: ({ row }) => (
-        <div className="pl-3">{row.original.expectedDeliveryDate}</div>
+        <div className="">{row.original.expectedDeliveryDate}</div>
       ),
     },
     {
@@ -58,16 +79,25 @@ export default function OngoingCompletedTable({ data = [] }) {
       header: "Total price",
       cell: ({ row }) => {
         const totalCost = row.original.rolls.reduce(
-            (total, roll) => total + roll.noOfPieces * roll.costPrice,
-            0
-          );
-          return <div className="pl-3">{totalCost.toFixed(2)}</div>;
-        },
+          (total, roll) => total + roll.noOfPieces * roll.costPrice,
+          0
+        );
+        return <div className="">{totalCost.toFixed(2)}</div>;
+      },
     },
     {
       accessorKey: "assignTo",
       header: "AssignTo",
-      cell: ({ row }) => <div className="pl-3">{row.original.assignTo.name}</div>,
+      cell: ({ row }) => <div className="">{row.original.assignTo.name}</div>,
+    },
+    {
+      accessorKey: "*",
+      header: "",
+      cell: ({ row }) => (
+        <div>
+          <Options id={row.original._id} markAsDone={row.original.markAsDone} />
+        </div>
+      ),
     },
   ];
 
