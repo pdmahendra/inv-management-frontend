@@ -4,6 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import toast from "react-hot-toast";
 import { useUpdateProduction } from "../../api/query/productionApi";
 import axios from "../../utils/middleware";
+import { SERVER_BASE_URL } from "../../api/index";
 
 export default function Options({ id, markAsDone }) {
   const updateProductionMutation = useUpdateProduction();
@@ -40,9 +41,12 @@ export default function Options({ id, markAsDone }) {
 
   const downloadPdf = async () => {
     try {
-      const response = await axios.get(`/production/generate-pdf/${id}`, {
-        responseType: "blob", // Important for binary data
-      });
+      const response = await axios.get(
+        `${SERVER_BASE_URL}/production/generate-pdf/${id}`,
+        {
+          responseType: "blob", // Important for binary data
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
