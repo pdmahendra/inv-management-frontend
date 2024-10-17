@@ -12,6 +12,7 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
 
     toast.success("Logout successful!");
 
