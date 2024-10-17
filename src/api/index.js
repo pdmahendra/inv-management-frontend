@@ -1,5 +1,5 @@
 export const SERVER_BASE_URL =
-`https://fact-1-1.onrender.com` || `http://localhost:3000`;
+  `https://fact-1-1.onrender.com` || `http://localhost:3000`;
 
 export const API = {
   users: {
@@ -22,6 +22,7 @@ export const API = {
   production: {
     getAllProduction: `${SERVER_BASE_URL}/production/get-all-productions`,
     getMyProductions: `${SERVER_BASE_URL}/production/get-my-productions`,
+    generatePdf: `${SERVER_BASE_URL}/production/generate-pdf`,
     startNew: `${SERVER_BASE_URL}/production/start-new`,
     update: `${SERVER_BASE_URL}/production/update`,
   },
