@@ -13,18 +13,23 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
-
     toast.success("Logout successful!");
-
     navigate("/login");
   };
+
+  const handleTabClick = () => {
+    if (window.innerWidth < 768) {
+      handleSidebar(); // Close the sidebar only on smaller devices
+    }
+  };
+
   return (
     <div
       className={`fixed w-64 z-40  bg-[#F4F0ED] flex flex-col justify-between text-black h-full transform ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 ease-in-out`}
     >
-      <div onClick={handleSidebar}>
+      <div>
         {" "}
         <div className="flex items-center justify-center py-4">
           <span className="text-xl font-semibold flex justify-start items-center">
@@ -49,12 +54,12 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
           </button>
         </div>
         <ul class="mt-6">
-          <Link to="/" className=" font-medium">
+          <Link to="/" className=" font-medium" onClick={handleTabClick}>
             <li class="px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Home
             </li>
           </Link>
-          <Link to="#" className=" font-medium">
+          <Link to="#" className="font-medium" onClick={handleTabClick}>
             <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Analytics
             </li>
@@ -79,43 +84,63 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               </AccordionSummary>
               <AccordionDetails>
                 <ul className="">
-                  <Link to="/inventory/raw" className="font-medium">
+                  <Link
+                    to="/inventory/raw"
+                    className="font-medium"
+                    onClick={handleTabClick}
+                  >
                     <li className="hover:bg-[#E4EAFB] py-1">Raw Inventory</li>
                   </Link>
-                  <Link to="/inventory/cutting" className="font-medium">
+                  <Link
+                    to="/inventory/cutting"
+                    className="font-medium"
+                    onClick={handleTabClick}
+                  >
                     <li className="hover:bg-[#E4EAFB] py-1">
                       Cutting Inventory
                     </li>
                   </Link>
-                  <Link to="/inventory/ready" className="font-medium">
+                  <Link
+                    to="/inventory/ready"
+                    className="font-medium"
+                    onClick={handleTabClick}
+                  >
                     <li className="hover:bg-[#E4EAFB] py-1">Ready Inventory</li>
                   </Link>
                 </ul>
               </AccordionDetails>
             </Accordion>
           </li>
-          <Link to="/production" className="font-medium">
+          <Link
+            to="/production"
+            className="font-medium"
+            onClick={handleTabClick}
+          >
             <li class="px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Production{" "}
             </li>
           </Link>
-          <Link to="/notifications" className="font-medium">
+          <Link
+            to="/notifications"
+            className="font-medium"
+            onClick={handleTabClick}
+          >
             <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Notification
             </li>
           </Link>
-          <Link to="#" className="font-medium">
+          <Link to="#" className="font-medium" onClick={handleTabClick}>
             <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               View Lifecycle
             </li>
           </Link>
-          <Link to="#" className=" font-medium">
+          <Link to="#" className=" font-medium" onClick={handleTabClick}>
             <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Issuance Records
             </li>
           </Link>
           {user?.userType !== "worker" && (
-            <Link to="/people" className="font-medium">
+            <Link to="/people" className="font-medium" onClick={handleTabClick}>
               <li className="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
                 People
               </li>
