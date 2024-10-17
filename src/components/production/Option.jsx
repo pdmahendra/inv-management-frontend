@@ -3,6 +3,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import toast from "react-hot-toast";
 import { useUpdateProduction } from "../../api/query/productionApi";
+import axios from "../../utils/middleware";
 
 export default function Options({ id, markAsDone }) {
   const updateProductionMutation = useUpdateProduction();
@@ -23,6 +24,7 @@ export default function Options({ id, markAsDone }) {
 
     try {
       await updateProductionMutation.mutateAsync({ id, updatedMarkAsDone });
+      console.log(id);
 
       toast.success(
         `Production marked as ${
@@ -33,6 +35,24 @@ export default function Options({ id, markAsDone }) {
     } catch (error) {
       console.error("Failed to update production:", error);
       toast.error("Failed to update production");
+    }
+  };
+
+  const downloadPdf = async () => {
+    try {
+      const response = await axios.get(`/production/generate-pdf/${id}`, {
+        responseType: "blob", // Important for binary data
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "order-details.pdf"); // Specify the file name
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
     }
   };
 
@@ -75,6 +95,7 @@ export default function Options({ id, markAsDone }) {
         }}
       >
         <MenuItem onClick={handleMarkAsCompleted}>Mark as Completed</MenuItem>
+        <MenuItem onClick={downloadPdf}>Generate Challan</MenuItem>
       </Menu>
     </div>
   );
