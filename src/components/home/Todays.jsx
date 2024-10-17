@@ -34,25 +34,6 @@ const Todays = () => {
       setMyProductionData(myProductionResponse); // Update state with the fetched data
     }
   }, [myProductionResponse]);
-  const addTask = async () => {
-    const newTask = {
-      title,
-      description,
-      todo_type: "todo3",
-    };
-
-    try {
-      const response = await axios.post(
-        `${SERVER_BASE_URL}/todo/addTask`,
-        newTask
-      );
-      setTasks([...tasks, response.data.task]);
-      setTitle("");
-      setDescription("");
-    } catch (error) {
-      console.error("Error adding task:", error);
-    }
-  };
 
   // useEffect(() => {
   //   getTasks();
@@ -60,49 +41,42 @@ const Todays = () => {
   return (
     <div className="pr-2 w-80">
       <div>
-        <div className="flex justify-between items-center pr-2 text-xl font-medium">
+        <div className="flex justify-center items-center text-xl font-medium">
           <h1 className="">My pending jobs</h1>
-          <div className="flex items-center gap-4">
-            <FormDialog
-              title={title}
-              description={description}
-              setTitle={setTitle}
-              setDescription={setDescription}
-              addTask={addTask}
-            />{" "}
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                />
-              </svg>
-            </div>
-          </div>
         </div>
       </div>
       <div className="mt-2 md:mt-14">
         <ul>
-          {myProductionData?.productions?.map((t) =>
-            t.rolls.map((roll) => (
+          {myProductionData?.productions?.map((t) => {
+            const currentDate = new Date();
+
+            const [day, month, year] = t.expectedDeliveryDate.split("-");
+            const expectedDeliveryDate = new Date(`${year}-${month}-${day}`);
+
+            if (isNaN(expectedDeliveryDate.getTime())) {
+              console.error(
+                "Invalid expected delivery date:",
+                t.expectedDeliveryDate
+              );
+              return null;
+            }
+
+            const timeDiff = expectedDeliveryDate - currentDate;
+            const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+            return t.rolls.map((roll) => (
               <ListItem
-                key={t._id}
+                key={roll.rollNo} // Use roll.rollNo as key if it's unique
                 id={t._id}
                 status={t.markAsDone}
-                title={`${"Cutting"} / ${roll.rollNo} / ${
-                  t.expectedDeliveryDate
-                }`}
+                title={`Cutting / ${
+                  roll.rollNo
+                } / ${expectedDeliveryDate.toDateString()}`}
+                daysLeft={daysLeft >= 0 ? `${daysLeft} days left` : "Past due"}
+                heading={"My pending jobs"}
               />
-            ))
-          )}
+            ));
+          })}
         </ul>
       </div>
     </div>
