@@ -3,8 +3,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import toast from "react-hot-toast";
 import { useUpdateProduction } from "../../api/query/productionApi";
-import axios from "../../utils/middleware";
-import { SERVER_BASE_URL } from "../../api/index";
+import { downloadPdf } from "../../api/query/downloadChallan";
 
 export default function Options({ id, markAsDone }) {
   const updateProductionMutation = useUpdateProduction();
@@ -39,24 +38,15 @@ export default function Options({ id, markAsDone }) {
     }
   };
 
-  const downloadPdf = async () => {
+  const handleDownloadClick = async () => {
+    const toastId = toast.loading("Downloading..");
     try {
-      const response = await axios.get(
-        `${SERVER_BASE_URL}/production/generate-pdf/${id}`,
-        {
-          responseType: "blob", // Important for binary data
-        }
-      );
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "order-details.pdf"); // Specify the file name
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      await downloadPdf(id);
+      toast.dismiss(toastId);
+      toast.success("Download successful!");
     } catch (error) {
-      console.error("Error downloading PDF:", error);
+      toast.dismiss(toastId);
+      toast.error("Download failed!");
     }
   };
 
@@ -99,7 +89,7 @@ export default function Options({ id, markAsDone }) {
         }}
       >
         <MenuItem onClick={handleMarkAsCompleted}>Mark as Completed</MenuItem>
-        <MenuItem onClick={downloadPdf}>Generate Challan</MenuItem>
+        <MenuItem onClick={handleDownloadClick}>Generate Challan</MenuItem>
       </Menu>
     </div>
   );
