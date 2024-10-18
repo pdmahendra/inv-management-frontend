@@ -1,10 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import icon from "../profileIcon.png";
 import Factory from "../factory.png";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar({ sidebarOpen, handleSidebar, user }) {
@@ -21,6 +17,12 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
     if (window.innerWidth < 768) {
       handleSidebar(); // Close the sidebar only on smaller devices
     }
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -55,68 +57,85 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
         </div>
         <ul class="mt-6">
           <Link to="/" className=" font-medium" onClick={handleTabClick}>
-            <li class="px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Home
             </li>
           </Link>
           <Link to="#" className="font-medium" onClick={handleTabClick}>
-            <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Analytics
             </li>
           </Link>
           <li>
-            <Accordion
-              sx={{
-                backgroundColor: "#F4F0ED",
-                border: "none",
-                boxShadow: "none",
-                paddingLeft: "16px",
-                marginTop: "4px",
-                marginBottom: "4px",
-              }}
+            <div
+              className="bg-[#F4F0ED] border-none shadow-none px-8 py-2 cursor-pointer flex justify-between"
+              onClick={toggleAccordion}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
-              >
-                <span className="font-medium">Inventory</span>
-              </AccordionSummary>
-              <AccordionDetails>
-                <ul className="">
-                  <Link
-                    to="/inventory/raw"
-                    className="font-medium"
-                    onClick={handleTabClick}
-                  >
-                    <li className="hover:bg-[#E4EAFB] py-1">Raw Inventory</li>
-                  </Link>
-                  <Link
-                    to="/inventory/cutting"
-                    className="font-medium"
-                    onClick={handleTabClick}
-                  >
-                    <li className="hover:bg-[#E4EAFB] py-1">
-                      Cutting Inventory
-                    </li>
-                  </Link>
-                  <Link
-                    to="/inventory/ready"
-                    className="font-medium"
-                    onClick={handleTabClick}
-                  >
-                    <li className="hover:bg-[#E4EAFB] py-1">Ready Inventory</li>
-                  </Link>
-                </ul>
-              </AccordionDetails>
-            </Accordion>
+              <span className="font-medium">Inventory</span>
+              <span className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className={`size-4 delay-100 transition-transform ease-in-out duration-500 ${
+                    isOpen ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </span>
+            </div>
+
+            {/* Accordion Content */}
+            <div
+              className={`transition-all ease-in-out delay-100 duration-500 overflow-hidden ${
+                isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <ul>
+                <Link
+                  to="/inventory/raw"
+                  className="font-medium"
+                  onClick={handleTabClick}
+                >
+                  <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
+                    Raw Inventory
+                  </li>
+                </Link>
+                <Link
+                  to="/inventory/cutting"
+                  className="font-medium"
+                  onClick={handleTabClick}
+                >
+                  <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
+                    Cutting Inventory
+                  </li>
+                </Link>
+                <Link
+                  to="/inventory/ready"
+                  className="font-medium"
+                  onClick={handleTabClick}
+                >
+                  <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
+                    Ready Inventory
+                  </li>
+                </Link>
+              </ul>
+            </div>
           </li>
+
           <Link
             to="/production"
             className="font-medium"
             onClick={handleTabClick}
           >
-            <li class="px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Production{" "}
             </li>
           </Link>
@@ -125,30 +144,30 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
             className="font-medium"
             onClick={handleTabClick}
           >
-            <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Notification
             </li>
           </Link>
           <Link to="#" className="font-medium" onClick={handleTabClick}>
-            <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               View Lifecycle
             </li>
           </Link>
           <Link to="#" className=" font-medium" onClick={handleTabClick}>
-            <li class="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Issuance Records
             </li>
           </Link>
           {user?.userType !== "worker" && (
             <Link to="/people" className="font-medium" onClick={handleTabClick}>
-              <li className="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+              <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
                 People
               </li>
             </Link>
           )}
 
           <Link to="#" onClick={handleLogout} className="font-medium">
-            <li className="mt-4 px-8 rounded-lg hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+            <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Logout
             </li>
           </Link>
