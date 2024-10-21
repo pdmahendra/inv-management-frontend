@@ -27,6 +27,19 @@ export const useFetchMyProduction = () => {
   });
 };
 
+export const fetchProductionById = async (id) => {
+  const response = await axios.get(`${API.production.getProductionById}/${id}`);
+  return response.data;
+};
+
+export const useFetchProductionById = (id) => {
+  return useQuery({
+    queryKey: ["fetchProductionById", id],
+    queryFn: () => fetchProductionById(id),
+    enabled: !!id,
+  });
+};
+
 export const startNewProduction = async (productionData) => {
   const response = await axios.post(
     `${API.production.startNew}`,
@@ -48,9 +61,10 @@ export const useStartNewProduction = () => {
   });
 };
 
-export const updateProduction = async ({ id, updatedMarkAsDone }) => {
+export const updateProduction = async ({ id, updatedMarkAsDone, rolls }) => {
   const response = await axios.put(`${API.production.update}/${id}`, {
     markAsDone: updatedMarkAsDone,
+    rolls,
   });
   return response.data;
 };

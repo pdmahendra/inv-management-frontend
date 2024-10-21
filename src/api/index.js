@@ -22,8 +22,13 @@ export const API = {
   production: {
     getAllProduction: `${SERVER_BASE_URL}/production/get-all-productions`,
     getMyProductions: `${SERVER_BASE_URL}/production/get-my-productions`,
+    getProductionById: `${SERVER_BASE_URL}/production/getProductionById`,
     generatePdf: `${SERVER_BASE_URL}/production/generate-pdf`,
     startNew: `${SERVER_BASE_URL}/production/start-new`,
     update: `${SERVER_BASE_URL}/production/update`,
+  },
+  lifecycle: {
+    startNewLifecycle: `${SERVER_BASE_URL}/lifecycle/start-new-lifecycle`,
+    getAllLifecycle: `${SERVER_BASE_URL}/lifecycle/get-all-lifecycle`,
   },
 };
