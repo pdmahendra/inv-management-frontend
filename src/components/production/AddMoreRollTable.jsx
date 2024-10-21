@@ -51,7 +51,7 @@ export const columns = [
   },
   {
     accessorKey: "noOfPieces",
-    header: "No. of Pieces",
+    header: "Expected No. of Pieces",
     cell: ({ row }) => <div className="pl-3">{row.original.noOfPieces}</div>,
   },
   {
@@ -66,7 +66,7 @@ export const columns = [
       const noOfPieces = Number(row.original.noOfPieces);
       const costPrice = Number(row.original.costPrice);
       const totalCost = noOfPieces * costPrice;
-      return <div className="pl-3">{totalCost.toFixed(2)}</div>;
+      return <div className="pl-3">₹ {totalCost}</div>;
     },
   },
 ];
