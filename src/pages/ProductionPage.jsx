@@ -4,10 +4,8 @@ import { Link } from "react-router-dom";
 import { useFetchAllProduction } from "../api/query/productionApi";
 
 const ProductionPage = () => {
-  const {
-    data: productionResponse,
-    isLoading: isFetching,
-  } = useFetchAllProduction();
+  const { data: productionResponse, isLoading: isFetching } =
+    useFetchAllProduction();
 
   const productionData = productionResponse?.productions || [];
 
@@ -33,11 +31,14 @@ const ProductionPage = () => {
             Start New
           </Link>
         </div>
-        <OngoingCompletedTable data={ongoingProduction} />
+        <OngoingCompletedTable data={ongoingProduction} heading={"Ongoing"} />
       </div>
       <div className="sm:pt-8 sm:pr-16 p-8 max-sm:w-[420px]">
         <h1 className="sm:pl-4 text-lg">Completed</h1>
-        <OngoingCompletedTable data={completedProduction} />
+        <OngoingCompletedTable
+          data={completedProduction}
+          heading={"Completed"}
+        />
       </div>
     </>
   );
