@@ -10,7 +10,6 @@ const Todays = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [myProductionData, setMyProductionData] = useState([]);
-  console.log(myProductionData.productions);
 
   // const getTasks = async () => {
   //   try {
@@ -31,13 +30,12 @@ const Todays = () => {
 
   useEffect(() => {
     if (myProductionResponse) {
+      console.log(myProductionResponse);
+
       setMyProductionData(myProductionResponse); // Update state with the fetched data
     }
   }, [myProductionResponse]);
 
-  // useEffect(() => {
-  //   getTasks();
-  // }, []);
   return (
     <div className="pr-2 w-80">
       <div>
@@ -50,8 +48,8 @@ const Todays = () => {
           {myProductionData?.productions?.map((t) => {
             const currentDate = new Date();
 
-            const [day, month, year] = t.expectedDeliveryDate.split("-");
-            const expectedDeliveryDate = new Date(`${year}-${month}-${day}`);
+            const [day, month, year] = t.expectedDeliveryDate.split("/");
+            const expectedDeliveryDate = new Date(`${year}/${month}/${day}`);
 
             if (isNaN(expectedDeliveryDate.getTime())) {
               console.error(
@@ -64,14 +62,14 @@ const Todays = () => {
             const timeDiff = expectedDeliveryDate - currentDate;
             const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
-            return t.rolls.map((roll) => (
+            return t.rolls.map((roll, index) => (
               <ListItem
-                key={roll.rollNo} // Use roll.rollNo as key if it's unique
+                key={index}
                 id={t._id}
                 status={t.markAsDone}
-                title={`Cutting / ${
+                title={`Cutting - ${
                   roll.rollNo
-                } / ${expectedDeliveryDate.toDateString()}`}
+                } - ${t.expectedDeliveryDate}`}
                 daysLeft={daysLeft >= 0 ? `${daysLeft} days left` : "Past due"}
                 heading={"My pending jobs"}
               />
