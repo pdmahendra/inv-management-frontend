@@ -2,11 +2,10 @@ import React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import toast from "react-hot-toast";
-import { useUpdateProduction } from "../../api/query/productionApi";
 import { downloadPdf } from "../../api/query/downloadChallan";
+import MarkAsCompletedDialog from "../production/MarkAsCompletedDialog";
 
-export default function Options({ id, markAsDone }) {
-  const updateProductionMutation = useUpdateProduction();
+export default function Options({ id, markAsDone, row, heading }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -17,25 +16,6 @@ export default function Options({ id, markAsDone }) {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleMarkAsCompleted = async () => {
-    const updatedMarkAsDone = !markAsDone;
-
-    try {
-      await updateProductionMutation.mutateAsync({ id, updatedMarkAsDone });
-      console.log(id);
-
-      toast.success(
-        `Production marked as ${
-          updatedMarkAsDone ? "completed" : "not completed"
-        } successfully`
-      );
-      handleClose();
-    } catch (error) {
-      console.error("Failed to update production:", error);
-      toast.error("Failed to update production");
-    }
   };
 
   const handleDownloadClick = async () => {
@@ -88,7 +68,15 @@ export default function Options({ id, markAsDone }) {
           },
         }}
       >
-        <MenuItem onClick={handleMarkAsCompleted}>Mark as Completed</MenuItem>
+        {/* <MenuItem onClick={handleMarkAsCompleted}>Mark as Completed</MenuItem> */}
+        {heading != "Completed" ? (
+          <MenuItem>
+            <MarkAsCompletedDialog row={row} id={id} markAsDone={markAsDone} />
+          </MenuItem>
+        ) : (
+          <div></div>
+        )}
+
         <MenuItem onClick={handleDownloadClick}>Generate Challan</MenuItem>
       </Menu>
     </div>
