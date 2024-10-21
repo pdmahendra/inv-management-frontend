@@ -26,10 +26,11 @@ const StartNewProductionPage = () => {
 
   //handle expected date field
   const handleDateChange = (newValue) => {
-    const formattedDate = newValue
-      ? dayjs(newValue).format("DD-MM-YYYY")
-      : null;
-    setExpectedDeliveryDate(formattedDate);
+    if (newValue) {
+      setExpectedDeliveryDate(newValue); // Set the raw Dayjs object
+    } else {
+      setExpectedDeliveryDate(null); // Reset if no date is selected
+    }
   };
 
   //fetch all users to show name in dropdown
@@ -41,10 +42,13 @@ const StartNewProductionPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formattedDeliveryDate = expectedDeliveryDate
+    ? expectedDeliveryDate.format("DD/MM/YYYY")
+    : "";
 
     const productionData = {
       rolls: data,
-      expectedDeliveryDate: expectedDeliveryDate,
+      expectedDeliveryDate: formattedDeliveryDate,
       assignTo: assignTo === "Others" ? "others" : assignTo,
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
@@ -146,11 +150,7 @@ const StartNewProductionPage = () => {
                   sm: "50%",
                 },
               }}
-              value={
-                expectedDeliveryDate
-                  ? dayjs(expectedDeliveryDate, "MM/DD/YYYY")
-                  : null
-              }
+              value={expectedDeliveryDate} // Directly use the Dayjs object
               onChange={handleDateChange}
               renderInput={(params) => <input {...params} />}
             />
