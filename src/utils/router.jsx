@@ -11,6 +11,8 @@ import ProtectedRoutes from "../components/ProtectedRoutes";
 import { Navigate } from "react-router-dom";
 import ProductionPage from "../pages/ProductionPage";
 import StartNewProductionPage from "../pages/StartNewProductionPage";
+import ViewLifecyclePage from "../pages/ViewLifecyclePage";
+import StartNewLifecyclePage from "../pages/StartNewViewLifecyclePage"
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +47,14 @@ export const router = createBrowserRouter([
       {
         path: "/production/start-new",
         element: <ProtectedRoutes element={<StartNewProductionPage />} />,
+      },
+      {
+        path: "/view-lifecycle",
+        element: <ProtectedRoutes element={<ViewLifecyclePage />} />,
+      },
+      {
+        path: "/view-lifecycle/start-new",
+        element: <ProtectedRoutes element={<StartNewLifecyclePage />} />,
       },
       {
         path: "/inventory/cutting",
