@@ -8,7 +8,6 @@ const Agendas = () => {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  console.log(tasks.map((t) => t._id));
 
   const getTasks = async () => {
     try {
