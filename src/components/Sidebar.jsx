@@ -148,7 +148,7 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               Notification
             </li>
           </Link>
-          <Link to="#" className="font-medium" onClick={handleTabClick}>
+          <Link to="/view-lifecycle" className="font-medium" onClick={handleTabClick}>
             <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               View Lifecycle
             </li>
