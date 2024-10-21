@@ -219,7 +219,7 @@ export default function AddMoreDialog({ setData }) {
               className="block mb-2 text-lg font-medium"
               htmlFor="noOfPieces"
             >
-              Number of Pieces
+             Expected Number of Pieces
             </label>
             <input
               type="number"
