@@ -19,7 +19,7 @@ import {
 } from "../../ui/table";
 import Options from "./Option";
 
-export default function OngoingCompletedTable({ data = [] }) {
+export default function OngoingCompletedTable({ data = [], heading }) {
   // const [sorting, setSorting] = useState([]);
   // const [columnFilters, setColumnFilters] = useState([]);
   // const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -36,10 +36,26 @@ export default function OngoingCompletedTable({ data = [] }) {
       header: "Status",
       cell: ({ row }) => {
         const markAsDone = row.original.markAsDone;
-        const statusClass = markAsDone ? "bg-green-500" : "bg-yellow-300";
+        const expectedDeliveryDate = row.original.expectedDeliveryDate;
+
+        const today = new Date().toLocaleDateString("en-GB");
+
+        const isDelayed = expectedDeliveryDate < today;
+        let statusClass, statusText;
+        if (markAsDone) {
+          statusClass = "bg-green-500";
+          statusText = "Completed";
+        } else if (!markAsDone && isDelayed) {
+          statusClass = "bg-red-500";
+          statusText = "Delayed";
+        } else {
+          statusClass = "bg-yellow-300";
+          statusText = "Ongoing";
+        }
+
         return (
           <div className={`text-white ${statusClass} p-1 rounded-full`}>
-            {markAsDone ? "Completed" : "Ongoing"}
+            {statusText}
           </div>
         );
       },
@@ -68,11 +84,32 @@ export default function OngoingCompletedTable({ data = [] }) {
       },
     },
     {
-      accessorKey: "expectedDeliveryDate",
-      header: "Expected Date",
-      cell: ({ row }) => (
-        <div className="">{row.original.expectedDeliveryDate}</div>
-      ),
+      accessorKey:
+        heading === "Completed" ? "updatedAt" : "expectedDeliveryDate",
+      header: heading === "Completed" ? "Delivery Date" : "Expected Date",
+      cell: ({ row }) => {
+        const formattedDate = new Date(
+          row.original.updatedAt
+        ).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        return (
+          <div className="">
+            {" "}
+            {heading === "Completed"
+              ? formattedDate
+              : row.original.expectedDeliveryDate}
+          </div>
+        );
+
+        //     <div className="">
+        //     {heading === "Completed"
+        //       ? row.original.updatedAt
+        //       : row.original.expectedDeliveryDate}
+        //   </div>
+      },
     },
     {
       accessorKey: "totalPrice",
@@ -82,7 +119,7 @@ export default function OngoingCompletedTable({ data = [] }) {
           (total, roll) => total + roll.noOfPieces * roll.costPrice,
           0
         );
-        return <div className="">{totalCost.toFixed(2)}</div>;
+        return <div className="">₹ {totalCost}</div>;
       },
     },
     {
@@ -91,15 +128,44 @@ export default function OngoingCompletedTable({ data = [] }) {
       cell: ({ row }) => <div className="">{row.original.assignTo.name}</div>,
     },
     {
+      accessorKey: "phoneNo",
+      header: "Phone Number",
+      cell: ({ row }) => (
+        <div className="">{row.original.assignTo.phoneNo}</div>
+      ),
+    },
+    {
       accessorKey: "*",
       header: "",
       cell: ({ row }) => (
         <div>
-          <Options id={row.original._id} markAsDone={row.original.markAsDone} />
+          <Options
+            heading={heading}
+            id={row.original._id}
+            markAsDone={row.original.markAsDone}
+            row={row.original}
+          />
         </div>
       ),
     },
   ];
+
+  // Conditionally add the Options column
+  //    if (heading !== "Completed") {
+  //     columns.push({
+  //       accessorKey: "*",
+  //       header: "",
+  //       cell: ({ row }) => (
+  //         <div>
+  //           <Options
+  //             id={row.original._id}
+  //             markAsDone={row.original.markAsDone}
+  //             row={row.original}
+  //           />
+  //         </div>
+  //       ),
+  //     });
+  //   }
 
   const table = useReactTable({
     data,
