@@ -6,27 +6,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import RawInventoryTable from "../components/inventory/rawInventory/accessories/RawInventoryAccessoriesTable";
 import { useAddItem } from "../api/query/inventory/invetoryApi";
-import { useFetchInventoryData } from "../api/query/inventory/invetoryApi";
 import toast from "react-hot-toast";
+import { useFetchAllProduction } from "../api/query/productionApi";
+import OngoingCompletedTable from "../components/production/OngoingCompletedTable";
 
 export default function CuttingInventory() {
-  const { mutate: addItmes, isLoading } = useAddItem();
-  const {
-    data: inventoryData = { items: [] },
-    isLoading: isFetching,
-    refetch,
-  } = useFetchInventoryData();
-  const [data, setData] = useState({
-    name: "",
-    quantity: 0,
-    price: 0,
-    minimum: 0,
-    image_url: "",
-    inventory_type: "",
-  });
+  const { data: productionResponse, isLoading: isFetching } =
+    useFetchAllProduction();
 
-  const filteredInventoryData = inventoryData.items?.filter(
-    (item) => item.inventory_type === "cutting"
+  const productionData = productionResponse?.productions || [];
+  const completedProduction = productionData.filter(
+    (item) => item.markAsDone === true
   );
 
   const [open, setOpen] = React.useState(false);
@@ -37,42 +27,6 @@ export default function CuttingInventory() {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const item = {
-      name: data.name,
-      quantity: data.quantity,
-      price: data.price,
-      min_limit: data.min_limit,
-      image_url: "abc",
-      inventory_type: "cutting",
-    };
-
-    try {
-      addItmes(item, {
-        onSuccess: (response) => {
-          console.log(response);
-          toast.success("item added successfully!");
-          setData({
-            name: "",
-            quantity: "",
-            price: "",
-            min_limit: "",
-            image_url: "",
-            inventory_type: "",
-          });
-          handleClose();
-        },
-        onError: (error) => {
-          const errorMessage = error.response?.data?.error;
-          toast.error(errorMessage);
-        },
-      });
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const handleInputChange = (e) => {
@@ -127,8 +81,6 @@ export default function CuttingInventory() {
                     type="text"
                     fullWidth
                     variant="outlined"
-                    value={data.name}
-                    onChange={handleInputChange}
                   />
                   <TextField
                     autoFocus
@@ -140,8 +92,6 @@ export default function CuttingInventory() {
                     type="number"
                     fullWidth
                     variant="outlined"
-                    value={data.quantity}
-                    onChange={handleInputChange}
                   />
                   <TextField
                     autoFocus
@@ -153,8 +103,6 @@ export default function CuttingInventory() {
                     type="number"
                     fullWidth
                     variant="outlined"
-                    value={data.min_limit}
-                    onChange={handleInputChange}
                   />
                   <TextField
                     autoFocus
@@ -166,8 +114,6 @@ export default function CuttingInventory() {
                     type="number"
                     fullWidth
                     variant="outlined"
-                    value={data.price}
-                    onChange={handleInputChange}
                   />
                 </DialogContent>
                 <DialogActions>
@@ -177,16 +123,16 @@ export default function CuttingInventory() {
                   >
                     Cancel
                   </button>
-                  <button
-                    onClick={handleSubmit}
-                    className="text-white bg-[#3F51D7] font-medium px-8 py-2 border-2 rounded-xl"
-                  >
+                  <button className="text-white bg-[#3F51D7] font-medium px-8 py-2 border-2 rounded-xl">
                     Add
                   </button>
                 </DialogActions>
               </Dialog>
             </div>
-            <RawInventoryTable data={filteredInventoryData} refetch={refetch} />{" "}
+            <OngoingCompletedTable
+              data={completedProduction}
+              heading={"Completed"}
+            />{" "}
           </div>
         </div>
       </div>
