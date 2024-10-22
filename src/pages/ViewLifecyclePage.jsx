@@ -9,12 +9,27 @@ const ViewLifecyclePage = () => {
 
   const LifecycleData = lifecycleResponse?.lifecycle || [];
 
-  const ongoingLifecycle = LifecycleData.filter(
-    (item) => item.markAsDone === false
-  );
-  const completedLifecycle = LifecycleData.filter(
-    (item) => item.markAsDone === true
-  );
+  const ongoingLifecycle = LifecycleData.filter((item) => {
+    return !item.markAsDone && item.stages.some((stage) => !stage.isCompleted);
+  });
+
+  const completedLifecycle = LifecycleData.filter((item) => {
+    return (
+      item.markAsDone === true &&
+      item.stages.every((stage) => stage.isCompleted === true)
+    );
+  });
+  const waitingLifecycle = LifecycleData.filter((item) => {
+    return (
+      item.stages.every((stage) => stage.isCompleted === true) &&
+      item.markAsDone === false
+    );
+  });
+
+  console.log(ongoingLifecycle);
+  
+
+  console.log(waitingLifecycle);
 
   return (
     <>
@@ -31,11 +46,15 @@ const ViewLifecyclePage = () => {
             Start New
           </Link>
         </div>
-        <OngoingWaitingCompletedTable data={ongoingLifecycle} />
+        <OngoingWaitingCompletedTable data={ongoingLifecycle} heading="Ongoing"/>
+      </div>
+      <div className="sm:pt-8 sm:pr-16 p-8 max-sm:w-[420px]">
+        <h1 className="sm:pl-4 text-lg">Waiting</h1>
+        <OngoingWaitingCompletedTable data={waitingLifecycle} heading="Waiting"/>
       </div>
       <div className="sm:pt-8 sm:pr-16 p-8 max-sm:w-[420px]">
         <h1 className="sm:pl-4 text-lg">Completed</h1>
-        <OngoingWaitingCompletedTable data={completedLifecycle} />
+        <OngoingWaitingCompletedTable data={completedLifecycle} heading="Completed"/>
       </div>
     </>
   );
