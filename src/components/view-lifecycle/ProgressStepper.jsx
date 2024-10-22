@@ -71,7 +71,7 @@ export default function ProgressStepper() {
 
     try {
       await axios.put(
-        `http://localhost:3000/lifecycle/update/${id}/${stageId}`,
+        `https://fact-1-1.onrender.com/update/${id}/${stageId}`,
         {
           isCompleted: true,
           markAsDone: isLastStep, // Set markAsDone if it's the last step
@@ -96,7 +96,7 @@ export default function ProgressStepper() {
   const fetchLifecycleData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/lifecycle/getLifecycleById/${id}`
+        `https://fact-1-1.onrender.com/getLifecycleById/${id}`
       );
       const lifecycleResponse = response.data;
 
@@ -194,7 +194,7 @@ export default function ProgressStepper() {
     };
     try {
       await axios.post(
-        `http://localhost:3000/lifecycle/${id}/new-stage`,
+        `https://fact-1-1.onrender.com/${id}/new-stage`,
         stageData
       );
       toast.success("New stage started successfully!");
