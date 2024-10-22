@@ -18,6 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "../../utils/middleware";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import {SERVER_BASE_URL} from "../../api/index"
 
 const steps = [
   {
@@ -71,7 +72,7 @@ export default function ProgressStepper() {
 
     try {
       await axios.put(
-        `https://fact-1-1.onrender.com/update/${id}/${stageId}`,
+        `${SERVER_BASE_URL}/lifecycle/update/${id}/${stageId}`,
         {
           isCompleted: true,
           markAsDone: isLastStep, // Set markAsDone if it's the last step
@@ -96,7 +97,7 @@ export default function ProgressStepper() {
   const fetchLifecycleData = async () => {
     try {
       const response = await axios.get(
-        `https://fact-1-1.onrender.com/getLifecycleById/${id}`
+        `${SERVER_BASE_URL}/lifecycle/getLifecycleById/${id}`
       );
       const lifecycleResponse = response.data;
 
@@ -194,7 +195,7 @@ export default function ProgressStepper() {
     };
     try {
       await axios.post(
-        `https://fact-1-1.onrender.com/${id}/new-stage`,
+        `${SERVER_BASE_URL}/${id}/new-stage`,
         stageData
       );
       toast.success("New stage started successfully!");
