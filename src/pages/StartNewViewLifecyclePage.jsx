@@ -60,7 +60,7 @@ const StartNewLifecyclePage = () => {
     startNewLifecycle(lifecycleData, {
       onSuccess: (response) => {
         navigate("/view-lifecycle");
-        toast.success("Production started successfully!");
+        toast.success("Lifecycle started successfully!");
       },
       onError: (error) => {
         const errorMessage = error.response?.data?.message;
