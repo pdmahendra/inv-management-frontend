@@ -18,10 +18,9 @@ import {
   TableRow,
 } from "../../ui/table";
 import Options from "../production/Option";
+import { Link } from "react-router-dom";
 
-export default function OngoingWaitingCompletedTable({ data = [] }) {
-  console.log(data);
-
+export default function OngoingWaitingCompletedTable({ data = [], heading }) {
   // const [sorting, setSorting] = useState([]);
   // const [columnFilters, setColumnFilters] = useState([]);
   // const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -48,35 +47,40 @@ export default function OngoingWaitingCompletedTable({ data = [] }) {
       ),
     },
     {
-      accessorKey: "currentStage",
+      accessorKey: "stage",
       header: "Stage",
       cell: ({ row }) => {
-        const lastStage = row.original.stages[row.original.stages.length - 1];
-        return <div>{lastStage.stage}</div>;
+        const stages = row.original.stages;
+        const lastStage =
+          stages.length > 0 ? stages[stages.length - 1].stage : "No stage";
+        return <div>{lastStage}</div>;
       },
     },
     {
       accessorKey: "startTime",
       header: "Start Date",
       cell: ({ row }) => {
-        const lastStage = row.original.stages[row.original.stages.length - 1];
+        const stages = row.original.stages;
+        const lastStage = stages.length > 0 ? stages[stages.length - 1] : null;
+        const formattedDate =
+          lastStage && lastStage.startTime
+            ? new Date(lastStage.startTime).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })
+            : "No start time";
 
-        const formattedDate = new Date(
-          row.original.stages.map((stage) => lastStage.startTime)
-        ).toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
         return <div className="">{formattedDate}</div>;
       },
     },
     {
-      accessorKey: "expectedDeliveryDate",
-      header: "Expected Date",
+      accessorKey: heading === "Waiting" ? "endTime" : "expectedDeliveryDate",
+      header: heading === "Waiting" ? "End Date" : "Expected Date",
       cell: ({ row }) => {
-        const lastStage = row.original.stages[row.original.stages.length - 1];
-        return <div>{lastStage.expectedDeliveryDate}</div>;
+        const stages = row.original.stages;
+        const lastStage = stages.length > 0 ? stages[stages.length - 1] : null;
+        return <div>{lastStage?.expectedDeliveryDate}</div>;
       },
     },
     // {
@@ -94,10 +98,12 @@ export default function OngoingWaitingCompletedTable({ data = [] }) {
       accessorKey: "assignTo",
       header: "Assign To",
       cell: ({ row }) => {
-        const lastStage = row.original.stages[row.original.stages.length - 1];
+        const stages = row.original.stages;
+        const lastStage = stages.length > 0 ? stages[stages.length - 1] : null;
+
         return (
           <div>
-            {lastStage.assignTo ? lastStage.assignTo.name : "Not Assigned"}
+            {lastStage?.assignTo ? lastStage.assignTo?.name : lastStage?.name}
           </div>
         );
       },
@@ -106,29 +112,35 @@ export default function OngoingWaitingCompletedTable({ data = [] }) {
       accessorKey: "phoneNo",
       header: "Phone Number",
       cell: ({ row }) => {
-        const lastStage = row.original.stages[row.original.stages.length - 1];
+        const stages = row.original.stages;
+        const lastStage = stages.length > 0 ? stages[stages.length - 1] : null;
         return (
           <div>
-            {lastStage.assignTo
-              ? lastStage.assignTo.phoneNo
-              : lastStage.contact}
+            {lastStage?.assignTo
+              ? lastStage?.assignTo?.phoneNo
+              : lastStage?.contact}
           </div>
         );
       },
     },
-    // {
-    //   accessorKey: "*",
-    //   header: "",
-    //   cell: ({ row }) => (
-    //     <div>
-    //       <Options
-    //         id={row.original._id}
-    //         markAsDone={row.original.markAsDone}
-    //         row={row.original}
-    //       />
-    //     </div>
-    //   ),
-    // },
+    {
+      accessorKey: "*",
+      header: "",
+      cell: ({ row }) => {
+        const lastStage =
+          row.original.stages.length > 0
+            ? row.original.stages[row.original.stages.length - 1]
+            : null;
+
+        const stageId = lastStage ? lastStage._id : null;
+
+        return (
+          <Link to={`details/${row.original._id}`}>
+            View Details
+          </Link>
+        );
+      },
+    },
   ];
 
   const table = useReactTable({
