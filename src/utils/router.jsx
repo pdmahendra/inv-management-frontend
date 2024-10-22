@@ -12,7 +12,8 @@ import { Navigate } from "react-router-dom";
 import ProductionPage from "../pages/ProductionPage";
 import StartNewProductionPage from "../pages/StartNewProductionPage";
 import ViewLifecyclePage from "../pages/ViewLifecyclePage";
-import StartNewLifecyclePage from "../pages/StartNewViewLifecyclePage"
+import StartNewLifecyclePage from "../pages/StartNewViewLifecyclePage";
+import ViewDetails from "../pages/ViewDetails";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: "/view-lifecycle/start-new",
         element: <ProtectedRoutes element={<StartNewLifecyclePage />} />,
+      },
+      {
+        path: "/view-lifecycle/details/:id",
+        element: <ProtectedRoutes element={<ViewDetails />} />,
       },
       {
         path: "/inventory/cutting",
