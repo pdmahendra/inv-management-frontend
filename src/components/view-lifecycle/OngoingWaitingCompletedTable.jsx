@@ -75,14 +75,58 @@ export default function OngoingWaitingCompletedTable({ data = [], heading }) {
       },
     },
     {
-      accessorKey: heading === "Waiting" ? "endTime" : "expectedDeliveryDate",
-      header: heading === "Waiting" ? "End Date" : "Expected Date",
-      cell: ({ row }) => {
-        const stages = row.original.stages;
-        const lastStage = stages.length > 0 ? stages[stages.length - 1] : null;
-        return <div>{lastStage?.expectedDeliveryDate}</div>;
+        accessorKey:
+          heading === "Ongoing"
+            ? "expectedDeliveryDate"
+            : heading === "Waiting"
+            ? "endTime"
+            : heading === "Completed"
+            ? "updatedAt"
+            : null, // Add null as default fallback
+        header:
+          heading === "Ongoing"
+            ? "Expected Date"
+            : heading === "Waiting"
+            ? "End Date"
+            : heading === "Completed"
+            ? "End Date"
+            : "Date",
+        cell: ({ row }) => {
+          const stages = row.original.stages;
+          const lastStage = stages.length > 0 ? stages[stages.length - 1] : null;
+      
+          // Logic to display the correct date
+          if (heading === "Ongoing") {
+            return <div>{lastStage?.expectedDeliveryDate || "N/A"}</div>;
+          } else if (heading === "Waiting") {
+            return (
+              <div>
+                {lastStage?.endTime
+                  ? new Date(lastStage.endTime).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })
+                  : "N/A"}
+              </div>
+            );
+          } else if (heading === "Completed") {
+            return (
+              <div>
+                {row.original.updatedAt
+                  ? new Date(row.original.updatedAt).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })
+                  : "N/A"}
+              </div>
+            );
+          }
+          return <div>N/A</div>; // Fallback for any other case
+        },
       },
-    },
+      
     // {
     //   accessorKey: "totalPrice",
     //   header: "Total price",
@@ -134,11 +178,7 @@ export default function OngoingWaitingCompletedTable({ data = [], heading }) {
 
         const stageId = lastStage ? lastStage._id : null;
 
-        return (
-          <Link to={`details/${row.original._id}`}>
-            View Details
-          </Link>
-        );
+        return <Link to={`details/${row.original._id}`} className="border p-1 px-2 rounded bg-[#3F51D7] text-white">View Details</Link>;
       },
     },
   ];
