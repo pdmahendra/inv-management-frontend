@@ -54,7 +54,7 @@ export default function OngoingCompletedTable({ data = [], heading }) {
         }
 
         return (
-          <div className={`text-white ${statusClass} p-1 rounded-full`}>
+          <div className={`text-white ${statusClass} p-1  px-2 rounded-full`}>
             {statusText}
           </div>
         );
