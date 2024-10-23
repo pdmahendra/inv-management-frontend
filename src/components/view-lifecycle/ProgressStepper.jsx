@@ -18,7 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "../../utils/middleware";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import {SERVER_BASE_URL} from "../../api/index"
+import { SERVER_BASE_URL } from "../../api/index";
 
 const steps = [
   {
@@ -52,7 +52,7 @@ const steps = [
   },
 ];
 
-export default function ProgressStepper() {
+export default function ProgressStepper({ refetch }) {
   const { id } = useParams();
   const [activeStep, setActiveStep] = React.useState(0);
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -60,38 +60,6 @@ export default function ProgressStepper() {
   const [completedSteps, setCompletedSteps] = React.useState({});
   const [nextStepLabel, setNextStepLabel] = React.useState("");
   const [lifecycleStages, setLifecycleStages] = React.useState([]); // store lifecycle stages
-
-  const handleCompleteStep = async () => {
-    const currentStage = lifecycleStages[activeStep];
-    if (!currentStage) return;
-
-    const stageId = currentStage._id;
-
-    // Check if this is the last step
-    const isLastStep = activeStep === lifecycleStages.length - 1;
-
-    try {
-      await axios.put(
-        `${SERVER_BASE_URL}/lifecycle/update/${id}/${stageId}`,
-        {
-          isCompleted: true,
-          markAsDone: isLastStep, // Set markAsDone if it's the last step
-        }
-      );
-      toast.success("Step completed successfully!");
-
-      setStepCompleted(true);
-      setCompletedSteps((prev) => ({ ...prev, [activeStep]: true }));
-    } catch (error) {
-      console.error("Error completing step:", error);
-    }
-  };
-
-  const navigate = useNavigate();
-
-  const handleBackButton = (e) => {
-    navigate("/view-lifecycle");
-  };
 
   // Fetch the lifecycle data by ID
   const fetchLifecycleData = async () => {
@@ -102,23 +70,21 @@ export default function ProgressStepper() {
       const lifecycleResponse = response.data;
 
       if (lifecycleResponse.lifecycle?.stages) {
-        setLifecycleStages(lifecycleResponse.lifecycle.stages); // set stages in state
+        setLifecycleStages(lifecycleResponse.lifecycle.stages);
 
-        // Create an array of completion statuses for the lifecycle stages
         const stagesCompletion = lifecycleResponse.lifecycle.stages.map(
           (stage) => stage.isCompleted
         );
 
         setCompletedSteps(stagesCompletion);
 
-        // Find the first incomplete step and set it as active, otherwise last completed step
         const firstIncompleteStepIndex = stagesCompletion.findIndex(
           (completed) => !completed
         );
         if (firstIncompleteStepIndex !== -1) {
-          setActiveStep(firstIncompleteStepIndex); // Set the first incomplete step as active
+          setActiveStep(firstIncompleteStepIndex);
         } else {
-          setActiveStep(lifecycleResponse.lifecycle.stages.length - 1); // All steps completed
+          setActiveStep(lifecycleResponse.lifecycle.stages.length - 1);
         }
       }
     } catch (error) {
@@ -129,6 +95,64 @@ export default function ProgressStepper() {
   useEffect(() => {
     fetchLifecycleData();
   }, [id]);
+
+  const handleCompleteStep = async () => {
+    const currentStage = lifecycleStages[activeStep];
+
+    if (!currentStage) return;
+
+    const stageId = currentStage._id;
+    const isLastStep = activeStep === lifecycleStages.length - 1;
+
+    if (currentStage.stage === "final checking") {
+      try {
+        await axios.put(
+          `${SERVER_BASE_URL}/lifecycle/update/${id}/${stageId}`,
+          {
+            isCompleted: true,
+            markAsDone: true,
+          }
+        );
+        toast.success("Lifecycle completed successfully!");
+        setStepCompleted(true);
+        setCompletedSteps((prev) => ({ ...prev, [activeStep]: true }));
+
+        // Move to the next step
+        if (!isLastStep) {
+          setActiveStep((prev) => prev + 1);
+        }
+      } catch (error) {
+        console.error("Error completing step:", error);
+        toast.error("Error completing the step. Please try again.");
+      }
+    } else {
+      try {
+        await axios.put(
+          `${SERVER_BASE_URL}/lifecycle/update/${id}/${stageId}`,
+          {
+            isCompleted: true,
+          }
+        );
+        toast.success("Step completed successfully!");
+        setStepCompleted(true);
+        setCompletedSteps((prev) => ({ ...prev, [activeStep]: true }));
+
+        // Move to the next step
+        if (!isLastStep) {
+          setActiveStep((prev) => prev + 1);
+        }
+      } catch (error) {
+        console.error("Error completing step:", error);
+        toast.error("Error completing the step. Please try again.");
+      }
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const handleBackButton = (e) => {
+    navigate("/view-lifecycle");
+  };
 
   const handleStartNextStep = () => {
     if (activeStep < steps.length - 1) {
@@ -195,7 +219,7 @@ export default function ProgressStepper() {
     };
     try {
       await axios.post(
-        `${SERVER_BASE_URL}/${id}/new-stage`,
+        `${SERVER_BASE_URL}/lifecycle/${id}/new-stage`,
         stageData
       );
       toast.success("New stage started successfully!");
