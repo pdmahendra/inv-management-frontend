@@ -27,7 +27,7 @@ export default function MarkAsCompletedDialog({
   const handleMarkAsCompleted = async () => {
     const rolls = row.rolls.map((roll) => ({
       rollNo: roll.rollNo,
-      noOfPieces: Number(actualPieces),
+      noOfPieces: actualPieces ? Number(actualPieces) : roll.noOfPieces,
     }));
     const updatedMarkAsDone = !markAsDone;
 
