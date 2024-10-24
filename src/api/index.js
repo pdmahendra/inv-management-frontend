@@ -30,5 +30,6 @@ export const API = {
   lifecycle: {
     startNewLifecycle: `${SERVER_BASE_URL}/lifecycle/start-new-lifecycle`,
     getAllLifecycle: `${SERVER_BASE_URL}/lifecycle/get-all-lifecycle`,
+    generatePdf: `${SERVER_BASE_URL}/lifecycle/generate-pdf`,
   },
 };
