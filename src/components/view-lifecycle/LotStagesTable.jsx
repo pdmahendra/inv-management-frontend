@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../ui/table";
-// import Options from "./Option";
+import Options from "./Options";
 
 export default function LotStagesTable({ data = [] }) {
   // const [sorting, setSorting] = useState([]);
@@ -114,6 +114,15 @@ export default function LotStagesTable({ data = [] }) {
       accessorKey: "additionalInformation",
       header: "Additional Information",
       cell: ({ row }) => <div>{row.original.additionalInformation || "-"}</div>,
+    },
+    {
+      accessorKey: "*",
+      header: "",
+      cell: ({ row }) => (
+        <div>
+          <Options stageId={row.original._id} />
+        </div>
+      ),
     },
   ];
 
