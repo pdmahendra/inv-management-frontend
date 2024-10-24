@@ -185,6 +185,7 @@ export default function ProgressStepper({ refetch }) {
   const [contact, setContact] = useState("");
   const [assignTo, setAssignTo] = useState("");
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(null);
+  const [price, setPrice] = useState("");
   const [addInfo, setAddInfo] = useState("");
 
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
@@ -212,6 +213,7 @@ export default function ProgressStepper({ refetch }) {
     const stageData = {
       stage: nextStepLabel,
       expectedDeliveryDate: formattedDeliveryDate,
+      price,
       assignTo: assignTo === "Others" ? "others" : assignTo,
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
@@ -232,8 +234,8 @@ export default function ProgressStepper({ refetch }) {
       setExpectedDeliveryDate(null);
       setAddInfo("");
     } catch (error) {
-      toast.error("Error starting new stage.");
-      console.error("Error starting new stage:", error);
+      const errorMessage = error.response?.data?.message;
+      toast.error(errorMessage);
     }
   };
   return (
@@ -368,6 +370,20 @@ export default function ProgressStepper({ refetch }) {
                 </div>
               </>
             ) : null}
+            <div className="mt-4">
+              <label className="block mb-2 text-lg font-medium" htmlFor="price">
+                Price
+              </label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="w-full px-4 py-4 border rounded-lg"
+                placeholder="Enter your contact"
+              />
+            </div>{" "}
             <div className="mt-4">
               <label
                 className="block mb-2 text-lg font-medium"

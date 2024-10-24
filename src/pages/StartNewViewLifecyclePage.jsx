@@ -16,6 +16,7 @@ const StartNewLifecyclePage = () => {
   const [contact, setContact] = useState("");
   const [assignTo, setAssignTo] = useState("");
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(null);
+  const [price, setPrice] = useState("");
   const [addInfo, setAddInfo] = useState("");
   const [data, setData] = useState([]);
 
@@ -46,6 +47,7 @@ const StartNewLifecyclePage = () => {
 
     const stageDate = {
       expectedDeliveryDate: formattedDeliveryDate,
+      price,
       assignTo: assignTo === "Others" ? "others" : assignTo,
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
@@ -137,7 +139,21 @@ const StartNewLifecyclePage = () => {
           </>
         ) : (
           <div></div>
-        )}
+        )}{" "}
+        <div className="mt-4">
+          <label className="block mb-2 text-lg font-medium" htmlFor="price">
+            Price
+          </label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+            placeholder="Enter your contact"
+          />
+        </div>{" "}
         <div className="mt-4">
           <label
             className="block mb-2 text-lg font-medium"
