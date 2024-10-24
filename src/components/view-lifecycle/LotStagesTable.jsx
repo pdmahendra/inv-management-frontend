@@ -37,6 +37,11 @@ export default function LotStagesTable({ data = [] }) {
       cell: ({ row }) => <div>{row.original.stage}</div>,
     },
     {
+      accessorKey: "price",
+      header: "Price",
+      cell: ({ row }) => <div>{row.original.price}</div>,
+    },
+    {
       accessorKey: "startTime",
       header: "Start Date",
       cell: ({ row }) => {
