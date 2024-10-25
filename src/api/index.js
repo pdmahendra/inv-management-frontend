@@ -14,6 +14,7 @@ export const API = {
   },
   inventory: {
     getItems: `${SERVER_BASE_URL}/inventory/get-items`,
+    getItemsBySubcategory: `${SERVER_BASE_URL}/inventory/getItemsBySubcategory`,
     getItemById: `${SERVER_BASE_URL}/inventory/get-item`,
     addItems: `${SERVER_BASE_URL}/inventory/add-item`,
     updateItems: `${SERVER_BASE_URL}/inventory/update-item`,
@@ -31,5 +32,9 @@ export const API = {
     startNewLifecycle: `${SERVER_BASE_URL}/lifecycle/start-new-lifecycle`,
     getAllLifecycle: `${SERVER_BASE_URL}/lifecycle/get-all-lifecycle`,
     generatePdf: `${SERVER_BASE_URL}/lifecycle/generate-pdf`,
+  },
+  issuance: {
+    issueInventoryItems: `${SERVER_BASE_URL}/issuance/issue-inventory-items`,
+    getIssuanceRecords: `${SERVER_BASE_URL}/issuance/issuance-records`,
   },
 };
