@@ -153,7 +153,7 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               View Lifecycle
             </li>
           </Link>
-          <Link to="#" className=" font-medium" onClick={handleTabClick}>
+          <Link to="/issuance-records" className=" font-medium" onClick={handleTabClick}>
             <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Issuance Records
             </li>
