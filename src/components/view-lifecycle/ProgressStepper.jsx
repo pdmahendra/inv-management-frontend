@@ -233,6 +233,7 @@ export default function ProgressStepper({ refetch }) {
       setAssignTo("");
       setExpectedDeliveryDate(null);
       setAddInfo("");
+      setPrice("")
     } catch (error) {
       const errorMessage = error.response?.data?.message;
       toast.error(errorMessage);
