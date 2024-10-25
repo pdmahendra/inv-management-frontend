@@ -14,6 +14,7 @@ import StartNewProductionPage from "../pages/StartNewProductionPage";
 import ViewLifecyclePage from "../pages/ViewLifecyclePage";
 import StartNewLifecyclePage from "../pages/StartNewViewLifecyclePage";
 import ViewDetails from "../pages/ViewDetails";
+import IssuanceRecordPage from "../pages/IssuanceRecordPage"
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
         path: "/view-lifecycle/details/:id",
         element: <ProtectedRoutes element={<ViewDetails />} />,
+      },
+      {
+        path: "/issuance-records",
+        element: <ProtectedRoutes element={<IssuanceRecordPage />} />,
       },
       {
         path: "/inventory/cutting",
