@@ -26,11 +26,6 @@ const ViewLifecyclePage = () => {
     );
   });
 
-  console.log(ongoingLifecycle);
-  
-
-  console.log(waitingLifecycle);
-
   return (
     <>
       <h1 className="text-3xl max-sm:pl-16 pt-10 sm:pt-8 sm:pl-4">
@@ -46,15 +41,24 @@ const ViewLifecyclePage = () => {
             Start New
           </Link>
         </div>
-        <OngoingWaitingCompletedTable data={ongoingLifecycle} heading="Ongoing"/>
+        <OngoingWaitingCompletedTable
+          data={ongoingLifecycle}
+          heading="Ongoing"
+        />
       </div>
       <div className="sm:pt-8 sm:pr-16 p-8 max-sm:w-[420px]">
         <h1 className="sm:pl-4 text-lg">Waiting</h1>
-        <OngoingWaitingCompletedTable data={waitingLifecycle} heading="Waiting"/>
+        <OngoingWaitingCompletedTable
+          data={waitingLifecycle}
+          heading="Waiting"
+        />
       </div>
       <div className="sm:pt-8 sm:pr-16 p-8 max-sm:w-[420px]">
         <h1 className="sm:pl-4 text-lg">Completed</h1>
-        <OngoingWaitingCompletedTable data={completedLifecycle} heading="Completed"/>
+        <OngoingWaitingCompletedTable
+          data={completedLifecycle}
+          heading="Completed"
+        />
       </div>
     </>
   );
