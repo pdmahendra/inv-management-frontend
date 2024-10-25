@@ -14,6 +14,22 @@ export const useFetchInventoryData = () => {
   });
 };
 
+export const getItemsBySubcategory = async (subcategory) => {
+  if (!subcategory) return;
+  const response = await axios.get(
+    `${API.inventory.getItemsBySubcategory}?type=${subcategory}`
+  );
+  return response.data.items;
+};
+
+export const useFetchItemsBySubcategory = (subcategory) => {
+  return useQuery({
+    queryKey: ["subCategoryItems", subcategory],
+    queryFn: () => getItemsBySubcategory(subcategory), 
+    enabled: !!subcategory,
+  });
+};
+
 export const addItem = async (newItem) => {
   const response = await axios.post(`${API.inventory.addItems}`, newItem);
   return response.data;
