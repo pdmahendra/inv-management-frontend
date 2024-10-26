@@ -28,10 +28,28 @@ export const useIssueInventoryItems = () => {
   return useMutation({
     mutationFn: issueInventoryItems,
     onSuccess: () => {
-      queryClient.invalidateQueries(["fetchIssuanceRecords"]);
+      queryClient.invalidateQueries([
+        "fetchIssuanceRecords",
+        "fetchLotIssuanceRecords",
+      ]);
     },
     onError: (error) => {
       console.error("Error:", error);
     },
+  });
+};
+
+export const fetchLotIssuanceRecords = async (id) => {
+  const response = await axios.get(
+    `${API.issuance.getLotIssuanceRecords}/${id}`
+  );
+  return response.data.issuanceRecord;
+};
+
+export const useLotFetchIssuanceRecords = (id) => {
+  return useQuery({
+    queryKey: ["fetchLotIssuanceRecords", id],
+    queryFn: () => fetchLotIssuanceRecords(id),
+    enabled: !!id,
   });
 };
