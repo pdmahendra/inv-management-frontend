@@ -1,5 +1,5 @@
 export const SERVER_BASE_URL =
-  `http://localhost:3000` || `https://fact-1-1.onrender.com`;
+  `https://fact-1-1.onrender.com` || `http://localhost:3000`;
 
 export const API = {
   users: {
