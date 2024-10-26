@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import axios from "../utils/middleware";
 import { SERVER_BASE_URL } from "../api/index";
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress from MUI
+import { useLotFetchIssuanceRecords } from "../api/query/issuanceApi";
+import LotIssuanceRecordsTable from "../components/view-lifecycle/LotIssuanceRecordsTable";
 
 const ViewDetails = () => {
   const { id } = useParams();
@@ -30,6 +32,9 @@ const ViewDetails = () => {
     fetchLifecycleData();
   }, [id]);
 
+  const { data: lotIssuanceRecordData, isLoading: isFetching } =
+    useLotFetchIssuanceRecords(id);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -50,6 +55,12 @@ const ViewDetails = () => {
           Lifecycle Stages
         </h1>
         <LotStagesTable data={stages} />
+      </div>
+      <div className="sm:pt-8 max-sm:w-[420px]">
+        <h1 className="text-2xl max-sm:pl-16 pt-10 sm:pt-8 sm:pl-4">
+          Issuance Records
+        </h1>
+        <LotIssuanceRecordsTable data={lotIssuanceRecordData} />
       </div>
     </div>
   );

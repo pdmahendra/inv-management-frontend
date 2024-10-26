@@ -1,5 +1,5 @@
 export const SERVER_BASE_URL =
-  `https://fact-1-1.onrender.com` || `http://localhost:3000`;
+  `http://localhost:3000` || `https://fact-1-1.onrender.com`;
 
 export const API = {
   users: {
@@ -36,5 +36,6 @@ export const API = {
   issuance: {
     issueInventoryItems: `${SERVER_BASE_URL}/issuance/issue-inventory-items`,
     getIssuanceRecords: `${SERVER_BASE_URL}/issuance/issuance-records`,
+    getLotIssuanceRecords: `${SERVER_BASE_URL}/issuance/issuance-record`,
   },
 };
