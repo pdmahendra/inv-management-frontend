@@ -35,12 +35,12 @@ export default function IssuanceRecordsTable({ data = [] }) {
     {
       accessorKey: "lot",
       header: "Lot No.",
-      cell: ({ row }) => <div>{row.original.lot}</div>,
+      cell: ({ row }) => <div>{row.original.lot.lotNo}</div>,
     },
     {
       accessorKey: "stage",
       header: "Stage",
-      cell: ({ row }) => <div>{row.original.stage}</div>,
+      cell: ({ row }) => <div>{row.original.stageDetails.stage}</div>,
     },
     {
       accessorKey: "inventoryItem",
@@ -60,12 +60,12 @@ export default function IssuanceRecordsTable({ data = [] }) {
     {
       accessorKey: "allotTo",
       header: "Allot To",
-      cell: ({ row }) => <div>{row.original.allotTo}</div>,
+      cell: ({ row }) => <div>{row.original.allotTo.name}</div>,
     },
     {
       accessorKey: "allotBy",
       header: "Alloted By",
-      cell: ({ row }) => <div>{row.original.allotBy}</div>,
+      cell: ({ row }) => <div>{row.original.allotBy.name}</div>,
     },
     {
       accessorKey: "issuedDate",
