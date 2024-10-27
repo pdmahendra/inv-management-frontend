@@ -15,6 +15,7 @@ import ViewLifecyclePage from "../pages/ViewLifecyclePage";
 import StartNewLifecyclePage from "../pages/StartNewViewLifecyclePage";
 import ViewDetails from "../pages/ViewDetails";
 import IssuanceRecordPage from "../pages/IssuanceRecordPage"
+import ProfilePage from "../pages/ProfilePage"
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
       {
         path: "/issuance-records",
         element: <ProtectedRoutes element={<IssuanceRecordPage />} />,
+      },
+      {
+        path: "/profile",
+        element: <ProtectedRoutes element={<ProfilePage />} />,
       },
       {
         path: "/inventory/cutting",
