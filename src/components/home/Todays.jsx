@@ -1,16 +1,12 @@
 import ListItem from "./ListItem";
-import FormDialog from "./AddItem";
 import React, { useEffect, useState } from "react";
-import axios from "../../utils/middleware";
-import { SERVER_BASE_URL } from "../../api/index";
 import { useFetchMyProduction } from "../../api/query/productionApi";
 
 const Todays = () => {
-  const [tasks, setTasks] = useState([]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  // const [tasks, setTasks] = useState([]);
+  // const [title, setTitle] = useState("");
+  // const [description, setDescription] = useState("");
   const [myProductionData, setMyProductionData] = useState([]);
-
   // const getTasks = async () => {
   //   try {
   //     const response = await axios.get(
@@ -30,9 +26,10 @@ const Todays = () => {
 
   useEffect(() => {
     if (myProductionResponse) {
-      console.log(myProductionResponse);
-
-      setMyProductionData(myProductionResponse); // Update state with the fetched data
+      const filtered = myProductionResponse.productions.filter(
+        (p) => p.markAsDone === false
+      );
+      setMyProductionData(filtered);
     }
   }, [myProductionResponse]);
 
@@ -45,7 +42,7 @@ const Todays = () => {
       </div>
       <div className="mt-2 md:mt-14">
         <ul>
-          {myProductionData?.productions?.map((t) => {
+          {myProductionData?.map((t) => {
             const currentDate = new Date();
 
             const [day, month, year] = t.expectedDeliveryDate.split("/");
@@ -67,9 +64,7 @@ const Todays = () => {
                 key={index}
                 id={t._id}
                 status={t.markAsDone}
-                title={`Cutting - ${
-                  roll.rollNo
-                } - ${t.expectedDeliveryDate}`}
+                title={`Cutting - ${roll.rollNo} - ${t.expectedDeliveryDate}`}
                 daysLeft={daysLeft >= 0 ? `${daysLeft} days left` : "Past due"}
                 heading={"My pending jobs"}
               />
