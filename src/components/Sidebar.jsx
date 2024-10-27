@@ -25,6 +25,10 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
     setIsOpen(!isOpen);
   };
 
+  const handleProfileClick = () => {
+    navigate("/profile")
+  }
+
   return (
     <div
       className={`fixed w-64 z-40  bg-[#F4F0ED] flex flex-col justify-between text-black h-full transform ${
@@ -174,9 +178,9 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
         </ul>
       </div>
       <div className="rounded-lg bg-blue-50 px-5 flex gap-4 items-center py-4">
-        <img src={icon} className="w-10 h-10" />
+        <img src={icon} className="w-10 h-10 cursor-pointer" onClick={handleProfileClick}/>
         <div className="text-black flex flex-col justify-center">
-          <div className="font-semibold text-lg">{user?.name}</div>
+          <div className="font-semibold text-lg cursor-pointer" onClick={handleProfileClick}>{user?.name}</div>
           <div className="text-sm">{user?.userType}</div>
         </div>
       </div>
