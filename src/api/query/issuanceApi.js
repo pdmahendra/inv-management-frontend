@@ -31,6 +31,7 @@ export const useIssueInventoryItems = () => {
       queryClient.invalidateQueries([
         "fetchIssuanceRecords",
         "fetchLotIssuanceRecords",
+        "fetchMyIssuanceRecords"
       ]);
     },
     onError: (error) => {
@@ -51,5 +52,17 @@ export const useLotFetchIssuanceRecords = (id) => {
     queryKey: ["fetchLotIssuanceRecords", id],
     queryFn: () => fetchLotIssuanceRecords(id),
     enabled: !!id,
+  });
+};
+
+export const fetchMyIssuanceRecords = async () => {
+  const response = await axios.get(`${API.issuance.getMyIssuanceRecords}`);
+  return response.data;
+};
+
+export const useFetchMyIssuanceRecords = () => {
+  return useQuery({
+    queryKey: ["fetchMyIssuanceRecords"],
+    queryFn: fetchMyIssuanceRecords,
   });
 };
