@@ -20,8 +20,6 @@ import {
 import Options from "../production/Option";
 
 export default function CuttingAlotTable({ data = [], heading }) {
-  console.log(data);
-
   // const [sorting, setSorting] = useState([]);
   // const [columnFilters, setColumnFilters] = useState([]);
   // const [columnVisibility, setColumnVisibility] = React.useState({});
