@@ -14,6 +14,18 @@ export const useFetchAllLifecycle = () => {
   });
 };
 
+export const fetchMyLifecycle = async () => {
+  const response = await axios.get(`${API.lifecycle.getMyLifecycle}`);
+  return response.data;
+};
+
+export const useFetchMyLifecycle = () => {
+  return useQuery({
+    queryKey: ["fetchMyLifecycle"],
+    queryFn: fetchMyLifecycle,
+  });
+};
+
 export const startNewLifecycle = async (lifecycleData) => {
   console.log(lifecycleData);
   const response = await axios.post(
@@ -28,7 +40,7 @@ export const useStartNewLifecycle = () => {
   return useMutation({
     mutationFn: startNewLifecycle,
     onSuccess: () => {
-      queryClient.invalidateQueries(["fetchAllProduction"]);
+      queryClient.invalidateQueries(["fetchAllLifecycle","fetchMyLifecycle"]);
     },
     onError: (error) => {
       console.error("Error starting lifecycle:", error);
