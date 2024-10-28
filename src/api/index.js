@@ -31,11 +31,13 @@ export const API = {
   lifecycle: {
     startNewLifecycle: `${SERVER_BASE_URL}/lifecycle/start-new-lifecycle`,
     getAllLifecycle: `${SERVER_BASE_URL}/lifecycle/get-all-lifecycle`,
+    getMyLifecycle: `${SERVER_BASE_URL}/lifecycle/get-my-stages`,
     generatePdf: `${SERVER_BASE_URL}/lifecycle/generate-pdf`,
   },
   issuance: {
     issueInventoryItems: `${SERVER_BASE_URL}/issuance/issue-inventory-items`,
     getIssuanceRecords: `${SERVER_BASE_URL}/issuance/issuance-records`,
     getLotIssuanceRecords: `${SERVER_BASE_URL}/issuance/issuance-record`,
+    getMyIssuanceRecords: `${SERVER_BASE_URL}/issuance/my-issuance-record`,
   },
 };
