@@ -44,7 +44,7 @@ const ProfilePage = () => {
     useFetchMyIssuanceRecords();
 
   return (
-    <div className="max-sm:px-10">
+    <div className="max-sm:px-10 pb-10">
       <div className="max-sm:ml-6 sm:flex justify-center items-center text-3xl mt-10">
         User Profile
       </div>
