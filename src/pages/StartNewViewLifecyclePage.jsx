@@ -51,7 +51,7 @@ const StartNewLifecyclePage = () => {
       assignTo: assignTo === "Others" ? "others" : assignTo,
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
-      additioanlInformation: addInfo,
+      additionalInformation: addInfo,
     };
 
     const lifecycleData = {
