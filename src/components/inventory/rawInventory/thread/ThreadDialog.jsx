@@ -11,7 +11,8 @@ export default function FormDialog() {
   const [formData, setFormData] = useState({
     color: "",
     number: "",
-    quantity: ""
+    quantity: "",
+    price: "",
   });
 
   const handleClickOpen = () => {
@@ -26,7 +27,7 @@ export default function FormDialog() {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -79,6 +80,18 @@ export default function FormDialog() {
             fullWidth
             variant="outlined"
             value={formData.quantity}
+            onChange={handleChange}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="price"
+            name="price"
+            label="Price"
+            type="number"
+            fullWidth
+            variant="outlined"
+            value={formData.price}
             onChange={handleChange}
           />
         </DialogContent>
