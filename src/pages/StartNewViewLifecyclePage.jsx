@@ -189,6 +189,117 @@ const StartNewLifecyclePage = () => {
             placeholder="Enter Additional Details"
           />
         </div>{" "}
+        <div>
+          <h1 className="text-2xl sm:pt-14 max-sm:pl-16">
+            Inventory Specifications
+          </h1>
+          <div className="mt-4">
+            <label className="block mb-2 text-lg font-medium" htmlFor="type">
+              Type{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="type"
+              name="type"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+          <div className="mt-4">
+            <label className="block mb-2 text-lg font-medium" htmlFor="brand">
+              Brand{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="brand"
+              name="brand"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+          <div className="mt-4">
+            <label
+              className="block mb-2 text-lg font-medium"
+              htmlFor="accessories"
+            >
+              Accessories{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="accessories"
+              name="accessories"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+          <div className="mt-4">
+            <label
+              className="block mb-2 text-lg font-medium"
+              htmlFor="mainThread"
+            >
+              Main Thread{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="mainThread"
+              name="mainThread"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+          <div className="mt-4">
+            <label
+              className="block mb-2 text-lg font-medium"
+              htmlFor="contrastThread"
+            >
+              Contrast Thread{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="contrastThread"
+              name="contrastThread"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+          <div className="mt-4">
+            <label
+              className="block mb-2 text-lg font-medium"
+              htmlFor="insideThread"
+            >
+              Inside Thread{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="insideThread"
+              name="insideThread"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+          <div className="mt-4">
+            <label
+              className="block mb-2 text-lg font-medium"
+              htmlFor="washCard"
+            >
+              Wash Card{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="washCard"
+              name="washCard"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+        </div>
       </div>
       <div className="pt-8 ml-10 flex justify-start items-center gap-4">
         <button className="text-red-500 px-12 py-2 border-2 rounded-xl">
