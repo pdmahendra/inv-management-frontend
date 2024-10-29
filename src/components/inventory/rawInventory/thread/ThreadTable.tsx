@@ -40,6 +40,11 @@ export const columns = [
     header: "Quantity",
     cell: ({ row }) => <div className="pl-6">{row.original.quantity}</div>,
   },
+  {
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => <div className="pl-6">{row.original.price}</div>,
+  },
 ];
 
 export default function ThreadTable({ data = [] }) {
