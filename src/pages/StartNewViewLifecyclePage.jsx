@@ -299,6 +299,35 @@ const StartNewLifecyclePage = () => {
               placeholder="Enter Additional Details"
             />
           </div>{" "}
+          <div className="mt-4">
+            <label
+              className="block mb-2 text-lg font-medium"
+              htmlFor="embroidery"
+            >
+              Embroidery{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="embroidery"
+              name="embroidery"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
+          <div className="mt-4">
+            <label className="block mb-2 text-lg font-medium" htmlFor="zip">
+              Zip{" "}
+            </label>
+            <input
+              type="Textarea"
+              id="zip"
+              name="zip"
+              onChange={(e) => setAddInfo(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              placeholder="Enter Additional Details"
+            />
+          </div>{" "}
         </div>
       </div>
       <div className="pt-8 ml-10 flex justify-start items-center gap-4">
