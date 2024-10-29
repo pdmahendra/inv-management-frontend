@@ -116,9 +116,14 @@ export default function LotStagesTable({ data = [] }) {
       ),
     },
     {
+      accessorKey: "lostPieces",
+      header: "Lost Pieces",
+      cell: ({ row }) => <div>{row.original.lostPieces || "-"}</div>,
+    },
+    {
       accessorKey: "additionalInformation",
       header: "Additional Information",
-      cell: ({ row }) => <div>{row.original.additionalInformation || "-"}</div>,
+      cell: ({ row }) => <div className="">{row.original.additionalInformation || "-"}</div>,
     },
     {
       accessorKey: "*",
@@ -169,7 +174,7 @@ export default function LotStagesTable({ data = [] }) {
   });
 
   return (
-    <div className="border border-gray-300 rounded-3xl mt-6">
+    <div className="border border-gray-300 rounded-3xl mt-6 ">
       <div className="p-4">
         <Table>
           <TableHeader>
