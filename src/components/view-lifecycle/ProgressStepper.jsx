@@ -19,47 +19,51 @@ import axios from "../../utils/middleware";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { SERVER_BASE_URL } from "../../api/index";
-
-const steps = [
-  {
-    label: "Karigar",
-    description: "",
-  },
-  {
-    label: "Checking",
-    description: "",
-  },
-  {
-    label: "FeedOff",
-    description: "",
-  },
-  {
-    label: "Overlock",
-    description: "",
-  },
-  {
-    label: "Side & Lupi",
-    description: "",
-  },
-  { label: "Belt", description: "" },
-  {
-    label: "Thoka & Bottom & Label",
-    description: "",
-  },
-  {
-    label: "Final Checking",
-    description: "",
-  },
-];
+import { DialogContent } from "@mui/material";
 
 export default function ProgressStepper({ refetch }) {
   const { id } = useParams();
   const [activeStep, setActiveStep] = React.useState(0);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [completeDialog, setCompleteDialog] = React.useState(false);
   const [stepCompleted, setStepCompleted] = React.useState(false);
   const [completedSteps, setCompletedSteps] = React.useState({});
   const [nextStepLabel, setNextStepLabel] = React.useState("");
   const [lifecycleStages, setLifecycleStages] = React.useState([]); // store lifecycle stages
+  const [rolls, setRolls] = useState();
+  const [actualPieces, setActualPieces] = useState("");
+
+  const steps = [
+    {
+      label: "Karigar",
+      description: lifecycleStages[0]?.additionalInformation,
+    },
+    {
+      label: "Checking",
+      description: lifecycleStages[1]?.additionalInformation,
+    },
+    {
+      label: "FeedOff",
+      description: lifecycleStages[2]?.additionalInformation,
+    },
+    {
+      label: "Overlock",
+      description: lifecycleStages[3]?.additionalInformation,
+    },
+    {
+      label: "Side & Lupi",
+      description: lifecycleStages[4]?.additionalInformation,
+    },
+    { label: "Belt", description: lifecycleStages[5]?.additionalInformation },
+    {
+      label: "Thoka & Bottom & Label",
+      description: lifecycleStages[6]?.additionalInformation,
+    },
+    {
+      label: "Final Checking",
+      description: lifecycleStages[7]?.additionalInformation,
+    },
+  ];
 
   // Fetch the lifecycle data by ID
   const fetchLifecycleData = async () => {
@@ -68,7 +72,7 @@ export default function ProgressStepper({ refetch }) {
         `${SERVER_BASE_URL}/lifecycle/getLifecycleById/${id}`
       );
       const lifecycleResponse = response.data;
-
+      setRolls(lifecycleResponse.lifecycle.rolls[0]);
       if (lifecycleResponse.lifecycle?.stages) {
         setLifecycleStages(lifecycleResponse.lifecycle.stages);
 
@@ -96,6 +100,10 @@ export default function ProgressStepper({ refetch }) {
     fetchLifecycleData();
   }, [id]);
 
+  const handleCompleteButton = () => {
+    setCompleteDialog(true);
+  };
+
   const handleCompleteStep = async () => {
     const currentStage = lifecycleStages[activeStep];
 
@@ -111,10 +119,16 @@ export default function ProgressStepper({ refetch }) {
           {
             isCompleted: true,
             markAsDone: true,
+            noOfPieces: actualPieces
+              ? Number(actualPieces)
+              : Number(rolls?.noOfPieces),
+            lostPieces: actualPieces ? rolls?.noOfPieces - actualPieces : 0,
           }
         );
         toast.success("Lifecycle completed successfully!");
         setStepCompleted(true);
+        setCompleteDialog(false);
+        setActualPieces("");
         setCompletedSteps((prev) => ({ ...prev, [activeStep]: true }));
 
         // Move to the next step
@@ -131,10 +145,17 @@ export default function ProgressStepper({ refetch }) {
           `${SERVER_BASE_URL}/lifecycle/update/${id}/${stageId}`,
           {
             isCompleted: true,
+            noOfPieces: actualPieces,
+            noOfPieces: actualPieces
+              ? Number(actualPieces)
+              : Number(rolls?.noOfPieces),
+            lostPieces: actualPieces ? rolls?.noOfPieces - actualPieces : 0,
           }
         );
         toast.success("Step completed successfully!");
         setStepCompleted(true);
+        setActualPieces("");
+        setCompleteDialog(false);
         setCompletedSteps((prev) => ({ ...prev, [activeStep]: true }));
 
         // Move to the next step
@@ -187,6 +208,7 @@ export default function ProgressStepper({ refetch }) {
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(null);
   const [price, setPrice] = useState("");
   const [addInfo, setAddInfo] = useState("");
+  console.log("additional information", price);
 
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
 
@@ -219,6 +241,7 @@ export default function ProgressStepper({ refetch }) {
       contact: assignTo === "Others" ? contact : undefined,
       additionalInformation: addInfo,
     };
+
     try {
       await axios.post(
         `${SERVER_BASE_URL}/lifecycle/${id}/new-stage`,
@@ -233,53 +256,59 @@ export default function ProgressStepper({ refetch }) {
       setAssignTo("");
       setExpectedDeliveryDate(null);
       setAddInfo("");
-      setPrice("")
+      setPrice("");
     } catch (error) {
       const errorMessage = error.response?.data?.message;
       toast.error(errorMessage);
     }
   };
+
   return (
     <>
       <Box sx={{ maxWidth: 400 }}>
         <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((step, index) => (
-            <Step key={step.label} completed={completedSteps[index]}>
-              <StepLabel
-                optional={
-                  index === steps.length - 1 ? (
-                    <Typography variant="caption">Last step</Typography>
-                  ) : null
-                }
-              >
-                {step.label}
-              </StepLabel>
-              <StepContent>
-                <Typography>{step.description}</Typography>
-                <Box sx={{ mb: 2 }}>
-                  {activeStep === index && !completedSteps[index] ? (
-                    <Button
-                      variant="contained"
-                      onClick={handleCompleteStep}
-                      sx={{ mt: 1, mr: 1 }}
-                    >
-                      Complete Step
-                    </Button>
-                  ) : completedSteps[index] &&
-                    index === activeStep &&
-                    activeStep < steps.length - 1 ? (
-                    <Button
-                      variant="outlined"
-                      onClick={handleStartNextStep}
-                      sx={{ mt: 1, mr: 1 }}
-                    >
-                      Start Next Step
-                    </Button>
-                  ) : null}
-                </Box>
-              </StepContent>
-            </Step>
-          ))}
+          {steps.map(
+            (step, index) => (
+              console.log(step.description),
+              (
+                <Step key={step.label} completed={completedSteps[index]}>
+                  <StepLabel
+                    optional={
+                      index === steps.length - 1 ? (
+                        <Typography variant="caption">Last step</Typography>
+                      ) : null
+                    }
+                  >
+                    {step.label}
+                  </StepLabel>
+                  <StepContent>
+                    <Typography>{step?.description}</Typography>
+                    <Box sx={{ mb: 2 }}>
+                      {activeStep === index && !completedSteps[index] ? (
+                        <Button
+                          variant="contained"
+                          onClick={handleCompleteButton}
+                          sx={{ mt: 1, mr: 1 }}
+                        >
+                          Complete Step
+                        </Button>
+                      ) : completedSteps[index] &&
+                        index === activeStep &&
+                        activeStep < steps.length - 1 ? (
+                        <Button
+                          variant="outlined"
+                          onClick={handleStartNextStep}
+                          sx={{ mt: 1, mr: 1 }}
+                        >
+                          Start Next Step
+                        </Button>
+                      ) : null}
+                    </Box>
+                  </StepContent>
+                </Step>
+              )
+            )
+          )}
         </Stepper>
         {/* {activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
@@ -422,6 +451,68 @@ export default function ProgressStepper({ refetch }) {
           <DialogActions>
             <Button onClick={() => handleDialogClose(false)}>Cancel</Button>
             <Button onClick={handleStartNewStage}>Start</Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* complete button dialog */}
+        <Dialog
+          open={completeDialog}
+          onClose={() => handleDialogClose(false)}
+          sx={{
+            "& .MuiDialog-container": {
+              "& .MuiPaper-root": {
+                width: "600px",
+                maxWidth: "80%",
+                padding: "20px",
+              },
+            },
+          }}
+        >
+          <DialogTitle>Complete {steps[activeStep].label} Step</DialogTitle>
+          <DialogContent>
+            <div className="pt-4">
+              <div>
+                Roll Number: {rolls?.rollNo}
+                <span className="font-medium">{}</span>
+              </div>
+
+              <div className="flex">
+                {/* Expected No. of Pieces */}
+                <div>
+                  <label className="text-sm" htmlFor={`expectedPieces`}>
+                    Expected No. of Pieces
+                  </label>
+                  <input
+                    type="text"
+                    id={`expectedPieces`}
+                    name={`expectedPieces`}
+                    value={rolls?.noOfPieces}
+                    readOnly
+                    className="py-2 px-4 border rounded-lg bg-gray-100 cursor-not-allowed"
+                  />
+                </div>
+
+                {/* Actual No. of Pieces */}
+                <div>
+                  <label className="text-sm" htmlFor={`actualPieces`}>
+                    Actual No. of Pieces
+                  </label>
+                  <input
+                    type="text"
+                    id={`actualPieces}`}
+                    name={`actualPieces`}
+                    value={actualPieces}
+                    onChange={(e) => setActualPieces(e.target.value)}
+                    placeholder="Enter actual number"
+                    className="py-2 px-4 border rounded-lg"
+                  />
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setCompleteDialog(false)}>Cancel</Button>
+            <Button onClick={handleCompleteStep}>Complete</Button>
           </DialogActions>
         </Dialog>
       </Box>
