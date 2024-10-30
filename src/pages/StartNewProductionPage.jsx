@@ -13,10 +13,11 @@ import { toast } from "react-hot-toast";
 const StartNewProductionPage = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
   const [contact, setContact] = useState("");
   const [assignTo, setAssignTo] = useState("");
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(null);
-  const [data, setData] = useState([]);  
+  const [data, setData] = useState([]);
 
   //handle assignTo field
   const handleChange = (event) => {
@@ -34,17 +35,14 @@ const StartNewProductionPage = () => {
   };
 
   //fetch all users to show name in dropdown
-  const {
-    data: peopleData = [],
-    isLoading: isFetching,
-  } = useFetchAllUsers();
+  const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
   const { mutate: startNewProduction, isLoading } = useStartNewProduction();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formattedDeliveryDate = expectedDeliveryDate
-    ? expectedDeliveryDate.format("DD/MM/YYYY")
-    : "";
+      ? expectedDeliveryDate.format("DD/MM/YYYY")
+      : "";
 
     const productionData = {
       rolls: data,
@@ -52,6 +50,7 @@ const StartNewProductionPage = () => {
       assignTo: assignTo === "Others" ? "others" : assignTo,
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
+      type: type,
     };
 
     startNewProduction(productionData, {
@@ -60,7 +59,7 @@ const StartNewProductionPage = () => {
         toast.success("Production started successfully!");
       },
       onError: (error) => {
-        const errorMessage = error.response?.data?.message;        
+        const errorMessage = error.response?.data?.message;
         toast.error(errorMessage);
       },
     });
@@ -155,6 +154,26 @@ const StartNewProductionPage = () => {
               renderInput={(params) => <input {...params} />}
             />
           </LocalizationProvider>
+        </div>
+
+        <div className="mt-8">
+          <label className="block mb-2 text-lg font-medium" htmlFor="type">
+            Type
+          </label>
+          <select
+            id="type"
+            name="type"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+          >
+            <option value="" disabled>
+              Select Type
+            </option>
+
+            <option value="kids">Kids</option>
+            <option value="adult">Adult</option>
+          </select>
         </div>
       </div>
       <div className="pt-8 flex justify-start items-center gap-4">
