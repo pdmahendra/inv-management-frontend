@@ -19,6 +19,7 @@ const StartNewLifecyclePage = () => {
   const [price, setPrice] = useState("");
   const [addInfo, setAddInfo] = useState("");
   const [data, setData] = useState([]);
+  const [type, setType] = useState("");
 
   //handle assignTo field
   const handleChange = (event) => {
@@ -34,6 +35,7 @@ const StartNewLifecyclePage = () => {
       setExpectedDeliveryDate(null); // Reset if no date is selected
     }
   };
+  console.log(type);
 
   //fetch all users to show name in dropdown
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
@@ -54,10 +56,7 @@ const StartNewLifecyclePage = () => {
       additionalInformation: addInfo,
     };
 
-    const lifecycleData = {
-      rolls: data,
-      stages: [stageDate],
-    };
+    const lifecycleData = { type: type, rolls: data, stages: [stageDate] };
 
     startNewLifecycle(lifecycleData, {
       onSuccess: (response) => {
@@ -76,7 +75,12 @@ const StartNewLifecyclePage = () => {
       <div className="flex justify-between items-center max-sm:pr-8">
         <h1 className="text-3xl sm:pt-8 sm:pl-4 max-sm:pl-16">Start New</h1>
         <div className="pt-6">
-          <AddMoreLifecycleDialog setData={setData} data={data} />
+          <AddMoreLifecycleDialog
+            setData={setData}
+            data={data}
+            setType={setType}
+            type={type}
+          />
         </div>
       </div>{" "}
       <div className="p-8">
@@ -193,19 +197,6 @@ const StartNewLifecyclePage = () => {
           <h1 className="text-2xl sm:pt-14 max-sm:pl-16">
             Inventory Specifications
           </h1>
-          <div className="mt-4">
-            <label className="block mb-2 text-lg font-medium" htmlFor="type">
-              Type{" "}
-            </label>
-            <input
-              type="Textarea"
-              id="type"
-              name="type"
-              onChange={(e) => setAddInfo(e.target.value)}
-              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
-              placeholder="Enter Additional Details"
-            />
-          </div>{" "}
           <div className="mt-4">
             <label className="block mb-2 text-lg font-medium" htmlFor="brand">
               Brand{" "}

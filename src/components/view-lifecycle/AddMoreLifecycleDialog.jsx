@@ -10,7 +10,12 @@ import {
   useFetchProductionById,
 } from "../../api/query/productionApi";
 
-export default function AddMoreLifecycleDialog({ setData, data }) {
+export default function AddMoreLifecycleDialog({
+  setData,
+  data,
+  setType,
+  type,
+}) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     rollNo: "",
@@ -31,7 +36,7 @@ export default function AddMoreLifecycleDialog({ setData, data }) {
 
   // Filter out completed production rolls
   const completedProduction = productionData.filter(
-    (item) => item.markAsDone === true
+    (item) => item.markAsDone === true && item.type === type
   );
   const completedRolls = completedProduction.flatMap((item) =>
     item.rolls.map((roll) => ({
@@ -114,7 +119,6 @@ export default function AddMoreLifecycleDialog({ setData, data }) {
       noOfPieces: "",
       costPrice: "",
     });
-
     handleClose();
   };
 
@@ -143,6 +147,26 @@ export default function AddMoreLifecycleDialog({ setData, data }) {
           Add Roll
         </DialogTitle>
         <DialogContent>
+          {" "}
+          <div className="mt-8">
+            <label className="block mb-2 text-lg font-medium" htmlFor="type">
+              Type
+            </label>
+            <select
+              id="type"
+              name="type"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="w-full px-4 py-4 border rounded-lg"
+            >
+              <option value="" disabled>
+                Select Type
+              </option>
+
+              <option value="kids">Kids</option>
+              <option value="adult">Adult</option>
+            </select>
+          </div>
           <div className="mt-8">
             <label className="block mb-2 text-lg font-medium" htmlFor="rollNo">
               Select Roll Number
