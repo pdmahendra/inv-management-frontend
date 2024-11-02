@@ -13,6 +13,7 @@ import { toast } from "react-hot-toast";
 export default function AddMoreInventory() {
   const [open, setOpen] = useState(false);
   const [totalQuantity, setTotalQuantity] = useState("");
+
   const [formData, setFormData] = useState({
     lot: "",
     stage: "",
@@ -24,8 +25,8 @@ export default function AddMoreInventory() {
     name: "",
     contact: "",
   });
-  const { mutate: issueInventoryItems, isLoading } = useIssueInventoryItems();
 
+  const { mutate: issueInventoryItems, isLoading } = useIssueInventoryItems();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -46,14 +47,18 @@ export default function AddMoreInventory() {
   useEffect(() => {
     if (inventoryResponse && inventoryResponse.length > 0) {
       const inventoryItem = inventoryResponse.find((item) => {
-        return item.name === formData.inventoryItem;
+        const color = item.extra_fields[0]?.color || "";
+        return (
+          item.name === formData.inventoryItem ||
+          color === formData.inventoryItem
+        );
       });
 
       if (inventoryItem) {
         setTotalQuantity(inventoryItem.quantity);
       }
     }
-  }, [inventoryResponse, formData.inventoryItem]);
+  }, [formData.inventoryItem]);
 
   //fetch all lifecycle
   const { data: lifecycleResponse, isLoading: isAllLifecycleFetching } =
@@ -100,12 +105,24 @@ export default function AddMoreInventory() {
   };
 
   //handle all input fields
+  // handle all input fields
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (name === "inventory") {
+      setTotalQuantity(""); // Reset total quantity
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        inventoryItem: "", // Reset inventoryItem when inventory changes
+        quantity: "", // Optional: reset quantity too
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = () => {
@@ -196,7 +213,7 @@ export default function AddMoreInventory() {
                 ))}
             </select>
           </div>
-          <div className="mt-4">
+          <div className="mt-8">
             <label className="block mb-2 text-lg font-medium" htmlFor="stage">
               Ongoing Stage
             </label>
@@ -230,6 +247,7 @@ export default function AddMoreInventory() {
 
               <option value="accessories">Accessories</option>
               <option value="astar">Astar</option>
+              <option value="thread">Thread</option>
             </select>
           </div>
           <div className="mt-8">
@@ -251,28 +269,44 @@ export default function AddMoreInventory() {
               </option>
 
               {inventoryResponse?.map((item, index) => {
-                if (formData.inventory !== "astar") {
+                if (formData.inventory === "accessories") {
                   return (
                     <option key={index} value={item.name}>
                       {item.name}
                     </option>
                   );
                 }
-                return item.extra_fields?.map((extraField, extraIndex) => {
-                  const itemName = extraField.item_name || "";
-                  if (itemName) {
-                    return (
-                      <option key={`${index}-${extraIndex}`} value={itemName}>
-                        {itemName}
-                      </option>
-                    );
-                  }
-                  return null;
-                });
+                if (formData.inventory === "thread") {
+                  return item.extra_fields?.map((extraField, extraIndex) => {
+                    const color = extraField.color || "";
+
+                    if (color) {
+                      return (
+                        <option key={`${index}-${extraIndex}`} value={color}>
+                          {color}
+                        </option>
+                      );
+                    }
+                    return null;
+                  });
+                }
+                if (formData.inventory === "astar") {
+                  return item.extra_fields?.map((extraField, extraIndex) => {
+                    const itemName = extraField.item_name || "";
+                    if (itemName) {
+                      return (
+                        <option key={`${index}-${extraIndex}`} value={itemName}>
+                          {itemName}
+                        </option>
+                      );
+                    }
+                    return null;
+                  });
+                }
               })}
             </select>
           </div>
-          <div className="mt-4">
+          <div className="mt-8">
             <div className="flex justify-between items-center">
               <label
                 className="block mb-2 text-lg font-medium"
@@ -319,7 +353,7 @@ export default function AddMoreInventory() {
           </div>
           {formData.allotTo === "Others" ? (
             <>
-              <div className="mt-4">
+              <div className="mt-8">
                 <label
                   className="block mb-2 text-lg font-medium"
                   htmlFor="name"
@@ -336,7 +370,7 @@ export default function AddMoreInventory() {
                   placeholder="Enter your name"
                 />
               </div>
-              <div className="mt-4">
+              <div className="mt-8">
                 <label
                   className="block mb-2 text-lg font-medium"
                   htmlFor="contact"
