@@ -69,7 +69,6 @@ export const useEditItem = () => {
 };
 
 export const deleteItem = async (id) => {
-  console.log(id);
   const response = await axios.delete(`${API.inventory.deleteItems}`, {
     data: { item_id: id },
   });
