@@ -28,12 +28,9 @@ export const columns = [
   {
     accessorKey: "color",
     header: "Colour",
-    cell: ({ row }) => <div className="">{row.original.color}</div>,
-  },
-  {
-    accessorKey: "no",
-    header: "Number",
-    cell: ({ row }) => <div className="pl-3">{row.original.no}</div>,
+    cell: ({ row }) => (
+      <div className="">{row.original.extra_fields[0].color}</div>
+    ),
   },
   {
     accessorKey: "quantity",
