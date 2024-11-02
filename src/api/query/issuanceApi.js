@@ -15,7 +15,6 @@ export const useFetchIssuanceRecords = () => {
 };
 
 export const issueInventoryItems = async (payload) => {
-  console.log(payload);
   const response = await axios.post(
     `${API.issuance.issueInventoryItems}`,
     payload
@@ -31,7 +30,7 @@ export const useIssueInventoryItems = () => {
       queryClient.invalidateQueries([
         "fetchIssuanceRecords",
         "fetchLotIssuanceRecords",
-        "fetchMyIssuanceRecords"
+        "fetchMyIssuanceRecords",
       ]);
     },
     onError: (error) => {
