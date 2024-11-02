@@ -5,14 +5,21 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField"; // Import TextField component from MUI
 import { useState } from "react";
+import { useAddItem } from "../../../../api/query/inventory/invetoryApi";
+import { toast } from "react-hot-toast";
 
-export default function FormDialog() {
+export default function FormDialog({ refetch }) {
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    color: "",
-    number: "",
-    quantity: "",
+  const { mutate: addItmes, isLoading } = useAddItem();
+  const [data, setData] = useState({
+    name: "N/A",
+    quantity: 1,
     price: "",
+    minimum: 1,
+    image_url: "abc",
+    inventory_type: "raw",
+    sub_category: "thread",
+    extra_fields: [{ color: "" }],
   });
 
   const handleClickOpen = () => {
@@ -25,12 +32,62 @@ export default function FormDialog() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    if (["color"].includes(name)) {
+      setData((prevData) => ({
+        ...prevData,
+        extra_fields: {
+          ...prevData.extra_fields,
+          [name]: value,
+        },
+      }));
+    } else {
+      setData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const item = {
+      name: data.name,
+      quantity: data.quantity,
+      price: data.price,
+      min_limit: data.minimum,
+      image_url: data.image_url,
+      inventory_type: data.inventory_type,
+      sub_category: data.sub_category,
+      extra_fields: [{ color: data.extra_fields.color }],
+    };
 
+    try {
+      addItmes(item, {
+        onSuccess: () => {
+          toast.success("Item added successfully!");
+
+          setData({
+            name: "N/A",
+            quantity: 1,
+            price: "",
+            minimum: 1,
+            image_url: "abc",
+            inventory_type: "raw",
+            sub_category: "thread",
+            extra_fields: [{ color: "" }],
+          });
+
+          handleClose();
+          refetch();
+        },
+        onError: (error) => {
+          const errorMessage = error.response?.data?.error;
+          toast.error(errorMessage);
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div>
       <button
@@ -55,19 +112,7 @@ export default function FormDialog() {
             type="text"
             fullWidth
             variant="outlined"
-            value={formData.color}
-            onChange={handleChange}
-          />
-          <TextField
-            required
-            margin="dense"
-            id="number"
-            name="number"
-            label="Number"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={formData.number}
+            value={data.color}
             onChange={handleChange}
           />
           <TextField
@@ -79,7 +124,7 @@ export default function FormDialog() {
             type="number"
             fullWidth
             variant="outlined"
-            value={formData.quantity}
+            value={data.quantity}
             onChange={handleChange}
           />
           <TextField
@@ -91,7 +136,7 @@ export default function FormDialog() {
             type="number"
             fullWidth
             variant="outlined"
-            value={formData.price}
+            value={data.price}
             onChange={handleChange}
           />
         </DialogContent>
@@ -102,7 +147,10 @@ export default function FormDialog() {
           >
             Cancel
           </button>
-          <button className="text-white bg-[#3F51D7] font-medium px-8 py-2 border-2 rounded-xl">
+          <button
+            className="text-white bg-[#3F51D7] font-medium px-8 py-2 border-2 rounded-xl"
+            onClick={handleSubmit}
+          >
             Add
           </button>
         </DialogActions>
