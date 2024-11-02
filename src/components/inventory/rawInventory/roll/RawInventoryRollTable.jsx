@@ -66,10 +66,6 @@ export const columns = [
 ];
 
 export default function RawInventoryRollTable({ data = [] }) {
-
-  console.log(data);
-  
-
   // const [sorting, setSorting] = useState([]);
   // const [columnFilters, setColumnFilters] = useState([]);
   // const [columnVisibility, setColumnVisibility] = React.useState({});
