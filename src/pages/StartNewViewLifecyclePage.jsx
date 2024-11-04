@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetchAllUsers } from "../api/query/fetchAllUsers";
 import { useStartNewLifecycle } from "../api/query/lifecycleApi";
 import { toast } from "react-hot-toast";
+import { useFetchItemsBySubcategory } from "../api/query/inventory/invetoryApi";
 
 const StartNewLifecyclePage = () => {
   const navigate = useNavigate();
@@ -20,6 +21,14 @@ const StartNewLifecyclePage = () => {
   const [addInfo, setAddInfo] = useState("");
   const [data, setData] = useState([]);
   const [type, setType] = useState("");
+  const [brand, setBrand] = useState("");
+  const [accessories, setAccessories] = useState("");
+  const [mainThread, setMainThread] = useState("");
+  const [contrastThread, setContrastThread] = useState("");
+  const [insideThread, setInsideThread] = useState("");
+  const [washCard, setWashCard] = useState("");
+  const [embroidery, setEmbroidery] = useState("");
+  const [zip, setZip] = useState("");
 
   //handle assignTo field
   const handleChange = (event) => {
@@ -35,7 +44,6 @@ const StartNewLifecyclePage = () => {
       setExpectedDeliveryDate(null); // Reset if no date is selected
     }
   };
-  console.log(type);
 
   //fetch all users to show name in dropdown
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
@@ -56,7 +64,19 @@ const StartNewLifecyclePage = () => {
       additionalInformation: addInfo,
     };
 
-    const lifecycleData = { type: type, rolls: data, stages: [stageDate] };
+    const lifecycleData = {
+      type: type,
+      rolls: data,
+      stages: [stageDate],
+      brand,
+      accessories,
+      mainThread,
+      contrastThread,
+      insideThread,
+      washCard,
+      embroidery,
+      zip,
+    };
 
     startNewLifecycle(lifecycleData, {
       onSuccess: (response) => {
@@ -69,6 +89,15 @@ const StartNewLifecyclePage = () => {
       },
     });
   };
+
+  //fetch all inventory items
+  const { data: accessoriesResponse, isLoading: isAccessoriesFetching } =
+    useFetchItemsBySubcategory("accessories");
+  const { data: threadResponse, isLoading: isthreadFetching } =
+    useFetchItemsBySubcategory("thread");
+
+  console.log(accessoriesResponse);
+  console.log(threadResponse);
 
   return (
     <div className="sm:pr-20 pb-10 pt-5 max-sm:w-[420px]">
@@ -205,74 +234,140 @@ const StartNewLifecyclePage = () => {
               type="Textarea"
               id="brand"
               name="brand"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
               placeholder="Enter Additional Details"
             />
           </div>{" "}
-          <div className="mt-4">
+          <div className="mt-8">
             <label
               className="block mb-2 text-lg font-medium"
               htmlFor="accessories"
             >
               Accessories{" "}
             </label>
-            <input
-              type="Textarea"
+            <select
               id="accessories"
               name="accessories"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={accessories}
+              onChange={(e) => setAccessories(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
-              placeholder="Enter Additional Details"
-            />
+            >
+              <option value="" disabled>
+                Select Accessories
+              </option>
+
+              {accessoriesResponse?.map((item, index) => {
+                return (
+                  <option key={index} value={item.name}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
           </div>{" "}
-          <div className="mt-4">
+          <div className="mt-8">
             <label
               className="block mb-2 text-lg font-medium"
               htmlFor="mainThread"
             >
               Main Thread{" "}
             </label>
-            <input
-              type="Textarea"
+            <select
               id="mainThread"
               name="mainThread"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={mainThread}
+              onChange={(e) => setMainThread(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
-              placeholder="Enter Additional Details"
-            />
+            >
+              <option value="" disabled>
+                Select Main Thread
+              </option>
+
+              {threadResponse?.map((item, index) => {
+                return item.extra_fields?.map((extraField, extraIndex) => {
+                  const color = extraField.color || "";
+
+                  if (color) {
+                    return (
+                      <option key={`${index}-${extraIndex}`} value={color}>
+                        {color}
+                      </option>
+                    );
+                  }
+                  return null;
+                });
+              })}
+            </select>
           </div>{" "}
-          <div className="mt-4">
+          <div className="mt-8">
             <label
               className="block mb-2 text-lg font-medium"
               htmlFor="contrastThread"
             >
               Contrast Thread{" "}
             </label>
-            <input
-              type="Textarea"
+            <select
               id="contrastThread"
               name="contrastThread"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={contrastThread}
+              onChange={(e) => setContrastThread(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
-              placeholder="Enter Additional Details"
-            />
+            >
+              <option value="" disabled>
+                Select Contrast Thread
+              </option>
+
+              {threadResponse?.map((item, index) => {
+                return item.extra_fields?.map((extraField, extraIndex) => {
+                  const color = extraField.color || "";
+
+                  if (color) {
+                    return (
+                      <option key={`${index}-${extraIndex}`} value={color}>
+                        {color}
+                      </option>
+                    );
+                  }
+                  return null;
+                });
+              })}
+            </select>
           </div>{" "}
-          <div className="mt-4">
+          <div className="mt-8">
             <label
               className="block mb-2 text-lg font-medium"
               htmlFor="insideThread"
             >
               Inside Thread{" "}
             </label>
-            <input
-              type="Textarea"
+            <select
               id="insideThread"
               name="insideThread"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={insideThread}
+              onChange={(e) => setInsideThread(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
-              placeholder="Enter Additional Details"
-            />
+            >
+              <option value="" disabled>
+                Select Inside Thread
+              </option>
+
+              {threadResponse?.map((item, index) => {
+                return item.extra_fields?.map((extraField, extraIndex) => {
+                  const color = extraField.color || "";
+
+                  if (color) {
+                    return (
+                      <option key={`${index}-${extraIndex}`} value={color}>
+                        {color}
+                      </option>
+                    );
+                  }
+                  return null;
+                });
+              })}
+            </select>
           </div>{" "}
           <div className="mt-4">
             <label
@@ -285,7 +380,8 @@ const StartNewLifecyclePage = () => {
               type="Textarea"
               id="washCard"
               name="washCard"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={washCard}
+              onChange={(e) => setWashCard(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
               placeholder="Enter Additional Details"
             />
@@ -301,7 +397,8 @@ const StartNewLifecyclePage = () => {
               type="Textarea"
               id="embroidery"
               name="embroidery"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={embroidery}
+              onChange={(e) => setEmbroidery(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
               placeholder="Enter Additional Details"
             />
@@ -314,7 +411,8 @@ const StartNewLifecyclePage = () => {
               type="Textarea"
               id="zip"
               name="zip"
-              onChange={(e) => setAddInfo(e.target.value)}
+              value={zip}
+              onChange={(e) => setZip(e.target.value)}
               className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
               placeholder="Enter Additional Details"
             />
