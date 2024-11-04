@@ -1,5 +1,5 @@
 export const SERVER_BASE_URL =
-  `https://fact-1-1.onrender.com` || `http://localhost:3000`;
+`https://fact-1-1.onrender.com` || `http://localhost:3000`;
 
 export const API = {
   users: {
@@ -33,6 +33,7 @@ export const API = {
     getAllLifecycle: `${SERVER_BASE_URL}/lifecycle/get-all-lifecycle`,
     getMyLifecycle: `${SERVER_BASE_URL}/lifecycle/get-my-stages`,
     generatePdf: `${SERVER_BASE_URL}/lifecycle/generate-pdf`,
+    update: `${SERVER_BASE_URL}/lifecycle/update`,
   },
   issuance: {
     issueInventoryItems: `${SERVER_BASE_URL}/issuance/issue-inventory-items`,
