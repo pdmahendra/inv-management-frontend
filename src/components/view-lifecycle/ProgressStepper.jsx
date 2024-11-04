@@ -20,9 +20,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { SERVER_BASE_URL } from "../../api/index";
 import { DialogContent } from "@mui/material";
+import { useUpdateLifecycle } from "../../api/query/lifecycleApi";
 
 export default function ProgressStepper({ refetch }) {
   const { id } = useParams();
+  const updateLifecycleMutation = useUpdateLifecycle();
   const [activeStep, setActiveStep] = React.useState(0);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [completeDialog, setCompleteDialog] = React.useState(false);
@@ -114,17 +116,16 @@ export default function ProgressStepper({ refetch }) {
 
     if (currentStage.stage === "final checking") {
       try {
-        await axios.put(
-          `${SERVER_BASE_URL}/lifecycle/update/${id}/${stageId}`,
-          {
-            isCompleted: true,
-            markAsDone: true,
-            noOfPieces: actualPieces
-              ? Number(actualPieces)
-              : Number(rolls?.noOfPieces),
-            lostPieces: actualPieces ? rolls?.noOfPieces - actualPieces : 0,
-          }
-        );
+        await updateLifecycleMutation.mutateAsync({
+          id,
+          stageId,
+          isCompleted: true,
+          markAsDone: true,
+          noOfPieces: actualPieces
+            ? Number(actualPieces)
+            : Number(rolls?.noOfPieces),
+          lostPieces: actualPieces ? rolls?.noOfPieces - actualPieces : 0,
+        });
         toast.success("Lifecycle completed successfully!");
         setStepCompleted(true);
         setCompleteDialog(false);
@@ -141,18 +142,17 @@ export default function ProgressStepper({ refetch }) {
       }
     } else {
       try {
-        await axios.put(
-          `${SERVER_BASE_URL}/lifecycle/update/${id}/${stageId}`,
-          {
-            isCompleted: true,
-            noOfPieces: actualPieces,
-            noOfPieces: actualPieces
-              ? Number(actualPieces)
-              : Number(rolls?.noOfPieces),
-            lostPieces: actualPieces ? rolls?.noOfPieces - actualPieces : 0,
-          }
-        );
+        await updateLifecycleMutation.mutateAsync({
+          id,
+          stageId,
+          isCompleted: true,
+          noOfPieces: actualPieces
+            ? Number(actualPieces)
+            : Number(rolls?.noOfPieces),
+          lostPieces: actualPieces ? rolls?.noOfPieces - actualPieces : 0,
+        });
         toast.success("Step completed successfully!");
+        refetch();
         setStepCompleted(true);
         setActualPieces("");
         setCompleteDialog(false);
@@ -208,7 +208,6 @@ export default function ProgressStepper({ refetch }) {
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(null);
   const [price, setPrice] = useState("");
   const [addInfo, setAddInfo] = useState("");
-  console.log("additional information", price);
 
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
 
@@ -250,7 +249,7 @@ export default function ProgressStepper({ refetch }) {
       toast.success("New stage started successfully!");
       handleDialogClose(true);
       fetchLifecycleData();
-
+      refetch();
       setName("");
       setContact("");
       setAssignTo("");
@@ -267,48 +266,43 @@ export default function ProgressStepper({ refetch }) {
     <>
       <Box sx={{ maxWidth: 400 }}>
         <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map(
-            (step, index) => (
-              console.log(step.description),
-              (
-                <Step key={step.label} completed={completedSteps[index]}>
-                  <StepLabel
-                    optional={
-                      index === steps.length - 1 ? (
-                        <Typography variant="caption">Last step</Typography>
-                      ) : null
-                    }
-                  >
-                    {step.label}
-                  </StepLabel>
-                  <StepContent>
-                    <Typography>{step?.description}</Typography>
-                    <Box sx={{ mb: 2 }}>
-                      {activeStep === index && !completedSteps[index] ? (
-                        <Button
-                          variant="contained"
-                          onClick={handleCompleteButton}
-                          sx={{ mt: 1, mr: 1 }}
-                        >
-                          Complete Step
-                        </Button>
-                      ) : completedSteps[index] &&
-                        index === activeStep &&
-                        activeStep < steps.length - 1 ? (
-                        <Button
-                          variant="outlined"
-                          onClick={handleStartNextStep}
-                          sx={{ mt: 1, mr: 1 }}
-                        >
-                          Start Next Step
-                        </Button>
-                      ) : null}
-                    </Box>
-                  </StepContent>
-                </Step>
-              )
-            )
-          )}
+          {steps.map((step, index) => (
+            <Step key={step.label} completed={completedSteps[index]}>
+              <StepLabel
+                optional={
+                  index === steps.length - 1 ? (
+                    <Typography variant="caption">Last step</Typography>
+                  ) : null
+                }
+              >
+                {step.label}
+              </StepLabel>
+              <StepContent>
+                <Typography>{step?.description}</Typography>
+                <Box sx={{ mb: 2 }}>
+                  {activeStep === index && !completedSteps[index] ? (
+                    <Button
+                      variant="contained"
+                      onClick={handleCompleteButton}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Complete Step
+                    </Button>
+                  ) : completedSteps[index] &&
+                    index === activeStep &&
+                    activeStep < steps.length - 1 ? (
+                    <Button
+                      variant="outlined"
+                      onClick={handleStartNextStep}
+                      sx={{ mt: 1, mr: 1 }}
+                    >
+                      Start Next Step
+                    </Button>
+                  ) : null}
+                </Box>
+              </StepContent>
+            </Step>
+          ))}
         </Stepper>
         {/* {activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>

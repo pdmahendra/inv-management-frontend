@@ -48,7 +48,7 @@ const ViewDetails = () => {
         Track Lifecycle
       </h1>
       <div className="max-sm:pl-16 pt-10 sm:pt-8 sm:pl-4">
-        <ProgressStepper />
+        <ProgressStepper refetch={fetchLifecycleData}/>
       </div>
       <div className="sm:pt-8 max-sm:w-[420px]">
         <h1 className="text-2xl max-sm:pl-16 pt-10 sm:pt-8 sm:pl-4">
