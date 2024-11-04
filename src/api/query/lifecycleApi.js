@@ -40,10 +40,40 @@ export const useStartNewLifecycle = () => {
   return useMutation({
     mutationFn: startNewLifecycle,
     onSuccess: () => {
-      queryClient.invalidateQueries(["fetchAllLifecycle","fetchMyLifecycle"]);
+      queryClient.invalidateQueries(["fetchAllLifecycle", "fetchMyLifecycle"]);
     },
     onError: (error) => {
       console.error("Error starting lifecycle:", error);
+    },
+  });
+};
+
+export const updateLifecycle = async ({
+  id,
+  stageId,
+  markAsDone,
+  isCompleted,
+  noOfPieces,
+  lostPieces,
+}) => {
+  const response = await axios.put(`${API.lifecycle.update}/${id}/${stageId}`, {
+    markAsDone,
+    isCompleted,
+    noOfPieces,
+    lostPieces,
+  });
+  return response.data;
+};
+
+export const useUpdateLifecycle = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateLifecycle,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["fetchAllLifecycle", "fetchMyLifecycle"]);
+    },
+    onError: (error) => {
+      console.error("Error updating lifecycle:", error);
     },
   });
 };
