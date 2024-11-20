@@ -1,5 +1,5 @@
 export const SERVER_BASE_URL =
-`https://fact-1-1.onrender.com` || `http://localhost:3000`;
+  `https://fact-1-1.onrender.com` || `http://localhost:3000`;
 
 export const API = {
   users: {
@@ -7,6 +7,7 @@ export const API = {
     register: `${SERVER_BASE_URL}/auth/add-user`,
     fetchAllUsers: `${SERVER_BASE_URL}/auth/fetch-users`,
     editUser: `${SERVER_BASE_URL}/auth/edit-user`,
+    deleteUser: `${SERVER_BASE_URL}/auth/delete-user`,
   },
   tasks: {
     updateStatus: `${SERVER_BASE_URL}/todo/updateStatus`,
