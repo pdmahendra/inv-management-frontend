@@ -8,7 +8,7 @@ import { useUser } from "../../context/UserContext";
 import toast from "react-hot-toast";
 import { useDeleteUser } from "../../api/query/deleteUserApi";
 
-function DeleteUser({ id }) {
+function DeleteUser({ id, close }) {
   const { user } = useUser();
   const [adminPassword, setAdminPassword] = useState("");
   const [open, setOpen] = useState(false);
@@ -22,6 +22,7 @@ function DeleteUser({ id }) {
 
   const handleClose = () => {
     setOpen(false);
+    close();
   };
 
   const handleSubmit = async (e) => {
@@ -34,7 +35,7 @@ function DeleteUser({ id }) {
         onSuccess: (data) => {
           toast.success(data.message || "User deleted successfully");
           setIsLoading(false);
-          setOpen(false);
+          handleClose();
         },
         onError: (error) => {
           toast.error(error?.response?.data?.error || "Failed to delete user");

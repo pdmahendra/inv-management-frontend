@@ -143,7 +143,7 @@ function EditUser({ row }) {
               />
             </DialogContent>
             <DialogActions>
-              <DeleteUser id={row.original._id} />
+              <DeleteUser id={row.original._id} close={setOpen}/>
               <button
                 type="submit"
                 onClick={handleSubmit}
