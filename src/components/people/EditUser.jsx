@@ -7,6 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useEditUser } from "../../api/query/editUser";
 import { useUser } from "../../context/UserContext";
 import toast from "react-hot-toast";
+import DeleteUser from "./DeleteUserDialog";
 
 function EditUser({ row }) {
   const [name, setName] = useState("");
@@ -142,13 +143,7 @@ function EditUser({ row }) {
               />
             </DialogContent>
             <DialogActions>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="px-4 py-2 text-white bg-gray-500 rounded"
-              >
-                Cancel
-              </button>
+              <DeleteUser id={row.original._id} />
               <button
                 type="submit"
                 onClick={handleSubmit}
