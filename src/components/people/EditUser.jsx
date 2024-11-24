@@ -31,38 +31,38 @@ function EditUser({ row }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const data = {
-        name,
-        username,
-        password,
-        phoneNo,
-        userType,
-      };
-      editUser(
-        { id: row.original._id, data },
-        {
-          onSuccess: (response) => {
-            console.log(response);
-            toast.success("User updated successfully!");
-            setName(row.original.name);
-            setUsername(row.original.username);
-            setPhoneNo(row.original.phoneNo);
-            setUserType(row.original.userType);
-            setPassword("");
-            handleClose();
-          },
-          onError: (error) => {
-            const errorMessage = error.response?.data?.error;
-            toast.error(errorMessage);
-          },
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
+  
+    const data = {
+      name,
+      username,
+      password,
+      phoneNo,
+      userType,
+    };
+  
+    const toastId = toast.loading("Updating user..."); 
+  
+    editUser(
+      { id: row.original._id, data },
+      {
+        onSuccess: (response) => {
+          console.log(response);
+          toast.success("User updated successfully!", { id: toastId }); 
+          setName(row.original.name);
+          setUsername(row.original.username);
+          setPhoneNo(row.original.phoneNo);
+          setUserType(row.original.userType);
+          setPassword("");
+          handleClose();
+        },
+        onError: (error) => {
+          const errorMessage = error.response?.data?.error || "Failed to update user.";
+          toast.error(errorMessage, { id: toastId }); 
+        },
+      }
+    );
   };
+  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -132,18 +132,25 @@ function EditUser({ row }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <TextField
-                margin="dense"
-                label="User Type"
-                type="text"
-                fullWidth
-                variant="standard"
-                value={userType}
-                onChange={(e) => setUserType(e.target.value)}
-              />
+              <div className="dropdown relative w-full mt-4">
+                Role Type
+                <select
+                  id="userType"
+                  name="userType"
+                  className="w-full px-3 mt-2 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-600"
+                  onChange={(e) => {
+                    setUserType(e.target.value);
+                  }}
+                  value={userType}
+                >
+                  <option value="admin">Admin</option>
+                  <option value="manager">Manager</option>
+                  <option value="worker">Worker</option>
+                </select>
+              </div>
             </DialogContent>
             <DialogActions>
-              <DeleteUser id={row.original._id} close={setOpen}/>
+              <DeleteUser id={row.original._id} close={setOpen} />
               <button
                 type="submit"
                 onClick={handleSubmit}
