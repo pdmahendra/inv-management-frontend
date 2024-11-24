@@ -1,11 +1,10 @@
 import * as React from "react";
-
+import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -17,7 +16,9 @@ import {
   TableHeader,
   TableRow,
 } from "../../../../ui/table";
-import EditAstarItem from "./EditAstarItem"
+import EditAstarItem from "./EditAstarItem";
+import { Search } from "lucide-react";
+
 export const columns = [
   {
     accessorKey: "id",
@@ -58,34 +59,39 @@ export const columns = [
 ];
 
 export default function RawInventoryAstarTable({ data = [] }) {
-
-  // const [sorting, setSorting] = useState([]);
-  // const [columnFilters, setColumnFilters] = useState([]);
-  // const [columnVisibility, setColumnVisibility] = React.useState({});
-  // const [rowSelection, setRowSelection] = useState({});
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 10;
 
   const table = useReactTable({
     data,
     columns,
-    // onSortingChange: setSorting,
-    // onColumnFiltersChange: setColumnFilters,
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    // onColumnVisibilityChange: setColumnVisibility,
-
-    // onRowSelectionChange: setRowSelection,
-    // state: {
-    //   sorting,
-    //   columnFilters,
-    //   columnVisibility,
-    //   rowSelection,
-    // },
   });
 
+  const pageCount = Math.ceil(data.length / pageSize);
   return (
     <div className="border border-gray-300 rounded-3xl mt-6">
+      {/* <div className="mt-4 flex flex-col sm:flex-row justify-between items-center p-2 px-4 gap-4 sm:gap-0">
+        <div className="relative flex items-center w-full sm:w-auto">
+          <Search className="absolute left-4 text-gray-400 pointer-events-none" />
+          <input
+            value={table.getColumn("name")?.getFilterValue() ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="w-full sm:w-auto !pl-14 !h-12 !rounded-full !bg-[#E6E6E682] py-3 pl-10 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-sm lg:w-80"
+            placeholder="Search"
+          />
+        </div>
+      </div> */}
       <div className="p-4">
         <Table>
           <TableHeader>
@@ -130,7 +136,22 @@ export default function RawInventoryAstarTable({ data = [] }) {
               </TableRow>
             )}
           </TableBody>
-        </Table>
+        </Table>{" "}
+        <div className="flex justify-center mt-4">
+          {Array.from({ length: pageCount }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setPageIndex(i)}
+              className={`px-2 m-3 rounded ${
+                pageIndex === i
+                  ? "text-black border-2 rounded-xl"
+                  : "text-black"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
