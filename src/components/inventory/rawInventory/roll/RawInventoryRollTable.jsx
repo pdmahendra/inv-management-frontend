@@ -53,11 +53,41 @@ export const columns = [
     cell: ({ row }) => <div className="pl-3">{row.getValue("price")}</div>,
   },
   {
-    accessorKey: "extra_",
+    accessorKey: "extra_fields",
     header: "Grade",
     cell: ({ row }) => (
       <div className="pl-3">{row.original.extra_fields?.[3]?.grade}</div>
     ),
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created At",
+    cell: ({ row }) => {
+      const formattedDate = new Date(row.original.createdAt).toLocaleDateString(
+        "en-GB",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }
+      );
+      return <div>{formattedDate}</div>;
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: "Updated At",
+    cell: ({ row }) => {
+      const formattedDate = new Date(row.original.updatedAt).toLocaleDateString(
+        "en-GB",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }
+      );
+      return <div>{formattedDate}</div>;
+    },
   },
   {
     accessorKey: "editAction",
