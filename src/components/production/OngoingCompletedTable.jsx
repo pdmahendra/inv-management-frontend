@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -18,12 +18,10 @@ import {
   TableRow,
 } from "../../ui/table";
 import Options from "./Option";
+import { Search } from "lucide-react";
 
 export default function OngoingCompletedTable({ data = [], heading }) {
-  // const [sorting, setSorting] = useState([]);
-  // const [columnFilters, setColumnFilters] = useState([]);
-  // const [columnVisibility, setColumnVisibility] = React.useState({});
-  // const [rowSelection, setRowSelection] = useState({});
+  const [columnFilters, setColumnFilters] = useState([]);
 
   const columns = [
     {
@@ -63,6 +61,7 @@ export default function OngoingCompletedTable({ data = [], heading }) {
     {
       accessorKey: "rollNo",
       header: "Roll no.",
+      filterFn: "nestedRollNoFilter",
       cell: ({ row }) => (
         <div className="">
           {row.original.rolls.map((roll) => roll.rollNo).join(", ")}
@@ -170,25 +169,39 @@ export default function OngoingCompletedTable({ data = [], heading }) {
   const table = useReactTable({
     data,
     columns,
-    // onSortingChange: setSorting,
-    // onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    // onColumnVisibilityChange: setColumnVisibility,
-
-    // onRowSelectionChange: setRowSelection,
-    // state: {
-    //   sorting,
-    //   columnFilters,
-    //   columnVisibility,
-    //   rowSelection,
-    // },
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    filterFns: {
+      nestedRollNoFilter: (row, columnId, filterValue) => {
+        const rolls = row.original.rolls || [];
+        return rolls.some((roll) =>
+          roll.rollNo.toLowerCase().includes(filterValue.toLowerCase())
+        );
+      },
+    },
   });
 
   return (
     <div className="border border-gray-300 rounded-3xl mt-6">
+      <div className="mt-4 flex flex-col sm:flex-row justify-between items-center p-2 px-4 gap-4 sm:gap-0">
+        <div className="relative flex items-center w-full sm:w-auto">
+          <Search className="absolute left-4 text-gray-400 pointer-events-none" />
+          <input
+            value={table.getColumn("rollNo")?.getFilterValue() ?? ""}
+            onChange={(event) =>
+              table.getColumn("rollNo")?.setFilterValue(event.target.value)
+            }
+            className="w-full sm:w-auto !pl-14 !h-12 !rounded-full !bg-[#E6E6E682] py-3 pl-10 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-sm lg:w-80"
+            placeholder="Search"
+          />
+        </div>
+      </div>
       <div className="p-4">
         <Table>
           <TableHeader>
