@@ -42,4 +42,10 @@ export const API = {
     getLotIssuanceRecords: `${SERVER_BASE_URL}/issuance/issuance-record`,
     getMyIssuanceRecords: `${SERVER_BASE_URL}/issuance/my-issuance-record`,
   },
+  notification: {
+    getNotifications: `${SERVER_BASE_URL}/notifications`,
+  },
+  activityLogs: {
+    getActivityLogs: `${SERVER_BASE_URL}/activity-logs`,
+  },
 };
