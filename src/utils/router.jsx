@@ -14,9 +14,9 @@ import StartNewProductionPage from "../pages/StartNewProductionPage";
 import ViewLifecyclePage from "../pages/ViewLifecyclePage";
 import StartNewLifecyclePage from "../pages/StartNewViewLifecyclePage";
 import ViewDetails from "../pages/ViewDetails";
-import IssuanceRecordPage from "../pages/IssuanceRecordPage"
-import ProfilePage from "../pages/ProfilePage"
-
+import IssuanceRecordPage from "../pages/IssuanceRecordPage";
+import ProfilePage from "../pages/ProfilePage";
+import ActivityLogs from "../pages/ActivityLogs";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -78,6 +78,10 @@ export const router = createBrowserRouter([
       {
         path: "/inventory/ready",
         element: <ProtectedRoutes element={<ReadyInventory />} />,
+      },
+      {
+        path: "/activity-logs",
+        element: <ProtectedRoutes element={<ActivityLogs />} />,
       },
       {
         path: "/login",
