@@ -35,10 +35,14 @@ export default function OngoingCompletedTable({ data = [], heading }) {
       cell: ({ row }) => {
         const markAsDone = row.original.markAsDone;
         const expectedDeliveryDate = row.original.expectedDeliveryDate;
-
         const today = new Date().toLocaleDateString("en-GB");
 
-        const isDelayed = expectedDeliveryDate < today;
+        const parsedExpectedDeliveryDate = new Date(
+          expectedDeliveryDate.split("/").reverse().join("-")
+        );
+        const parsedToday = new Date(today.split("/").reverse().join("-"));
+
+        const isDelayed = parsedExpectedDeliveryDate < parsedToday;
         let statusClass, statusText;
         if (markAsDone) {
           statusClass = "bg-green-500";
