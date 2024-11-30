@@ -26,8 +26,8 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
   };
 
   const handleProfileClick = () => {
-    navigate("/profile")
-  }
+    navigate("/profile");
+  };
 
   return (
     <div
@@ -152,12 +152,20 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               Notification
             </li>
           </Link>
-          <Link to="/view-lifecycle" className="font-medium" onClick={handleTabClick}>
+          <Link
+            to="/view-lifecycle"
+            className="font-medium"
+            onClick={handleTabClick}
+          >
             <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               View Lifecycle
             </li>
           </Link>
-          <Link to="/issuance-records" className=" font-medium" onClick={handleTabClick}>
+          <Link
+            to="/issuance-records"
+            className=" font-medium"
+            onClick={handleTabClick}
+          >
             <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Issuance Records
             </li>
@@ -170,6 +178,12 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
             </Link>
           )}
 
+          <Link to="/activity-logs" className="font-medium">
+            <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+              Activity Logs
+            </li>
+          </Link>
+
           <Link to="#" onClick={handleLogout} className="font-medium">
             <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
               Logout
@@ -178,9 +192,18 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
         </ul>
       </div>
       <div className="rounded-lg bg-blue-50 px-5 flex gap-4 items-center py-4">
-        <img src={icon} className="w-10 h-10 cursor-pointer" onClick={handleProfileClick}/>
+        <img
+          src={icon}
+          className="w-10 h-10 cursor-pointer"
+          onClick={handleProfileClick}
+        />
         <div className="text-black flex flex-col justify-center">
-          <div className="font-semibold text-lg cursor-pointer" onClick={handleProfileClick}>{user?.name}</div>
+          <div
+            className="font-semibold text-lg cursor-pointer"
+            onClick={handleProfileClick}
+          >
+            {user?.name}
+          </div>
           <div className="text-sm">{user?.userType}</div>
         </div>
       </div>
