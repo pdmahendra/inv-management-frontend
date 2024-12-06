@@ -48,4 +48,7 @@ export const API = {
   activityLogs: {
     getActivityLogs: `${SERVER_BASE_URL}/activity-logs`,
   },
+  upload: {
+    imgUpload: `${SERVER_BASE_URL}/upload`,
+  },
 };
