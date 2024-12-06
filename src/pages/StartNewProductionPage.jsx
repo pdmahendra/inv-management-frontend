@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetchAllUsers } from "../api/query/fetchAllUsers";
 import { useStartNewProduction } from "../api/query/productionApi";
 import { toast } from "react-hot-toast";
+import handleImageUpload from "../api/query/uploadApi";
 
 const StartNewProductionPage = () => {
   const navigate = useNavigate();
@@ -34,6 +35,30 @@ const StartNewProductionPage = () => {
     }
   };
 
+  const [imageUrl, setImageUrl] = useState("");
+
+  const [imageUploading, setImageUploading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please upload a valid image file.");
+        return;
+      }
+      setImageUploading(true);
+      try {
+        const response = await handleImageUpload(file);
+        setImageUrl(response.contentUrl);
+      } catch (error) {
+        toast.error("Image upload failed. Please try again.");
+      } finally {
+        setImageUploading(false);
+      }
+    }
+  };
+
   //fetch all users to show name in dropdown
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
   const { mutate: startNewProduction, isLoading } = useStartNewProduction();
@@ -51,6 +76,7 @@ const StartNewProductionPage = () => {
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
       type: type,
+      image:imageUrl
     };
 
     startNewProduction(productionData, {
@@ -174,6 +200,19 @@ const StartNewProductionPage = () => {
             <option value="kids">Kids</option>
             <option value="adult">Adult</option>
           </select>
+        </div>
+
+        <div className="mt-8">
+          <label className="block font-medium mb-1">
+            Image <span className="text-xs">(optional)</span>
+          </label>
+          <input
+            type="file"
+            accept="image/jpeg"
+            onChange={handleImageChange}
+            ref={fileInputRef}
+            className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+          />
         </div>
       </div>
       <div className="pt-8 flex justify-start items-center gap-4">
