@@ -76,7 +76,7 @@ const StartNewProductionPage = () => {
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
       type: type,
-      image:imageUrl
+      image: imageUrl,
     };
 
     startNewProduction(productionData, {
@@ -220,7 +220,10 @@ const StartNewProductionPage = () => {
           Cancel
         </button>
         <button
-          className="text-white bg-[#3F51D7] font-medium px-12 py-2 border-2 rounded-xl"
+          disabled={imageUploading}
+          className={`text-white bg-[#3F51D7] font-medium px-12 py-2 border-2 rounded-xl ${
+            imageUploading ? "cursor-not-allowed" : ""
+          }`}
           onClick={handleSubmit}
         >
           Start

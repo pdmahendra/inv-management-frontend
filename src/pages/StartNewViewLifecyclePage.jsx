@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -10,6 +10,7 @@ import { useFetchAllUsers } from "../api/query/fetchAllUsers";
 import { useStartNewLifecycle } from "../api/query/lifecycleApi";
 import { toast } from "react-hot-toast";
 import { useFetchItemsBySubcategory } from "../api/query/inventory/invetoryApi";
+import handleImageUpload from "../api/query/uploadApi";
 
 const StartNewLifecyclePage = () => {
   const navigate = useNavigate();
@@ -45,6 +46,30 @@ const StartNewLifecyclePage = () => {
     }
   };
 
+  const [imageUrl, setImageUrl] = useState("");
+
+  const [imageUploading, setImageUploading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please upload a valid image file.");
+        return;
+      }
+      setImageUploading(true);
+      try {
+        const response = await handleImageUpload(file);
+        setImageUrl(response.contentUrl);
+      } catch (error) {
+        toast.error("Image upload failed. Please try again.");
+      } finally {
+        setImageUploading(false);
+      }
+    }
+  };
+
   //fetch all users to show name in dropdown
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
   const { mutate: startNewLifecycle, isLoading } = useStartNewLifecycle();
@@ -62,6 +87,7 @@ const StartNewLifecyclePage = () => {
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
       additionalInformation: addInfo,
+      image: imageUrl,
     };
 
     const lifecycleData = {
@@ -417,6 +443,18 @@ const StartNewLifecyclePage = () => {
               placeholder="Enter Additional Details"
             />
           </div>{" "}
+          <div className="mt-8">
+            <label className="block font-medium mb-1">
+              Image <span className="text-xs">(optional)</span>
+            </label>
+            <input
+              type="file"
+              accept="image/jpeg"
+              onChange={handleImageChange}
+              ref={fileInputRef}
+              className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+            />
+          </div>
         </div>
       </div>
       <div className="pt-8 ml-10 flex justify-start items-center gap-4">
@@ -424,7 +462,10 @@ const StartNewLifecyclePage = () => {
           Cancel
         </button>
         <button
-          className="text-white bg-[#3F51D7] font-medium px-12 py-2 border-2 rounded-xl"
+          disabled={imageUploading}
+          className={`text-white bg-[#3F51D7] font-medium px-12 py-2 border-2 rounded-xl ${
+            imageUploading ? "cursor-not-allowed" : ""
+          }`}
           onClick={handleSubmit}
         >
           Start

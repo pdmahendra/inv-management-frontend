@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFetchAllUsers } from "../../api/query/fetchAllUsers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -21,17 +21,18 @@ import { toast } from "react-hot-toast";
 import { SERVER_BASE_URL } from "../../api/index";
 import { DialogContent } from "@mui/material";
 import { useUpdateLifecycle } from "../../api/query/lifecycleApi";
+import handleImageUpload from "../../api/query/uploadApi";
 
 export default function ProgressStepper({ refetch }) {
   const { id } = useParams();
   const updateLifecycleMutation = useUpdateLifecycle();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [completeDialog, setCompleteDialog] = React.useState(false);
-  const [stepCompleted, setStepCompleted] = React.useState(false);
-  const [completedSteps, setCompletedSteps] = React.useState({});
-  const [nextStepLabel, setNextStepLabel] = React.useState("");
-  const [lifecycleStages, setLifecycleStages] = React.useState([]); // store lifecycle stages
+  const [activeStep, setActiveStep] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [completeDialog, setCompleteDialog] = useState(false);
+  const [stepCompleted, setStepCompleted] = useState(false);
+  const [completedSteps, setCompletedSteps] = useState({});
+  const [nextStepLabel, setNextStepLabel] = useState("");
+  const [lifecycleStages, setLifecycleStages] = useState([]); // store lifecycle stages
   const [rolls, setRolls] = useState();
   const [actualPieces, setActualPieces] = useState("");
 
@@ -209,6 +210,30 @@ export default function ProgressStepper({ refetch }) {
   const [price, setPrice] = useState("");
   const [addInfo, setAddInfo] = useState("");
 
+  const [imageUrl, setImageUrl] = useState("");
+
+  const [imageUploading, setImageUploading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please upload a valid image file.");
+        return;
+      }
+      setImageUploading(true);
+      try {
+        const response = await handleImageUpload(file);
+        setImageUrl(response.contentUrl);
+      } catch (error) {
+        toast.error("Image upload failed. Please try again.");
+      } finally {
+        setImageUploading(false);
+      }
+    }
+  };
+
   const { data: peopleData = [], isLoading: isFetching } = useFetchAllUsers();
 
   // Handle assignTo field
@@ -239,6 +264,7 @@ export default function ProgressStepper({ refetch }) {
       name: assignTo === "Others" ? name : undefined,
       contact: assignTo === "Others" ? contact : undefined,
       additionalInformation: addInfo,
+      image: imageUrl,
     };
 
     try {
@@ -441,10 +467,28 @@ export default function ProgressStepper({ refetch }) {
                 placeholder="Enter additional info"
               />
             </div>
+            <div className="mt-8">
+              <label className="block font-medium mb-1">
+                Image <span className="text-xs">(optional)</span>
+              </label>
+              <input
+                type="file"
+                accept="image/jpeg"
+                onChange={handleImageChange}
+                ref={fileInputRef}
+                className="w-full px-4 py-4 border rounded-lg sm:w-[50%]"
+              />
+            </div>
           </div>
           <DialogActions>
             <Button onClick={() => handleDialogClose(false)}>Cancel</Button>
-            <Button onClick={handleStartNewStage}>Start</Button>
+            <Button
+              onClick={handleStartNewStage}
+              disabled={imageUploading}
+              className={`${imageUploading ? "cursor-not-allowed" : ""}`}
+            >
+              Start
+            </Button>
           </DialogActions>
         </Dialog>
 
