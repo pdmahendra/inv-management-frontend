@@ -69,7 +69,7 @@ function App() {
           </div>
         )}
 
-        <main className="min-w-[300px] sm:ml-72">
+        <main className={`min-w-[300px] ${!isLoginPage && "sm:ml-72"} `}>
           <Outlet />
         </main>
       </div>

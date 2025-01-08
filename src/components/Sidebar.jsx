@@ -40,7 +40,7 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
         <div className="flex items-center justify-center py-4">
           <span className="text-xl font-semibold flex justify-start items-center">
             <img src={Factory} className="w-12 h-12 p-2" />
-            Jeans Store
+            Factory
           </span>
           <button className="p-4 md:hidden" onClick={handleSidebar}>
             <svg
@@ -140,7 +140,7 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
             onClick={handleTabClick}
           >
             <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              Production{" "}
+              Cutting Management{" "}
             </li>
           </Link>
           <Link
@@ -158,7 +158,7 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
             onClick={handleTabClick}
           >
             <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              View Lifecycle
+              Lifecycle Management
             </li>
           </Link>
           <Link

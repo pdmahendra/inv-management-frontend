@@ -114,17 +114,17 @@ export default function OngoingCompletedTable({ data = [], heading }) {
         //   </div>
       },
     },
-    {
-      accessorKey: "totalPrice",
-      header: "Total price",
-      cell: ({ row }) => {
-        const totalCost = row.original.rolls.reduce(
-          (total, roll) => total + roll.noOfPieces * roll.costPrice,
-          0
-        );
-        return <div className="">₹ {totalCost}</div>;
-      },
-    },
+    // {
+    //   accessorKey: "totalPrice",
+    //   header: "Total price",
+    //   cell: ({ row }) => {
+    //     const totalCost = row.original.rolls.reduce(
+    //       (total, roll) => total + roll.noOfPieces * roll.costPrice,
+    //       0
+    //     );
+    //     return <div className="">₹ {totalCost}</div>;
+    //   },
+    // },
     {
       accessorKey: "assignTo",
       header: "AssignTo",

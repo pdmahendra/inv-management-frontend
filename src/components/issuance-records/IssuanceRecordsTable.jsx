@@ -32,22 +32,22 @@ export default function IssuanceRecordsTable({ data = [] }) {
     {
       accessorKey: "lot",
       header: "Lot No.",
-      cell: ({ row }) => <div>{row.original.lot.lotNo}</div>,
+      cell: ({ row }) => <div>{row.original.lot?.lotNo}</div>,
     },
     {
       accessorKey: "stage",
       header: "Stage",
-      cell: ({ row }) => <div>{row.original.stageDetails.stage}</div>,
+      cell: ({ row }) => <div>{row.original.stageDetails?.stage}</div>,
     },
     {
       accessorKey: "inventoryItem",
       header: "Inventory Item",
-      cell: ({ row }) => <div>{row.original.inventoryItem}</div>,
+      cell: ({ row }) => <div>{row.original?.inventoryItem}</div>,
     },
     {
       accessorKey: "quantity",
       header: "Issued Quantity",
-      cell: ({ row }) => <div>{row.original.quantity}</div>,
+      cell: ({ row }) => <div>{row.original?.quantity}</div>,
     },
     // {
     //   accessorKey: "totalQuantity",
