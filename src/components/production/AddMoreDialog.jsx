@@ -17,31 +17,47 @@ export default function AddMoreDialog({ setData }) {
     noOfPieces: "",
     costPrice: "",
   });
+  const [selectedSortNumber, setSelectedSortNumber] = useState("");
   const [selectedRollNoId, setSelectedRollNoId] = useState("");
 
-  //fetch list of roll item for dropdown
+  // Fetch inventory data
   const { data: inventoryData = { items: [] }, isLoading: isFetching } =
     useFetchInventoryData();
   const filteredInventoryData = inventoryData.items?.filter(
     (item) => item.inventory_type === "raw" && item.sub_category === "roll"
   );
 
-  //filter roll_name and id
+  // Extract unique sort numbers
+  const sortNumbers = [
+    ...new Set(
+      filteredInventoryData.flatMap((item) =>
+        item.extra_fields
+          .filter((field) => field.sort_number)
+          .map((field) => field.sort_number)
+      )
+    ),
+  ];
+
+  // Filter roll numbers based on selected sort number
   const rollNumbers = filteredInventoryData
+    .filter((item) =>
+      item.extra_fields.some(
+        (field) => field.sort_number === selectedSortNumber
+      )
+    )
     .map((item) => {
       const rollField = item.extra_fields.find((field) => field.roll_number);
-
       if (rollField?.roll_number) {
         return { roll_number: rollField.roll_number, id: item._id };
       }
       return null;
     })
-    .filter((rollNumber) => rollNumber !== null);
+    .filter(Boolean);
 
-  //fetch roll item data by id
+  // Fetch roll item data by ID
   const { data: rollInventoryData } = useFetchItemData(selectedRollNoId);
 
-  //prefill fields
+  // Prefill form fields when roll data changes
   useEffect(() => {
     if (rollInventoryData?.items) {
       const { extra_fields, price } = rollInventoryData.items;
@@ -68,32 +84,42 @@ export default function AddMoreDialog({ setData }) {
     setOpen(false);
   };
 
+  const handleSortChange = (e) => {
+    setSelectedSortNumber(e.target.value);
+    setFormData((prevData) => ({
+      ...prevData,
+      rollNo: "",
+      sort: e.target.value,
+    }));
+    setSelectedRollNoId("");
+  };
+
+  const handleRollChange = (e) => {
+    const { value } = e.target;
+    const selectedRollNo = rollNumbers.find(
+      (rollNo) => rollNo.roll_number === value
+    );
+
+    setFormData((prevData) => ({
+      ...prevData,
+      rollNo: value,
+    }));
+
+    setSelectedRollNoId(selectedRollNo?.id || "");
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "rollNo") {
-      const selectedRollNo = rollNumbers.find(
-        (rollNo) => rollNo.roll_number === value
-      );
-
-      setFormData((prevData) => ({
-        ...prevData,
-        rollNo: value,
-      }));
-
-      setSelectedRollNoId(selectedRollNo?.id || "");
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = () => {
-    if(!formData.rollNo) {
-        toast.error("Please select Roll number to continue.");
-        return;
+    if (!formData.rollNo) {
+      toast.error("Please select Roll number to continue.");
+      return;
     }
     if (!formData.noOfPieces || !formData.costPrice) {
       toast.error("Please enter number of pieces and cost price.");
@@ -137,6 +163,24 @@ export default function AddMoreDialog({ setData }) {
           Add Roll
         </DialogTitle>
         <DialogContent>
+          <div>
+            <label htmlFor="sortNo">Select Sort Number</label>
+            <select
+              id="sortNo"
+              value={selectedSortNumber}
+              onChange={handleSortChange}
+              className="w-full px-4 py-4 border rounded-lg"
+            >
+              <option value="" disabled>
+                Select Sort Number
+              </option>
+              {sortNumbers.map((sort, index) => (
+                <option key={index} value={sort}>
+                  {sort}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="mt-8">
             <label className="block mb-2 text-lg font-medium" htmlFor="rollNo">
               Select Roll Number
@@ -158,7 +202,7 @@ export default function AddMoreDialog({ setData }) {
               ))}
             </select>
           </div>
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <label className="block mb-2 text-lg font-medium" htmlFor="sort">
               Sort
             </label>
@@ -171,7 +215,7 @@ export default function AddMoreDialog({ setData }) {
               onChange={handleChange}
               className="w-full px-4 py-4 border rounded-lg"
             />
-          </div>
+          </div> */}
           <div className="mt-4">
             <label className="block mb-2 text-lg font-medium" htmlFor="meter">
               Meter
@@ -219,7 +263,7 @@ export default function AddMoreDialog({ setData }) {
               className="block mb-2 text-lg font-medium"
               htmlFor="noOfPieces"
             >
-             Expected Number of Pieces
+              Expected Number of Pieces
             </label>
             <input
               type="number"

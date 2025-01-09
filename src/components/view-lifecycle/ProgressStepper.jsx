@@ -22,7 +22,6 @@ import { SERVER_BASE_URL } from "../../api/index";
 import { DialogContent } from "@mui/material";
 import { useUpdateLifecycle } from "../../api/query/lifecycleApi";
 import handleImageUpload from "../../api/query/uploadApi";
-
 export default function ProgressStepper({ refetch }) {
   const { id } = useParams();
   const updateLifecycleMutation = useUpdateLifecycle();
@@ -35,40 +34,22 @@ export default function ProgressStepper({ refetch }) {
   const [lifecycleStages, setLifecycleStages] = useState([]); // store lifecycle stages
   const [rolls, setRolls] = useState();
   const [actualPieces, setActualPieces] = useState("");
-
-  const steps = [
-    {
-      label: "Karigar",
-      description: lifecycleStages[0]?.additionalInformation,
-    },
-    {
-      label: "Checking",
-      description: lifecycleStages[1]?.additionalInformation,
-    },
-    {
-      label: "FeedOff",
-      description: lifecycleStages[2]?.additionalInformation,
-    },
-    {
-      label: "Overlock",
-      description: lifecycleStages[3]?.additionalInformation,
-    },
-    {
-      label: "Side & Lupi",
-      description: lifecycleStages[4]?.additionalInformation,
-    },
-    { label: "Belt", description: lifecycleStages[5]?.additionalInformation },
-    {
-      label: "Thoka & Bottom & Label",
-      description: lifecycleStages[6]?.additionalInformation,
-    },
-    {
-      label: "Final Checking",
-      description: lifecycleStages[7]?.additionalInformation,
-    },
-  ];
-
-  // Fetch the lifecycle data by ID
+  const [steps1, setSteps] = useState();
+  useEffect(() => {
+    const fetchStages = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/stages");
+        setSteps(response.data);
+      } catch (error) {
+        toast.error("Failed to fetch stages");
+      }
+    };
+    fetchStages();
+  }, []);
+  const steps = steps1?.map((stage) => ({
+    label: stage.name,
+    description: stage.description,
+  }));
   const fetchLifecycleData = async () => {
     try {
       const response = await axios.get(
@@ -109,13 +90,12 @@ export default function ProgressStepper({ refetch }) {
 
   const handleCompleteStep = async () => {
     const currentStage = lifecycleStages[activeStep];
-
     if (!currentStage) return;
 
     const stageId = currentStage._id;
     const isLastStep = activeStep === lifecycleStages.length - 1;
-
-    if (currentStage.stage === "final checking") {
+    console.log(steps[steps.length - 1], " ", currentStage.stage);
+    if (currentStage.stage === steps[steps.length - 1].label.toLowerCase()) {
       try {
         await updateLifecycleMutation.mutateAsync({
           id,
@@ -292,11 +272,11 @@ export default function ProgressStepper({ refetch }) {
     <>
       <Box sx={{ maxWidth: 400 }}>
         <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((step, index) => (
+          {steps?.map((step, index) => (
             <Step key={step.label} completed={completedSteps[index]}>
               <StepLabel
                 optional={
-                  index === steps.length - 1 ? (
+                  index === steps?.length - 1 ? (
                     <Typography variant="caption">Last step</Typography>
                   ) : null
                 }
@@ -506,7 +486,7 @@ export default function ProgressStepper({ refetch }) {
             },
           }}
         >
-          <DialogTitle>Complete {steps[activeStep].label} Step</DialogTitle>
+          {/* <DialogTitle>Complete {steps[activeStep]?.label} Step</DialogTitle> */}
           <DialogContent>
             <div className="pt-4">
               <div>

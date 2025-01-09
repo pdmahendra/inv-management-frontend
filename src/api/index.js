@@ -1,6 +1,6 @@
-export const SERVER_BASE_URL =
+export const SERVER_BASE_URL1 =
   `https://fact-1-1.onrender.com` || `http://localhost:3000`;
-
+export const SERVER_BASE_URL = `http://localhost:3000`;
 export const API = {
   users: {
     login: `${SERVER_BASE_URL}/auth/login`,

@@ -17,6 +17,7 @@ import ViewDetails from "../pages/ViewDetails";
 import IssuanceRecordPage from "../pages/IssuanceRecordPage";
 import ProfilePage from "../pages/ProfilePage";
 import ActivityLogs from "../pages/ActivityLogs";
+import StagesPanel from "../pages/AddStages";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -82,6 +83,10 @@ export const router = createBrowserRouter([
       {
         path: "/activity-logs",
         element: <ProtectedRoutes element={<ActivityLogs />} />,
+      },
+      {
+        path: "/stages",
+        element: <ProtectedRoutes element={<StagesPanel />} />,
       },
       {
         path: "/login",

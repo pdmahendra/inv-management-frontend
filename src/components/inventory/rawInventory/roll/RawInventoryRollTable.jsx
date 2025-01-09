@@ -1,15 +1,6 @@
+"use client";
 import * as React from "react";
-import { useState } from "react";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { Search } from "lucide-react";
-
+import * as Accordion from "@radix-ui/react-accordion";
 import {
   Table,
   TableBody,
@@ -18,8 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "../../../../ui/table";
+import { flexRender } from "@tanstack/react-table";
 import EditItem from "../roll/editIRolltem";
 
+import FormDialog from "./RollDialog";
+
+// Define columns for the roll inventory table
 export const columns = [
   {
     accessorKey: "id",
@@ -29,65 +24,22 @@ export const columns = [
   {
     accessorKey: "extra_fields",
     header: "Roll No",
-    cell: ({ row }) => (
-      <div className="">{row.original.extra_fields?.[0]?.roll_number}</div>
-    ),
-  },
-  {
-    accessorKey: "extra_fields",
-    header: "Sort No",
-    cell: ({ row }) => (
-      <div className="pl-6">{row.original.extra_fields?.[1]?.sort_number}</div>
-    ),
-  },
-  {
-    accessorKey: "extra_fields",
-    header: "Meter",
-    cell: ({ row }) => (
-      <div className="pl-3">{row.original.extra_fields?.[2]?.meter}</div>
-    ),
+    cell: ({ row }) => <div>{row.original.extra_fields?.[0]?.roll_number}</div>,
   },
   {
     accessorKey: "price",
     header: "Price",
-    cell: ({ row }) => <div className="pl-3">{row.getValue("price")}</div>,
+    cell: ({ row }) => <div>{row.original.price}</div>,
+  },
+  {
+    accessorKey: "extra_fields",
+    header: "Meter",
+    cell: ({ row }) => <div>{row.original.extra_fields?.[2]?.meter}</div>,
   },
   {
     accessorKey: "extra_fields",
     header: "Grade",
-    cell: ({ row }) => (
-      <div className="pl-3">{row.original.extra_fields?.[3]?.grade}</div>
-    ),
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-    cell: ({ row }) => {
-      const formattedDate = new Date(row.original.createdAt).toLocaleDateString(
-        "en-GB",
-        {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        }
-      );
-      return <div>{formattedDate}</div>;
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated At",
-    cell: ({ row }) => {
-      const formattedDate = new Date(row.original.updatedAt).toLocaleDateString(
-        "en-GB",
-        {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        }
-      );
-      return <div>{formattedDate}</div>;
-    },
+    cell: ({ row }) => <div>{row.original.extra_fields?.[3]?.grade}</div>,
   },
   {
     accessorKey: "editAction",
@@ -96,102 +48,68 @@ export const columns = [
   },
 ];
 
-export default function RawInventoryRollTable({ data = [] }) {
-  const [pageIndex, setPageIndex] = useState(0);
-  const pageSize = 10;
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      pagination: {
-        pageIndex,
-        pageSize,
-      },
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-  });
-
-  const pageCount = Math.ceil(data.length / pageSize);
+// Roll Inventory Table with Accordion Grouped by Sort Number
+const RawInventoryRollTable = ({ data, refetch }) => {
+  // Extract unique sort numbers
+  const uniqueSortNumbers = Array.from(
+    new Set(data.map((item) => item.extra_fields?.[1]?.sort_number))
+  );
 
   return (
-    <div className="border border-gray-300 rounded-3xl mt-6">
-      {/* <div className="mt-4 flex flex-col sm:flex-row justify-between items-center p-2 px-4 gap-4 sm:gap-0">
-        <div className="relative flex items-center w-full sm:w-auto">
-          <Search className="absolute left-4 text-gray-400 pointer-events-none" />
-          <input
-            value={table.getColumn("name")?.getFilterValue() ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="w-full sm:w-auto !pl-14 !h-12 !rounded-full !bg-[#E6E6E682] py-3 pl-10 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-sm lg:w-80"
-            placeholder="Search"
-          />
-        </div>
-      </div> */}
-      <div className="p-4">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="px-14">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-12">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <div className="flex justify-center mt-4">
-          {Array.from({ length: pageCount }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setPageIndex(i)}
-              className={`px-2 m-3 rounded ${
-                pageIndex === i
-                  ? "text-black border-2 rounded-xl"
-                  : "text-black"
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="border border-gray-300 rounded-lg p-4 mt-6">
+      <h2 className="text-xl font-bold mb-4">
+        Roll Inventory (Grouped by Sort Number)
+      </h2>
+
+      {/* Radix UI Accordion for Sorting Rolls */}
+      <Accordion.Root type="multiple" className="w-full space-y-4">
+        {uniqueSortNumbers.map((sortNumber, index) => {
+          const filteredData = data.filter(
+            (item) => item.extra_fields?.[1]?.sort_number === sortNumber
+          );
+
+          return (
+            <Accordion.Item key={index} value={`sort-${sortNumber}`}>
+              <Accordion.Header>
+                <Accordion.Trigger className="text-lg font-semibold cursor-pointer">
+                  Sort Number: {sortNumber}
+                </Accordion.Trigger>
+              </Accordion.Header>
+              <Accordion.Content>
+                <div className="mt-4">
+                  <FormDialog refetch={refetch} sortNumber={sortNumber} />
+                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      {columns.map((column) => (
+                        <TableHead key={column.accessorKey}>
+                          {column.header}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredData.map((row, rowIndex) => (
+                      <TableRow key={rowIndex}>
+                        {columns.map((column, colIndex) => (
+                          <TableCell key={colIndex}>
+                            {flexRender(column.cell, {
+                              row: { original: row, index: rowIndex },
+                            })}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Accordion.Content>
+            </Accordion.Item>
+          );
+        })}
+      </Accordion.Root>
     </div>
   );
-}
+};
+
+export default RawInventoryRollTable;

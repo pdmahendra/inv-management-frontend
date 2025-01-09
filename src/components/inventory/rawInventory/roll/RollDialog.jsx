@@ -9,7 +9,7 @@ import { useAddItem } from "../../../../api/query/inventory/invetoryApi";
 import toast from "react-hot-toast";
 import QRCodeScanner from "../../rawInventory/roll/Scanner";
 
-export default function FormDialog({ refetch }) {
+export default function FormDialog({ refetch, sortNumber }) {
   const { mutate: addItmes, isLoading } = useAddItem();
   const [data, setData] = useState({
     name: "N/A",
@@ -105,7 +105,11 @@ export default function FormDialog({ refetch }) {
       }));
     }
   };
-
+  React.useEffect(() => {
+    if (sortNumber) {
+      data.extra_fields.sort_number = sortNumber;
+    }
+  }, []);
   return (
     <div>
       <button
@@ -146,6 +150,7 @@ export default function FormDialog({ refetch }) {
             fullWidth
             variant="outlined"
             value={data.extra_fields.sort_number}
+            disabled={sortNumber}
             onChange={handleInputChange}
           />
           <TextField
