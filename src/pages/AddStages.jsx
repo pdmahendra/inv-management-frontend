@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { SERVER_BASE_URL } from "../api";
-const API_URL = await axios.get(`${SERVER_BASE_URL}/stages`);
+const API_URL = `${SERVER_BASE_URL}/stages`;
 // Replace with your backend URL
 
 const StagesPanel = () => {
