@@ -14,12 +14,19 @@ function EditUser({ row }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
-  const [userType, setUserType] = useState("admin");
+  const [userType, setUserType] = useState("SuperAdmin");
   const [open, setOpen] = React.useState(false);
 
   const { user } = useUser();
   const { mutate: editUser, isLoading } = useEditUser();
-
+  const userTypes = {
+    SuperAdmin: "SuperAdmin",
+    SuperManager: "SuperManager",
+    CuttingManager: "CuttingManager",
+    LifecycleManager: "LifecycleManager",
+    InventoryManager: "InventoryManager",
+    Worker: "worker",
+  };
   React.useEffect(() => {
     if (row) {
       setName(row.original.name);
@@ -31,7 +38,7 @@ function EditUser({ row }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const data = {
       name,
       username,
@@ -39,15 +46,15 @@ function EditUser({ row }) {
       phoneNo,
       userType,
     };
-  
-    const toastId = toast.loading("Updating user..."); 
-  
+
+    const toastId = toast.loading("Updating user...");
+
     editUser(
       { id: row.original._id, data },
       {
         onSuccess: (response) => {
           console.log(response);
-          toast.success("User updated successfully!", { id: toastId }); 
+          toast.success("User updated successfully!", { id: toastId });
           setName(row.original.name);
           setUsername(row.original.username);
           setPhoneNo(row.original.phoneNo);
@@ -56,13 +63,13 @@ function EditUser({ row }) {
           handleClose();
         },
         onError: (error) => {
-          const errorMessage = error.response?.data?.error || "Failed to update user.";
-          toast.error(errorMessage, { id: toastId }); 
+          const errorMessage =
+            error.response?.data?.error || "Failed to update user.";
+          toast.error(errorMessage, { id: toastId });
         },
       }
     );
   };
-  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -138,14 +145,13 @@ function EditUser({ row }) {
                   id="userType"
                   name="userType"
                   className="w-full px-3 mt-2 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-600"
-                  onChange={(e) => {
-                    setUserType(e.target.value);
-                  }}
-                  value={userType}
+                  onChange={(e) => setUserType(e.target.value)}
                 >
-                  <option value="admin">Admin</option>
-                  <option value="manager">Manager</option>
-                  <option value="worker">Worker</option>
+                  {Object.values(userTypes).map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
                 </select>
               </div>
             </DialogContent>

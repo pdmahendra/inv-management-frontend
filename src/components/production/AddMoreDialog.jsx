@@ -189,7 +189,7 @@ export default function AddMoreDialog({ setData }) {
               id="rollNo"
               name="rollNo"
               value={formData.rollNo}
-              onChange={handleChange}
+              onChange={handleRollChange}
               className="w-full px-4 py-4 border rounded-lg"
             >
               <option value="" disabled>

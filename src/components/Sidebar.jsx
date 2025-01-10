@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar({ sidebarOpen, handleSidebar, user }) {
   const navigate = useNavigate();
-
+  const hasAccess = (roles) => roles.includes(user?.userType);
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
@@ -65,84 +65,122 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               Home
             </li>
           </Link>
-          <Link to="#" className="font-medium" onClick={handleTabClick}>
-            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              Analytics
-            </li>
-          </Link>
-          <li>
-            <div
-              className="bg-[#F4F0ED] border-none shadow-none px-8 py-2 cursor-pointer flex justify-between"
-              onClick={toggleAccordion}
-            >
-              <span className="font-medium">Inventory</span>
-              <span className="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  className={`size-4 delay-100 transition-transform ease-in-out duration-500 ${
-                    isOpen ? "rotate-180" : "rotate-0"
-                  }`}
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </span>
-            </div>
+          {hasAccess([
+            "admin",
+            "SuperAdmin",
+            "SuperManager",
+            "InventoryManager",
+          ]) && (
+            <Link to="#" className="font-medium" onClick={handleTabClick}>
+              <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+                Analytics
+              </li>
+            </Link>
+          )}
 
-            {/* Accordion Content */}
-            <div
-              className={`transition-all ease-in-out delay-100 duration-500 overflow-hidden ${
-                isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-              }`}
-            >
-              <ul>
-                <Link
-                  to="/inventory/raw"
-                  className="font-medium"
-                  onClick={handleTabClick}
-                >
-                  <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
-                    Raw Inventory
-                  </li>
-                </Link>
-                <Link
-                  to="/inventory/cutting"
-                  className="font-medium"
-                  onClick={handleTabClick}
-                >
-                  <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
-                    Cutting Inventory
-                  </li>
-                </Link>
-                <Link
-                  to="/inventory/ready"
-                  className="font-medium"
-                  onClick={handleTabClick}
-                >
-                  <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
-                    Ready Inventory
-                  </li>
-                </Link>
-              </ul>
-            </div>
-          </li>
-
-          <Link
-            to="/production"
-            className="font-medium"
-            onClick={handleTabClick}
-          >
-            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              Cutting Management{" "}
+          {hasAccess([
+            "admin",
+            "SuperAdmin",
+            "InventoryManager",
+            "SuperManager",
+          ]) && (
+            <li>
+              <div
+                className="bg-[#F4F0ED] border-none shadow-none px-8 py-2 cursor-pointer flex justify-between"
+                onClick={toggleAccordion}
+              >
+                <span className="font-medium">Inventory</span>
+                <span className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className={`size-4 delay-100 transition-transform ease-in-out duration-500 ${
+                      isOpen ? "rotate-180" : "rotate-0"
+                    }`}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div
+                className={`transition-all ease-in-out delay-100 duration-500 overflow-hidden ${
+                  isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
+                <ul>
+                  <Link
+                    to="/inventory/raw"
+                    className="font-medium"
+                    onClick={handleTabClick}
+                  >
+                    <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
+                      Raw Inventory
+                    </li>
+                  </Link>
+                  <Link
+                    to="/inventory/cutting"
+                    className="font-medium"
+                    onClick={handleTabClick}
+                  >
+                    <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
+                      Cutting Inventory
+                    </li>
+                  </Link>
+                  <Link
+                    to="/inventory/ready"
+                    className="font-medium"
+                    onClick={handleTabClick}
+                  >
+                    <li className="rounded-full hover:bg-[#E4EAFB] px-10 py-2">
+                      Ready Inventory
+                    </li>
+                  </Link>
+                </ul>
+              </div>
             </li>
-          </Link>
+          )}
+
+          {hasAccess([
+            "admin",
+            "SuperAdmin",
+            "CuttingManager",
+            "SuperManager",
+          ]) && (
+            <Link
+              to="/production"
+              className="font-medium"
+              onClick={handleTabClick}
+            >
+              <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+                Cutting Management
+              </li>
+            </Link>
+          )}
+
+          {hasAccess([
+            "admin",
+            "SuperAdmin",
+            "LifecycleManager",
+            "SuperManager",
+          ]) && (
+            <Link
+              to="/view-lifecycle"
+              className="font-medium"
+              onClick={handleTabClick}
+            >
+              <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+                Lifecycle Management
+              </li>
+            </Link>
+          )}
+
           <Link
             to="/notifications"
             className="font-medium"
@@ -152,25 +190,24 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
               Notification
             </li>
           </Link>
-          <Link
-            to="/view-lifecycle"
-            className="font-medium"
-            onClick={handleTabClick}
-          >
-            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              Lifecycle Management
-            </li>
-          </Link>
-          <Link
-            to="/issuance-records"
-            className=" font-medium"
-            onClick={handleTabClick}
-          >
-            <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              Issuance Records
-            </li>
-          </Link>
-          {user?.userType !== "worker" && (
+          {hasAccess([
+            "admin",
+            "SuperAdmin",
+            "LifecycleManager",
+            "InventoryManager",
+            "SuperManager",
+          ]) && (
+            <Link
+              to="/issuance-records"
+              className=" font-medium"
+              onClick={handleTabClick}
+            >
+              <li class="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+                Issuance Records
+              </li>
+            </Link>
+          )}
+          {(user?.userType == "admin" || user?.userType == "SuperAdmin") && (
             <Link to="/people" className="font-medium" onClick={handleTabClick}>
               <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
                 People
@@ -178,11 +215,21 @@ function Sidebar({ sidebarOpen, handleSidebar, user }) {
             </Link>
           )}
 
-          <Link to="/activity-logs" className="font-medium">
-            <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
-              Activity Logs
-            </li>
-          </Link>
+          {(user?.userType == "admin" || user?.userType == "SuperAdmin") && (
+            <Link to="/activity-logs" className="font-medium">
+              <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+                Activity Logs
+              </li>
+            </Link>
+          )}
+
+          {(user?.userType == "admin" || user?.userType == "SuperAdmin") && (
+            <Link to="/stages" className="font-medium">
+              <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">
+                Manage Stages
+              </li>
+            </Link>
+          )}
 
           <Link to="#" onClick={handleLogout} className="font-medium">
             <li className="px-8 p-2 rounded-full hover:bg-[#E4EAFB] hover:text-[#3F51D7]">

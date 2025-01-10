@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-
-const API_URL = "http://localhost:3000/stages"; // Replace with your backend URL
+import { SERVER_BASE_URL } from "../api";
+const API_URL = await axios.get(`${SERVER_BASE_URL}/stages`);
+// Replace with your backend URL
 
 const StagesPanel = () => {
   const [stages, setStages] = useState([]);

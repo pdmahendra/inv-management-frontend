@@ -11,11 +11,19 @@ import { useFetchAllUsers } from "../api/query/fetchAllUsers";
 import toast from "react-hot-toast";
 
 function People() {
+  const userTypes = {
+    SuperAdmin: "SuperAdmin",
+    SuperManager: "SuperManager",
+    CuttingManager: "CuttingManager",
+    LifecycleManager: "LifecycleManager",
+    InventoryManager: "InventoryManager",
+    Worker: "worker",
+  };
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
-  const [userType, setUserType] = useState("admin");
+  const [userType, setUserType] = useState("SuperAdmin");
   const [open, setOpen] = React.useState(false);
 
   const { user } = useUser();
@@ -145,13 +153,13 @@ function People() {
                       id="userType"
                       name="userType"
                       className="w-full px-3 mt-2 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-600"
-                      onChange={(e) => {
-                        setUserType(e.target.value);
-                      }}
+                      onChange={(e) => setUserType(e.target.value)}
                     >
-                      <option value="admin">Admin</option>
-                      <option value="manager">Manager</option>
-                      <option value="worker">Worker</option>
+                      {Object.values(userTypes).map((role) => (
+                        <option key={role} value={role}>
+                          {role}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </DialogContent>

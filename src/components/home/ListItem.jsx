@@ -2,6 +2,8 @@ import React from "react";
 import { downloadPdf } from "../../api/query/downloadChallan";
 import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
+import axios from "axios";
+import { API } from "../../api";
 const ListItem = ({
   id,
   title,
@@ -39,14 +41,14 @@ const ListItem = ({
   };
 
   const handleDownloadClick = async () => {
-    const toastId = toast.loading("Downloading.."); 
+    const toastId = toast.loading("Downloading..");
     try {
-      await downloadPdf(id); 
-      toast.dismiss(toastId); 
-      toast.success("Download successful!"); 
+      await downloadPdf(id);
+      toast.dismiss(toastId);
+      toast.success("Download successful!");
     } catch (error) {
-      toast.dismiss(toastId); 
-      toast.error("Download failed!"); 
+      toast.dismiss(toastId);
+      toast.error("Download failed!");
     }
   };
 

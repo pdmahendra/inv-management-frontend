@@ -38,7 +38,8 @@ export default function ProgressStepper({ refetch }) {
   useEffect(() => {
     const fetchStages = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/stages");
+        const response = await axios.get(`${SERVER_BASE_URL}/stages`);
+
         setSteps(response.data);
       } catch (error) {
         toast.error("Failed to fetch stages");

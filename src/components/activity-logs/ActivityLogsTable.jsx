@@ -31,7 +31,7 @@ export default function ActivityLogsTable({ data = [] }) {
     {
       accessorKey: "user",
       header: "User",
-      cell: ({ row }) => <div>{row.original.user.name}</div>,
+      cell: ({ row }) => <div>{row?.original?.user?.name}</div>,
     },
     {
       accessorKey: "action",
@@ -82,14 +82,14 @@ export default function ActivityLogsTable({ data = [] }) {
         switch (actionType) {
           case "POST":
             if (action.includes("/auth/add-user")) {
-              message = `${user.name} added a new user ${details.name}, who is a ${details.userType}.`;
+              message = `${user?.name} added a new user ${details.name}, who is a ${details.userType}.`;
             } else if (action.includes("/inventory/add-item")) {
-              message = `${user.name} added a new inventory item to ${details.sub_category} Table.`;
+              message = `${user?.name} added a new inventory item to ${details.sub_category} Table.`;
               //   } else if (action.includes("/todo")) {
               //     message = `${user.name} created a new task with the title: ${details.title || 'Untitled'}.`;
             } else if (action.includes("/production/start-new")) {
               message = `${
-                user.name
+                user?.name
               } started a new cutting production with Roll Number ${
                 details.rolls[0]?.rollNo || "Unknown"
               }.`;
@@ -97,38 +97,38 @@ export default function ActivityLogsTable({ data = [] }) {
               const rollNumbers = details.rolls
                 .map((roll) => roll.rollNo)
                 .join(", ");
-              message = `${user.name} started a new lifecycle with Roll Number(s) ${rollNumbers}.`;
+              message = `${user?.name} started a new lifecycle with Roll Number(s) ${rollNumbers}.`;
             } else if (action.includes("/issuance/issue-inventory-items")) {
-              message = `${user.name} issued new inventory item ${details.inventoryItem} with quantity ${details.quantity}.`;
+              message = `${user?.name} issued new inventory item ${details.inventoryItem} with quantity ${details.quantity}.`;
             }
             break;
           case "PUT":
             if (action.includes("/production/update")) {
               message = `${
-                user.name
+                user?.name
               } completed cutting production with Roll Number ${
                 details.rolls[0]?.rollNo || "Unknown"
               }.`;
             } else if (action.includes("/auth/edit-user")) {
-              message = `${user.name} updated user details for ${details.name}.`;
+              message = `${user?.name} updated user details for ${details.name}.`;
             } else if (action.includes("/inventory/update-item")) {
-              message = `${user.name} updated inventory item in ${details.sub_category} Table.`;
+              message = `${user?.name} updated inventory item in ${details.sub_category} Table.`;
             } else if (action.includes("/lifecycle/update")) {
               const rollNumbers = details.rolls
                 .map((roll) => roll.rollNo)
                 .join(", ");
-              message = `${user.name} updated (completed / started) stage in lifecycle with Roll Number ${rollNumbers}.`;
+              message = `${user?.name} updated (completed / started) stage in lifecycle with Roll Number ${rollNumbers}.`;
             }
             break;
           case "DELETE":
             if (action.includes("/auth/delete-user")) {
-              message = `${user.name} deleted a user with name ${details.name} who was a ${details.userType}.`;
+              message = `${user?.name} deleted a user with name ${details.name} who was a ${details.userType}.`;
               // } else if (action.includes("/todo/deleteTask")) {
               //   message = `${user.name} deleted a task with the title: ${
               //     details.title || "Untitled"
               //   }.`;
             } else if (action.includes("/inventory/delete-item")) {
-              message = `${user.name} deleted an inventory item from ${details.sub_category} Table.`;
+              message = `${user?.name} deleted an inventory item from ${details.sub_category} Table.`;
             }
             break;
           default:
