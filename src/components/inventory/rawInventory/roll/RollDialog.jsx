@@ -9,7 +9,7 @@ import { useAddItem } from "../../../../api/query/inventory/invetoryApi";
 import toast from "react-hot-toast";
 import QRCodeScanner from "../../rawInventory/roll/Scanner";
 
-export default function FormDialog({ refetch, sortNumber }) {
+export default function FormDialog({ refetch, sortNumber, duplicate }) {
   const { mutate: addItmes, isLoading } = useAddItem();
   const [data, setData] = useState({
     name: "N/A",
@@ -109,6 +109,17 @@ export default function FormDialog({ refetch, sortNumber }) {
     if (sortNumber) {
       data.extra_fields.sort_number = sortNumber;
     }
+    if (duplicate) {
+      console.log(duplicate);
+      // data.extra_fields.roll_number;
+      data.extra_fields.sort_number =
+        duplicate.original?.extra_fields[1]?.sort_number;
+      data.extra_fields.grade = duplicate.original?.extra_fields[3]?.grade;
+      data.price = duplicate.original.price;
+      // data.extra_fields.meter;
+      // data.extra_fields.grade;
+      // row.original?.price || "",
+    }
   }, []);
   return (
     <div>
@@ -174,7 +185,7 @@ export default function FormDialog({ refetch, sortNumber }) {
             type="number"
             fullWidth
             variant="outlined"
-            value={data.extra_fields.price}
+            value={data.price}
             onChange={handleInputChange}
           />
 

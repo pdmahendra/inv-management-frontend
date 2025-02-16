@@ -15,41 +15,52 @@ import EditItem from "../roll/editIRolltem";
 import FormDialog from "./RollDialog";
 
 // Define columns for the roll inventory table
-export const columns = [
-  {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => <div>{row.index + 1}</div>,
-  },
-  {
-    accessorKey: "extra_fields",
-    header: "Roll No",
-    cell: ({ row }) => <div>{row.original.extra_fields?.[0]?.roll_number}</div>,
-  },
-  {
-    accessorKey: "price",
-    header: "Price",
-    cell: ({ row }) => <div>{row.original.price}</div>,
-  },
-  {
-    accessorKey: "extra_fields",
-    header: "Meter",
-    cell: ({ row }) => <div>{row.original.extra_fields?.[2]?.meter}</div>,
-  },
-  {
-    accessorKey: "extra_fields",
-    header: "Grade",
-    cell: ({ row }) => <div>{row.original.extra_fields?.[3]?.grade}</div>,
-  },
-  {
-    accessorKey: "editAction",
-    header: "Edit Action",
-    cell: ({ row }) => <EditItem row={row} />,
-  },
-];
 
 // Roll Inventory Table with Accordion Grouped by Sort Number
 const RawInventoryRollTable = ({ data, refetch }) => {
+  const columns = [
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => <div>{row.index + 1}</div>,
+    },
+    {
+      accessorKey: "extra_fields",
+      header: "Roll No",
+      cell: ({ row }) => (
+        <div>{row.original.extra_fields?.[0]?.roll_number}</div>
+      ),
+    },
+    {
+      accessorKey: "price",
+      header: "Price",
+      cell: ({ row }) => <div>{row.original.price}</div>,
+    },
+    {
+      accessorKey: "extra_fields",
+      header: "Meter",
+      cell: ({ row }) => <div>{row.original.extra_fields?.[2]?.meter}</div>,
+    },
+    {
+      accessorKey: "extra_fields",
+      header: "Grade",
+      cell: ({ row }) => <div>{row.original.extra_fields?.[3]?.grade}</div>,
+    },
+    {
+      accessorKey: "editAction",
+      header: "Edit Action",
+      cell: ({ row }) => <EditItem row={row} />,
+    },
+    {
+      accessorKey: "Duplicate Action",
+      header: "Duplicate",
+      cell: ({ row }) => (
+        <div className="mt-4">
+          <FormDialog refetch={refetch} duplicate={row} />
+        </div>
+      ),
+    },
+  ];
   // Extract unique sort numbers
   const uniqueSortNumbers = Array.from(
     new Set(data.map((item) => item.extra_fields?.[1]?.sort_number))
