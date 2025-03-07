@@ -139,24 +139,26 @@ export default function FormDialog({ refetch, sortNumber, duplicate }) {
           </div>
         </div>
         <DialogContent>
+          <p>Roll Number</p>
           <TextField
             required
             margin="dense"
             id="roll_number"
             name="roll_number"
-            label="Roll Number"
+            
             type="text"
             fullWidth
             variant="outlined"
             value={data.extra_fields.roll_number}
             onChange={handleInputChange}
           />
+          <p>Sort Number</p>
           <TextField
             required
             margin="dense"
             id="sort_number"
             name="sort_number"
-            label="Sort Number"
+            
             type="text"
             fullWidth
             variant="outlined"
@@ -164,37 +166,39 @@ export default function FormDialog({ refetch, sortNumber, duplicate }) {
             disabled={sortNumber}
             onChange={handleInputChange}
           />
+          <p>Meter</p>
           <TextField
             required
             margin="dense"
             id="meter"
             name="meter"
-            label="Meter"
+            
             type="number"
             fullWidth
             variant="outlined"
             value={data.extra_fields.meter}
             onChange={handleInputChange}
           />
+          <p>Price</p>
           <TextField
             required
             margin="dense"
             id="price"
             name="price"
-            label="Price"
+            
             type="number"
             fullWidth
             variant="outlined"
             value={data.price}
             onChange={handleInputChange}
           />
-
+<p>Grade</p>
           <TextField
             required
             margin="dense"
             id="grade"
             name="grade"
-            label="Grade"
+            
             type="text"
             fullWidth
             variant="outlined"
