@@ -25,7 +25,7 @@ export const getItemsBySubcategory = async (subcategory) => {
 export const useFetchItemsBySubcategory = (subcategory) => {
   return useQuery({
     queryKey: ["subCategoryItems", subcategory],
-    queryFn: () => getItemsBySubcategory(subcategory), 
+    queryFn: () => getItemsBySubcategory(subcategory),
     enabled: !!subcategory,
   });
 };
@@ -99,5 +99,25 @@ export const useFetchItemData = (id) => {
     queryKey: ["rollInventory", id], // Use id in the query key for unique caching
     queryFn: () => getItem(id), // Call the getItem function with the id
     enabled: !!id, // Ensure the query only runs if the id is not null or undefined
+  });
+};
+export const bulkUpdatePrices = async ({ sortNumber, newPrice }) => {
+  const response = await axios.put(`${API.inventory.bulkUpdatePrice}`, {
+    sort_number: sortNumber,
+    new_price: newPrice,
+  });
+  return response.data;
+};
+export const useBulkUpdatePrices = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: bulkUpdatePrices,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["inventory"]); // Refresh inventory data
+    },
+    onError: (error) => {
+      console.error("Bulk update error:", error);
+    },
   });
 };

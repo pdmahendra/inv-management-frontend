@@ -18,6 +18,7 @@ export const API = {
     addItems: `${SERVER_BASE_URL}/inventory/add-item`,
     updateItems: `${SERVER_BASE_URL}/inventory/update-item`,
     deleteItems: `${SERVER_BASE_URL}/inventory/delete-item`,
+    bulkUpdatePrice: `${SERVER_BASE_URL}/inventory/bulk-update-price`,
   },
   production: {
     getAllProduction: `${SERVER_BASE_URL}/production/get-all-productions`,

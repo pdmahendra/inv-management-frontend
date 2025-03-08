@@ -11,13 +11,36 @@ import {
 } from "../../../../ui/table";
 import { flexRender } from "@tanstack/react-table";
 import EditItem from "../roll/editIRolltem";
-
 import FormDialog from "./RollDialog";
-
-// Define columns for the roll inventory table
-
-// Roll Inventory Table with Accordion Grouped by Sort Number
+import { Button } from "@mui/material";
+import { useBulkUpdatePrices } from "../../../../api/query/inventory/invetoryApi";
 const RawInventoryRollTable = ({ data, refetch }) => {
+  const [bulkEdit, setBulkEdit] = React.useState(null);
+  const [newPrice, setNewPrice] = React.useState("");
+
+  const handleBulkEdit = (sortNumber) => {
+    setBulkEdit(sortNumber);
+  };
+
+  const handlePriceChange = (event) => {
+    setNewPrice(event.target.value);
+  };
+  const { mutate: updatePrices, isLoading } = useBulkUpdatePrices();
+  const applyBulkEdit = (sortNumber) => {
+    updatePrices(
+      { sortNumber, newPrice },
+      {
+        onSuccess: () => {
+          setBulkEdit(null);
+          refetch(); // Refresh data after update
+        },
+        onError: (error) => {
+          console.error("Error updating prices:", error.message);
+        },
+      }
+    );
+  };
+
   const columns = [
     {
       accessorKey: "id",
@@ -61,7 +84,7 @@ const RawInventoryRollTable = ({ data, refetch }) => {
       ),
     },
   ];
-  // Extract unique sort numbers
+
   const uniqueSortNumbers = Array.from(
     new Set(data.map((item) => item.extra_fields?.[1]?.sort_number))
   );
@@ -72,7 +95,6 @@ const RawInventoryRollTable = ({ data, refetch }) => {
         Roll Inventory (Grouped by Sort Number)
       </h2>
 
-      {/* Radix UI Accordion for Sorting Rolls */}
       <Accordion.Root type="multiple" className="w-full space-y-4">
         {uniqueSortNumbers.map((sortNumber, index) => {
           const filteredData = data.filter(
@@ -87,8 +109,32 @@ const RawInventoryRollTable = ({ data, refetch }) => {
                 </Accordion.Trigger>
               </Accordion.Header>
               <Accordion.Content>
-                <div className="mt-4">
+                <div className="mt-4 flex items-center gap-4">
                   <FormDialog refetch={refetch} sortNumber={sortNumber} />
+                  {bulkEdit === sortNumber ? (
+                    <>
+                      <input
+                        type="number"
+                        value={newPrice}
+                        onChange={handlePriceChange}
+                        className="border p-2 rounded"
+                        placeholder="Enter new price"
+                      />
+                      <Button onClick={() => applyBulkEdit(sortNumber)}>
+                        Apply
+                      </Button>
+                      <Button
+                        onClick={() => setBulkEdit(null)}
+                        variant="outline"
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <Button onClick={() => handleBulkEdit(sortNumber)}>
+                      Bulk Edit Price
+                    </Button>
+                  )}
                 </div>
                 <Table>
                   <TableHeader>
