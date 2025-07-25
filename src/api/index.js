@@ -1,4 +1,4 @@
-export const SERVER_BASE_URL = `https://fact-1-1.onrender.com`;
+export const SERVER_BASE_URL = `https://fact-1-ilrku6cmk-adway7103s-projects.vercel.app/`;
 export const API = {
   users: {
     login: `${SERVER_BASE_URL}/auth/login`,
